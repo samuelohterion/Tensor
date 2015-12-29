@@ -5,3 +5,7 @@ CONFIG -= qt
 
 SOURCES += main.cpp
 
+QMAKE_CXXFLAGS += -std=c++11
+
+HEADERS += \
+    tensor.hpp

@@ -2,9 +2,13 @@
 
 using namespace std;
 
-int main()
-{
-	cout << "Hello World!" << endl;
+int
+main( ) {
+
+	cout << "T20151229\n---------\n\n";
+
+
+
 	return 0;
 }
 
