@@ -1,4 +1,5 @@
 #include <iostream>
+#include "tensor.hpp"
 
 using namespace std;
 
@@ -7,7 +8,10 @@ main( ) {
 
 	cout << "T20151229\n---------\n\n";
 
-
+	Idx
+	i,
+	j,
+	k;
 
 	return 0;
 }
