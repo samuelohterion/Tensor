@@ -1,126 +1,29 @@
 #include "idx.h"
 
-Idx::Idx( ) {
-
-}
-
-Idx::~Idx( ) {
-
-}
-
-//---------------------------------------------------------------------------
-
-
-CIdx::CIdx( ) :
-Idx( ),
-TermI( new TreeConstantIndex( 0 ) ) {
-
-}
-
-CIdx::CIdx( CIdx &p_idx ) :
-Idx( ),
-TermI( new TreeConstantIndex( p_idx.val( ) ) ) {
-
-}
-
-CIdx::CIdx( int const &p_val ) :
-Idx( ),
-TermI( new TreeConstantIndex( p_val ) ) {
-
-}
-
-CIdx::~CIdx( ) {
-
-}
-
-TreeI
-*CIdx::cpy( ) {
-
-	return new TreeConstantIndex( val( ) );
-}
-
-int
-CIdx::eval( ) {
-
-	return tree( )->val( );
-}
-
-bool
-CIdx::is( Idx & ) const {
-
-	return false;
-}
-
-bool
-CIdx::isConstant( ) const {
-
-	return true;
-}
-
-bool
-CIdx::isReference( ) const {
-
-	return false;
-}
-
-int
-CIdx::val( ) {
-
-	return tree( )->val( );
-}
-
-
-//---------------------------------------------------------------------------
-
-
-TreeConstantIndex::TreeConstantIndex( int const &p_value ) :
-TreeI( ),
-__value( p_value ) {
-
-}
-
-TreeI
-*TreeConstantIndex::cpy( ) {
-
-	return new TreeConstantIndex( __value );
-}
-
-int
-TreeConstantIndex::val( ) {
-
-	return __value;
-}
-
 
 //---------------------------------------------------------------------------
 
 
 EIdx::EIdx( ) :
 TermI( new TreeEinsteinIndex( this ) ),
-__isReference( false ),
-__begin( new int( 0 ) ),
-__current( new int( 0 ) ),
-__end( new int( 0 ) ) {
+__isConstant( false ),
+__begin( 0 ),
+__current( 0 ),
+__end( 0 ) {
 
 }
 
-EIdx::EIdx( EIdx const &p_idx ) :
+EIdx::EIdx( int const &p_idx ) :
 TermI( new TreeEinsteinIndex( this ) ),
-__isReference( true ),
-__begin( p_idx.__begin ),
-__current( p_idx.__current ),
-__end( p_idx.__end ) {
+__isConstant( true ),
+__begin( p_idx ),
+__current( __begin ),
+__end( __begin + 1 ) {
 
 }
 
 EIdx::~EIdx( ) {
 
-	if( !__isReference ) {
-
-		delete __begin;
-		delete __current;
-		delete __end;
-	}
 }
 
 
@@ -130,53 +33,41 @@ TreeI
 	return new TreeEinsteinIndex( this );
 }
 
-int
-EIdx::eval( ) {
-
-	return *__current;
-}
-
 EIdx
 &EIdx::inc( ) {
 
-	++*__current;
+	++__current;
 
 	return *this;
 }
 
 bool
-EIdx::is( Idx &p_idx ) const {
+EIdx::is( EIdx &p_idx ) const {
 
 	if( isConstant( ) || p_idx.isConstant( ) ) {
 
 		return true;
 	}
 
-	return ( static_cast< EIdx & >( p_idx ) ).__begin == __begin;
+	return &p_idx == this;
 }
 
 bool
 EIdx::isConstant( ) const {
 
-	return false;
+	return __isConstant;
 }
 
 bool
 EIdx::isOK( ) const {
 
-	return *__current < *__end && *__begin <= *__current;
-}
-
-bool
-EIdx::isReference( ) const {
-
-	return __isReference;
+	return __current < __end && __begin <= __current;
 }
 
 EIdx
 &EIdx::reset( ) {
 
-	*__current = *__begin;
+	__current = __begin;
 
 	return *this;
 }
@@ -184,7 +75,7 @@ EIdx
 EIdx
 &EIdx::set( int const &p_value ) {
 
-	*__current = p_value;
+	__current = p_value;
 
 	return *this;
 }
@@ -192,7 +83,7 @@ EIdx
 EIdx
 &EIdx::setCount( int const &p_count ) {
 
-	*__end = *__begin + p_count;
+	__end = __begin + p_count;
 
 	return *this;
 }
@@ -201,11 +92,11 @@ EIdx
 &EIdx::setFirst( int const &p_first ) {
 
 	int
-	d_ = *__end - *__begin;
+	d_ = __end - __begin;
 
-	*__begin = p_first;
-	*__end = *__begin + d_;
-	*__current = *__begin;
+	__begin = p_first;
+	__end = __begin + d_;
+	__current = __begin;
 
 	return *this;
 }
@@ -213,7 +104,7 @@ EIdx
 int
 EIdx::val( ) {
 
-	return *__current;
+	return __current;
 }
 
 EIdx
@@ -257,7 +148,7 @@ Subscription::~Subscription( ) {
 }
 
 Subscription
-&Subscription::addIdx( Idx *p_idx ) {
+&Subscription::addIdx( EIdx *p_idx ) {
 
 	push_back( p_idx );
 
@@ -271,7 +162,7 @@ Subscription::contains( EIdx *p_eidx ) const {
 
 		if( !i->isConstant( ) ) {
 
-			if( i->is( *p_eidx ) ) {
+			if( i == p_eidx ) {
 
 				return true;
 			}
@@ -316,9 +207,9 @@ Counter
 
 		if( !i->isConstant( ) ) {
 
-			if( !contains( static_cast< EIdx * >( i ) ) ) {
+			if( !contains( i ) ) {
 
-				push_back( static_cast< EIdx * >( i ) );
+				push_back( i );
 			}
 		}
 	}
@@ -331,7 +222,7 @@ Counter::contains( EIdx *p_eidx ) const {
 
 	for( auto i : *this ) {
 
-		if( i->is( *p_eidx ) ) {
+		if( i == p_eidx ) {
 
 			return true;
 		}

@@ -16,7 +16,7 @@ main( ) {
 	k;
 
 
-	CIdx
+	EIdx
 	ci( 8 ),
 	cj( 1111 );
 
@@ -67,9 +67,9 @@ main( ) {
 
 	cout << endl;
 
-	i.setFirst( 0 ).setCount( 2 );
-	j.setFirst( 10 ).setCount( 2 );
-	k.setFirst( 100 ).setCount( 2 );
+	i.setFirst( 1 ).setCount( 2 );
+	j.setFirst( 1 ).setCount( 2 );
+	k.setFirst( 1 ).setCount( 2 );
 
 	c.reset( );
 
@@ -77,7 +77,7 @@ main( ) {
 
 	while( c.isOK( ) ) {
 
-		cout << setw( 8 ) << ( i + j + k ).str( ) << endl;
+		cout << setw( 8 ) << ( 100 * i + 10 * j + k ).str( ) << endl;
 
 		++c;
 	}

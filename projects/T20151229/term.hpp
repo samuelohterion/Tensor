@@ -154,6 +154,68 @@ public TreeBranch< T > {
 		}
 };
 
+template< typename T >
+class TreeDif :
+public TreeBranch< T > {
+
+	public:
+
+		TreeDif( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
+		TreeBranch< T >( p_lhs, p_rhs ) {
+
+		}
+
+		~TreeDif( ) {
+
+		}
+
+	public:
+
+
+		Tree< T >
+		*cpy( ) {
+
+			return new TreeDif( this->lhs( true ), this->rhs( true ) );
+		}
+
+		T
+		val( ) {
+
+			return this->lhs( )->val( ) - this->rhs( )->val( );
+		}
+};
+
+template< typename T >
+class TreeMul :
+public TreeBranch< T > {
+
+	public:
+
+		TreeMul( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
+		TreeBranch< T >( p_lhs, p_rhs ) {
+
+		}
+
+		~TreeMul( ) {
+
+		}
+
+	public:
+
+
+		Tree< T >
+		*cpy( ) {
+
+			return new TreeMul( this->lhs( true ), this->rhs( true ) );
+		}
+
+		T
+		val( ) {
+
+			return this->lhs( )->val( ) * this->rhs( )->val( );
+		}
+};
+
 
 
 template< typename T >
@@ -184,7 +246,7 @@ class Term {
 	public:
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return __tree->cpy( );
 		}
@@ -218,7 +280,7 @@ class Term {
 		}
 
 		Term< T >
-		operator +( Term< T > &p_term ) {
+		operator +( Term< T > const &p_term ) {
 
 			return Term< T >( new TreeSum< T >( this->cpy( ), p_term.cpy( ) ) );
 		}
@@ -228,6 +290,51 @@ class Term {
 
 			return Term< T >( new TreeSum< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
 		}
+
+		Term< T >
+		operator -( Term< T > const &p_term ) {
+
+			return Term< T >( new TreeDif< T >( this->cpy( ), p_term.cpy( ) ) );
+		}
+
+		Term< T >
+		operator -( T const &p_val ) {
+
+			return Term< T >( new TreeDif< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+		}
+
+		Term< T >
+		operator *( Term< T > const &p_term ) {
+
+			return Term< T >( new TreeMul< T >( this->cpy( ), p_term.cpy( ) ) );
+		}
+
+		Term< T >
+		operator *( T const &p_val ) {
+
+			return Term< T >( new TreeMul< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+		}
 };
+
+template< typename T >
+Term< T >
+operator +( T const &p_val, Term< T > &p_term ) {
+
+	return Term< T >( new TreeSum< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator -( T const &p_val, Term< T > &p_term ) {
+
+	return Term< T >( new TreeDif< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator *( T const &p_val, Term< T > &p_term ) {
+
+	return Term< T >( new TreeMul< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
 
 #endif // TERM_HPP

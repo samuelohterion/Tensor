@@ -4,31 +4,6 @@
 #include "term.hpp"
 #include <vector>
 
-class Idx {
-
-	public:
-
-		Idx( );
-
-		virtual
-		~Idx( );
-
-	public:
-
-		virtual bool
-		is( Idx &p_idx ) const = 0;
-
-		virtual bool
-		isConstant( ) const = 0;
-
-		virtual bool
-		isReference( ) const = 0;
-
-		virtual int
-		eval( ) = 0;
-};
-
-
 //---------------------------------------------------------------------------
 
 typedef Term< int >
@@ -37,105 +12,41 @@ TermI;
 typedef Tree< int >
 TreeI;
 
-class CIdx :
-public Idx,
-public TermI {
-
-	public:
-
-		CIdx( );
-
-		CIdx( CIdx &p_idx );
-
-		CIdx( int const &p_val );
-
-		~CIdx( );
-
-	public:
-
-		TreeI
-		*cpy( );
-
-		int
-		eval( );
-
-		bool
-		is( Idx & ) const;
-
-		bool
-		isConstant( ) const;
-
-		bool
-		isReference( ) const;
-
-		int
-		val( );
-};
-
-
-//---------------------------------------------------------------------------
-
-
-class TreeConstantIndex :
-public TreeI {
-
-	public:
-
-		TreeConstantIndex( int const &p_value );
-
-	private:
-
-		int const
-		__value;
-
-	public:
-
-		TreeI
-		*cpy( );
-
-		int
-		val( );
-};
-
 
 //---------------------------------------------------------------------------
 
 
 class EIdx :
-public Idx,
 public TermI {
 
 	public:
 
 		EIdx( );
 
-		EIdx( EIdx const &p_idx );
+		EIdx( int const &p_idx );
 
 		~EIdx( );
 
 	private:
 
 		bool
-		__isReference;
+		__isConstant;
 
 		int
-		*__begin,
-		*__current,
-		*__end;
+		__begin,
+		__current,
+		__end;
 
 	public:
 
 		TreeI
 		*cpy( );
 
-		int
-		eval( );
-
 		EIdx
 		&inc( );
 
 		bool
-		is( Idx &p_idx ) const;
+		is( EIdx &p_idx ) const;
 
 		bool
 		isConstant( ) const;
@@ -197,7 +108,7 @@ public TreeI {
 
 
 class Subscription :
-public std::vector< Idx * > {
+public std::vector< EIdx * > {
 
 	public:
 
@@ -208,7 +119,7 @@ public std::vector< Idx * > {
 	public:
 
 		Subscription
-		&addIdx( Idx *p_idx );
+		&addIdx( EIdx *p_idx );
 
 		bool
 		contains( EIdx * p_eidx ) const;
