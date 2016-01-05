@@ -42,14 +42,14 @@ EIdx
 }
 
 bool
-EIdx::is( EIdx &p_idx ) const {
+EIdx::is( EIdx *p_idx ) const {
 
-	if( isConstant( ) || p_idx.isConstant( ) ) {
+	if( isConstant( ) || p_idx->isConstant( ) ) {
 
-		return true;
+		return false;
 	}
 
-	return &p_idx == this;
+	return p_idx == this;
 }
 
 bool
@@ -160,12 +160,9 @@ Subscription::contains( EIdx *p_eidx ) const {
 
 	for( auto i : *this ) {
 
-		if( !i->isConstant( ) ) {
+		if( i->is( p_eidx ) ) {
 
-			if( i == p_eidx ) {
-
-				return true;
-			}
+			return true;
 		}
 	}
 
@@ -222,7 +219,7 @@ Counter::contains( EIdx *p_eidx ) const {
 
 	for( auto i : *this ) {
 
-		if( i == p_eidx ) {
+		if( i->is( p_eidx ) ) {
 
 			return true;
 		}

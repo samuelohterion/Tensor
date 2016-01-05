@@ -46,7 +46,7 @@ public TermI {
 		&inc( );
 
 		bool
-		is( EIdx &p_idx ) const;
+		is( EIdx *p_idx ) const;
 
 		bool
 		isConstant( ) const;
