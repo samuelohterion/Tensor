@@ -2,20 +2,21 @@
 #define IDX_H
 
 #include "term.hpp"
+#include <vector>
 
-class Idx :
-public Term< int > {
+class Idx {
 
 	public:
 
 		Idx( );
 
+		virtual
 		~Idx( );
 
 	public:
 
 		virtual bool
-		is( Idx const &p_idx ) const  = 0;
+		is( Idx &p_idx ) const = 0;
 
 		virtual bool
 		isConstant( ) const = 0;
@@ -23,38 +24,64 @@ public Term< int > {
 		virtual bool
 		isReference( ) const = 0;
 
-		virtual Idx
-		&set( int const &p_val );
-
 		virtual int
-		val( ) const = 0;
-
-	public:
-
-		std::string
-		str( ) const;
+		eval( ) = 0;
 };
 
-class TreeCIdx :
-public TreeValue< int > {
 
-	public:
+//---------------------------------------------------------------------------
 
-		TreeCIdx( int const &p_constantIndex );
-};
+typedef Term< int >
+TermI;
+
+typedef Tree< int >
+TreeI;
 
 class CIdx :
-public Idx {
+public Idx,
+public TermI {
 
 	public:
 
 		CIdx( );
 
-		CIdx( CIdx const &p_idx );
+		CIdx( CIdx &p_idx );
 
-		CIdx( int const &p_idx );
+		CIdx( int const &p_val );
 
 		~CIdx( );
+
+	public:
+
+		TreeI
+		*cpy( );
+
+		int
+		eval( );
+
+		bool
+		is( Idx & ) const;
+
+		bool
+		isConstant( ) const;
+
+		bool
+		isReference( ) const;
+
+		int
+		val( );
+};
+
+
+//---------------------------------------------------------------------------
+
+
+class TreeConstantIndex :
+public TreeI {
+
+	public:
+
+		TreeConstantIndex( int const &p_value );
 
 	private:
 
@@ -63,80 +90,171 @@ public Idx {
 
 	public:
 
-		Tree< int >
-		*cpy( ) const;
-
-		bool
-		is( Idx const &p_idx );
-
-		Idx
-		&reset( );
-
-		TreeValue
-		&set( int const &p_val );
-
-		TreeValue
-		&setCount( int const &p_count);
-
-		TreeValue
-		&setFirst( int const &p_first);
-
-		std::string
-		str( ) const;
+		TreeI
+		*cpy( );
 
 		int
-		val( ) const;
+		val( );
 };
 
-//class Idx :
-//public Term< int > {
 
-//	public:
+//---------------------------------------------------------------------------
 
-//		Idx( );
 
-//		Idx( Idx const &p_idx );
+class EIdx :
+public Idx,
+public TermI {
 
-//		Idx( int const &p_idx );
+	public:
 
-//		~Idx( );
+		EIdx( );
 
-//	private:
+		EIdx( EIdx const &p_idx );
 
-//		bool
-//		__constant,
-//		__reference;
+		~EIdx( );
 
-//		int
-//		*__begin,
-//		*__current,
-//		*__end;
+	private:
 
-//	public:
+		bool
+		__isReference;
 
-//		Tree< int >
-//		*cpy( ) const;
+		int
+		*__begin,
+		*__current,
+		*__end;
 
-//		bool
-//		is( Idx const &p_idx );
+	public:
 
-//		Idx
-//		&reset( );
+		TreeI
+		*cpy( );
 
-//		TreeValue
-//		&set( int const &p_val );
+		int
+		eval( );
 
-//		TreeValue
-//		&setCount( int const &p_count);
+		EIdx
+		&inc( );
 
-//		TreeValue
-//		&setFirst( int const &p_first);
+		bool
+		is( Idx &p_idx ) const;
 
-//		std::string
-//		str( ) const;
+		bool
+		isConstant( ) const;
 
-//		int
-//		val( ) const;
-//};
+		bool
+		isOK( ) const;
+
+		bool
+		isReference( ) const;
+
+		EIdx
+		&reset( );
+
+		EIdx
+		&set( int const &p_value );
+
+		EIdx
+		&setCount( int const &p_count );
+
+		EIdx
+		&setFirst( int const &p_first );
+
+		int
+		val( );
+
+	public:
+
+		EIdx
+		&operator ++( );
+};
+
+
+//---------------------------------------------------------------------------
+
+
+class TreeEinsteinIndex :
+public TreeI {
+
+	public:
+
+		TreeEinsteinIndex( EIdx *p_eIdx );
+
+	private:
+
+		EIdx
+		*__einsteinIndex;
+
+	public:
+
+		TreeI
+		*cpy( );
+
+		int
+		val( );
+};
+
+
+//---------------------------------------------------------------------------
+
+
+class Subscription :
+public std::vector< Idx * > {
+
+	public:
+
+		Subscription( );
+
+		~Subscription( );
+
+	public:
+
+		Subscription
+		&addIdx( Idx *p_idx );
+
+		bool
+		contains( EIdx * p_eidx ) const;
+};
+
+class Counter :
+public std::vector< EIdx * > {
+
+	public:
+
+		Counter( );
+
+		~Counter( );
+
+	private:
+
+		int
+		__lastChangedDigit;
+
+	public:
+
+		Counter
+		&operator ++( );
+
+	public:
+
+		Counter
+		&addEIdx( EIdx *p_eidx );
+
+		Counter
+		&buildFromSubscription( Subscription const &p_subscription );
+
+		bool
+		contains( EIdx *p_edix ) const;
+
+		Counter
+		&inc( );
+
+		bool
+		isOK( ) const;
+
+		int
+		lcd( ) const;
+
+		Counter
+		&reset( );
+};
 
 #endif // IDX_H

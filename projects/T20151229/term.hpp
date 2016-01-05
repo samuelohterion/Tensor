@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+//#include "idx.h"
 
 template< typename T >
 class Tree {
@@ -13,13 +14,18 @@ class Tree {
 
 		}
 
+		virtual
+		~Tree( ) {
+
+		}
+
 	public:
 
 		virtual Tree< T >
-		*cpy( ) const = 0;
+		*cpy( ) = 0;
 
-		virtual std::string
-		str( ) const {
+		std::string
+		str( ) {
 
 			std::stringstream
 			ss;
@@ -30,7 +36,7 @@ class Tree {
 		}
 
 		virtual T
-		val( ) const = 0;
+		val( ) = 0;
 };
 
 template< typename T >
@@ -45,6 +51,10 @@ public Tree< T > {
 
 		}
 
+		~TreeValue( ) {
+
+		}
+
 	private:
 
 		T
@@ -52,13 +62,13 @@ public Tree< T > {
 
 	public:
 
-		virtual Tree< T >
-		*cpy( ) const {
+		Tree< T >
+		*cpy( ) {
 
 			return new TreeValue< T >( __val );
 		}
 
-		virtual TreeValue
+		TreeValue< T >
 		&set( T const &p_val ) {
 
 			__val = p_val;
@@ -66,99 +76,157 @@ public Tree< T > {
 			return *this;
 		}
 
-		virtual T
-		val( ) const {
+		T
+		val( ) {
 
 			return __val;
 		}
 };
 
 template< typename T >
-class TreeConstantValue :
-public TreeValue< T > {
+class TreeBranch :
+public Tree< T > {
 
 	public:
 
-		TreeValue( T const &p_val ) :
+		TreeBranch( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
 		Tree< T >( ),
-		__val( p_val ) {
+		_lhs( p_lhs ),
+		_rhs( p_rhs ) {
 
 		}
 
-	private:
+		~TreeBranch( ) {
 
-		T
-		__val;
+			delete _lhs;
+			delete _rhs;
+		}
+
+	protected:
+
+		Tree< T >
+		*_lhs,
+		*_rhs;
 
 	public:
 
-		virtual Tree< T >
-		*cpy( ) const {
+		Tree< T >
+		*lhs( bool p_copy = false ) {
 
-			return new TreeValue< T >( __val );
+			return p_copy ? _lhs->cpy( ) : _lhs;
 		}
 
-		virtual TreeValue
-		&set( T const &p_val ) {
+		Tree< T >
+		*rhs( bool p_copy = false ) {
 
-			__val = p_val;
-
-			return *this;
-		}
-
-		virtual T
-		val( ) const {
-
-			return __val;
+			return p_copy ? _rhs->cpy( ) : _rhs;
 		}
 };
 
-class TreeConstantIndex :
-public TreeValue< int > {
+template< typename T >
+class TreeSum :
+public TreeBranch< T > {
 
 	public:
 
-		TreeConstantIndex( int const &p_val ) :
-		TreeValue< int >( ),
-		__val( p_val ) {
+		TreeSum( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
+		TreeBranch< T >( p_lhs, p_rhs ) {
 
 		}
 
-	private:
+		~TreeSum( ) {
+
+		}
+
+	public:
+
+
+		Tree< T >
+		*cpy( ) {
+
+			return new TreeSum( this->lhs( true ), this->rhs( true ) );
+		}
 
 		T
-		__val;
+		val( ) {
 
-	public:
-
-		virtual Tree< T >
-		*cpy( ) const {
-
-			return new TreeValue< T >( __val );
-		}
-
-		virtual TreeValue
-		&set( T const &p_val ) {
-
-			__val = p_val;
-
-			return *this;
-		}
-
-		virtual T
-		val( ) const {
-
-			return __val;
+			return this->lhs( )->val( ) + this->rhs( )->val( );
 		}
 };
+
+
 
 template< typename T >
 class Term {
 
 	public:
 
-		Term( ) {
+		Term(  ) :
+		__tree( 0 ) {
 
+		}
+
+		Term( Tree< T > *p_tree ) :
+		__tree( p_tree ) {
+
+		}
+
+		~Term(  ) {
+
+			delete __tree;
+		}
+
+	private:
+
+		Tree< T >
+		*__tree;
+
+	public:
+
+		Tree< T >
+		*cpy( ) {
+
+			return __tree->cpy( );
+		}
+
+		Tree< T >
+		*tree( ) const {
+
+			return __tree;
+		}
+
+		T
+		val( ) {
+
+			return __tree->val( );
+		}
+
+		std::string
+		str( ) {
+
+			return __tree->str( );
+		}
+
+	public:
+
+		Term< T >
+		&operator =( Term< T > &p_term ) {
+
+			delete __tree;
+
+			__tree = p_term.cpy( );
+		}
+
+		Term< T >
+		operator +( Term< T > &p_term ) {
+
+			return Term< T >( new TreeSum< T >( this->cpy( ), p_term.cpy( ) ) );
+		}
+
+		Term< T >
+		operator +( T const &p_val ) {
+
+			return Term< T >( new TreeSum< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
 		}
 };
 
