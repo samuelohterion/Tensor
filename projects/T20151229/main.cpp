@@ -85,14 +85,14 @@ main( ) {
 		++c;
 	}
 
-	cout << endl << setw( 8 ) << "1000 · i + 100 · j + 10 · k + l" << endl;
+	cout << endl << setw( 8 ) << "1000 · i - 100 · j + 10 · k / l" << endl;
 
 	int
 	cnt = 2;
 
 	for( i.setFirst( 1 ).setCount( ++cnt ), j.setFirst( 1 ).setCount( ++cnt ), k.setFirst( 1 ).setCount( ++cnt ), l.setFirst( 1 ).setCount( ++cnt ), c.reset( ); c.isOK( ); ++c ) {
 
-		cout << ( c.size( ) - c.lcd( ) > 0 ? string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << setw( 6 ) << ( 1000 * i + 100 * j + 10 * k + l ).str( );
+		cout << ( 0 < c.size( ) - c.lcd( ) ? string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << setw( 6 ) << ( 1000 * i - 100 * j + 10 * k / l ).str( );
 	}
 
 	cout << endl;
