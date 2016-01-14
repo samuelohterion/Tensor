@@ -97,6 +97,34 @@ main( ) {
 
 	cout << endl;
 
+	typedef Tensor< int > TInt;
+
+	TInt
+	ti0 = { 3, 2, 4 };
+
+
+	ti0[ i ][ j ][ k ] = 8 * i + 4 * j + k;
+
+
+	cout << endl;
+
+	cout << ti0[ i ][ j ][ k ].str( 3 ) << endl;
+
+	cout << endl;
+
+	typedef Tensor< double > TDbl;
+
+	TDbl
+	td0 = { 3, 2, 4 };
+
+
+	td0[ i ][ j ][ k ] = Term< double >( 2 * i + j ) + .001 * Term< double >( k * k );
+
+
+	cout << endl;
+
+	cout << td0[ i ][ j ][ k ].str( 9 ) << endl;
+
 	return 0;
 }
 

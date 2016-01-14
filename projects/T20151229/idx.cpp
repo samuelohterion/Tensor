@@ -211,7 +211,7 @@ Counter
 		}
 	}
 
-	return *this;
+	return reset( );
 }
 
 bool

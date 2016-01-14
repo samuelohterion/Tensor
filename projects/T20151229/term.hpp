@@ -1,6 +1,7 @@
 #ifndef TERM_HPP
 #define TERM_HPP
 
+#include <iomanip>
 #include <string>
 #include <sstream>
 //#include "idx.h"
@@ -25,10 +26,17 @@ class Tree {
 		*cpy( ) = 0;
 
 		std::string
-		str( ) {
+		str( std::size_t const &p_width = 0 ) {
 
 			std::stringstream
 			ss;
+
+			if( p_width ) {
+
+				ss << std::setw( p_width ) << val( );
+
+				return ss.str( );
+			}
 
 			ss << val( );
 
@@ -247,6 +255,43 @@ public TreeBranch< T > {
 		}
 };
 
+template< typename T, typename T2 >
+class TreeCast :
+public Tree< T > {
+
+	public:
+
+		TreeCast( Tree< T2 > *p_tree ) :
+		Tree< T >( ),
+		__from( p_tree ) {
+
+		}
+
+		~TreeCast( ) {
+
+			delete __from;
+		}
+
+	private:
+
+		Tree< T2 >
+		*__from;
+
+	public:
+
+		Tree< T >
+		*cpy( ) {
+
+			return new TreeCast< T, T2 >( __from->cpy( ) );
+		}
+
+		T
+		val( ) {
+
+			return __from->val( );
+		}
+};
+
 
 
 template< typename T >
@@ -261,6 +306,12 @@ class Term {
 
 		Term( Tree< T > *p_tree ) :
 		__tree( p_tree ) {
+
+		}
+
+		template< typename T2 >
+		Term( Term< T2 > const &p_term ) :
+		__tree( new TreeCast< T, T2 >( p_term.cpy( ) ) ) {
 
 		}
 
@@ -361,28 +412,28 @@ class Term {
 
 template< typename T >
 Term< T >
-operator +( T const &p_val, Term< T > &p_term ) {
+operator +( T const &p_val, Term< T > const &p_term ) {
 
 	return Term< T >( new TreeSum< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
 }
 
 template< typename T >
 Term< T >
-operator -( T const &p_val, Term< T > &p_term ) {
+operator -( T const &p_val, Term< T > const &p_term ) {
 
 	return Term< T >( new TreeDif< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
 }
 
 template< typename T >
 Term< T >
-operator *( T const &p_val, Term< T > &p_term ) {
+operator *( T const &p_val, Term< T > const &p_term ) {
 
 	return Term< T >( new TreeMul< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
 }
 
 template< typename T >
 Term< T >
-operator /( T const &p_val, Term< T > &p_term ) {
+operator /( T const &p_val, Term< T > const &p_term ) {
 
 	return Term< T >( new TreeDiv< T >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
 }

@@ -1,6 +1,13 @@
 #ifndef TENSOR_HPP
 #define TENSOR_HPP
 
+
+#include <iomanip>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <sstream>
+
 #include "idx.h"
 #include "term.hpp"
 
@@ -55,10 +62,22 @@ class Properties {
 
 	public:
 
+		std::size_t
+		extent( std::size_t const p_id ) const {
+
+			return __extents[ p_id ];
+		}
+
 		std::vector< std::size_t > const
 		&extents( ) const {
 
 			return __extents;
+		}
+
+		std::size_t
+		subVolume( std::size_t const &p_id ) const {
+
+			return __subvolumes[ p_id ];
 		}
 
 		std::size_t
@@ -103,9 +122,146 @@ class Tensor {
 	public:
 
 		SubTensor< T >
-		operator [ ]( EIdx const &p_eidx ) const {
+		operator [ ]( EIdx &p_eidx ) {
 
-			return SubTensor< T >( this, p_eidx, true );
+			if( !p_eidx.isConstant( ) ) {
+
+				p_eidx.setFirst( 0 ).setCount( properties.extent( 0 ) ).reset( );
+			}
+
+			return SubTensor< T >( this, &p_eidx, true );
+		}
+};
+
+template< typename T >
+class TreeSubTensor;
+
+template< typename T >
+class SubTensor :
+Term< T  > {
+
+	public:
+
+		SubTensor( Tensor< T > *const p_tensor, EIdx *p_eidx, bool p_reference = true ) :
+		Term< T >( new TreeSubTensor< T >( this ) ),
+		__reference( p_reference ),
+		__t( __reference ? p_tensor : new Tensor< T >( p_tensor->properties.extents( ) ) ) {
+
+			__subscription.addIdx( p_eidx );
+		}
+
+		~SubTensor( ) {
+
+			if( !__reference ) {
+
+				delete __t;
+			}
+		}
+
+	private:
+
+		bool
+		__reference;
+
+		Tensor< T >
+		*__t;
+
+		Subscription
+		__subscription;
+
+	private:
+
+		std::size_t
+		__address( ) {
+
+			std::size_t
+			addr = 0;
+
+			for( std::size_t i = 0; i < __t->properties.extents( ).size( ); ++i ) {
+
+				addr += __subscription[ i ]->val( ) * __t->properties.subVolume( i );
+			}
+
+			return addr;
+		}
+
+	public:
+
+		SubTensor< T >
+		&operator =( Term< T > p_term ) {
+
+			Counter
+			c;
+
+			c.buildFromSubscription( __subscription );
+
+			c.reset( );
+
+			while( c.isOK( ) ) {
+
+				set( p_term.val( ) );
+
+				++c;
+			}
+
+
+			return *this;
+		}
+
+		SubTensor< T >
+		&operator [ ]( EIdx &p_eidx ) {
+
+			if( !p_eidx.isConstant( ) ) {
+
+				p_eidx.setFirst( 0 ).setCount( __t->properties.extent( __subscription.size( ) ) ).reset( );
+			}
+
+			__subscription.addIdx( &p_eidx );
+
+			return *this;
+		}
+
+		T
+		eval( ) {
+
+			return __t->x[ __address( ) ];
+
+		}
+
+		SubTensor< T >
+		&set( T p_val ) {
+
+			__t->x[ __address( ) ] = p_val;
+
+			return *this;
+		}
+
+		std::string
+		str( std::size_t const &p_width = 0 ) {
+
+			std::stringstream
+			ss;
+
+			Counter
+			c;
+
+			c.buildFromSubscription( __subscription );
+
+			while( c.isOK( ) ) {
+
+				if( p_width ) {
+
+					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( p_width ) << eval( );
+				}
+				else {
+
+					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << eval( );
+				}
+
+				++c;
+			}
+
+			return ss.str( );
 		}
 };
 
@@ -129,52 +285,24 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy( ) {
 
-			return new TreeSubTensor( this );
+			return new TreeSubTensor< T >( __subTensor );
 		}
 
 		T
-		val( ) const {
+		val( ) {
 
-			return __subTensor->val( );
+			return __subTensor->eval( );
 		}
 };
 
-template< typename T >
-class SubTensor :
-Term< T  > {
+//template< typename T, typename T2 >
+//Term< T >
+//operator +( T const &p_val, Term< T2 > &p_term ) {
 
-	public:
+//	return Term< T >( new TreeSum< T >( new TreeValue< T >( p_val ), new TreeCast< T, T2 >( p_term.cpy( ) ) ) );
+//}
 
-		SubTensor( Tensor< T > *const p_tensor, EIdx const &p_eidx, bool p_reference = true ) :
-		Term< T >( new TreeSubTensor< T >( this ) ),
-		__reference( p_reference ),
-		__t( __reference ? p_tensor : new Tensor< T >( p_tensor->properties.extents( ) ) ),
-		__eidx( 1, p_eidx ) {
-
-		}
-
-	private:
-
-		bool
-		__reference;
-
-		Tensor< T >
-		*__t;
-
-		std::vector< EIdx >
-		__eidx;
-
-	public:
-
-		SubTensor< T >
-		&operator [ ]( EIdx const &p_eidx ) {
-
-			__eidx.push_back( p_eidx );
-
-			return *this;
-		}
-};
 
 #endif // TENSOR_HPP
