@@ -115,22 +115,29 @@ public Tree< T > {
 
 	public:
 
-		TreeSubTensor( SubTensor< T > const &p_subTensor ) :
-		Tree< T >( ) {
+		TreeSubTensor( SubTensor< T > *const p_subTensor ) :
+		Tree< T >( ),
+		__subTensor( p_subTensor ) {
 
 		}
+
+	private:
+
+		SubTensor< T >
+		*__subTensor;
+
 	public:
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeSubTensor( this );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
-			return 0;
+			return __subTensor->val( );
 		}
 };
 
