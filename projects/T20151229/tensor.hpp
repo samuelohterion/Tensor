@@ -156,6 +156,15 @@ public Term< T  > {
 			__subscription.addEIdx( p_eidx );
 		}
 
+		SubTensor( Tensor< T > *p_tensor, Subscription const &p_subscription, bool p_reference = false ) :
+		Term< T >( new TreeSubTensor< T >( this ) ),
+		__reference( p_reference ),
+		__t( __reference ? p_tensor : new Tensor< T >( p_tensor->properties.extents( ) ) ),
+		__subscription( p_subscription ) {
+
+			std::copy( p_tensor->x.cbegin( ), p_tensor->x.cend( ), __t->x.begin( ) );
+		}
+
 		SubTensor( Subscription &p_subscription ) :
 		Term< T >( new TreeSubTensor< T >( this ) ),
 		__reference( false ),
@@ -242,6 +251,26 @@ public Term< T  > {
 		SubTensor< T >
 		&operator =( SubTensor< T > const &p_subTensor ) {
 
+			if( this->__t == p_subTensor.__t ) {
+
+				SubTensor< T >
+				tmp( p_subTensor.__t, p_subTensor.__subscription, false );
+
+				Counter
+				c;
+
+				c.buildFromSubscription( __subscription );
+
+				while( c.isOK( ) ) {
+
+					set( tmp.eval( ) );
+
+					++c;
+				}
+
+				return *this;
+			}
+
 			Counter
 			c;
 
@@ -310,6 +339,27 @@ public Term< T  > {
 				ret.set( sum );
 
 				++cOuter;
+			}
+
+			return ret;
+		}
+
+		SubTensor< T >
+		operator *( Term< T > const &p_term ) const {
+
+			Counter
+			c;
+
+			c.buildFromSubscription( __subscription );
+
+			SubTensor< T >
+			ret( c );
+
+			while( c.isOK( ) ) {
+
+				ret.set( eval( ) * p_term.val( ) );
+
+				++c;
 			}
 
 			return ret;

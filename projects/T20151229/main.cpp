@@ -17,10 +17,6 @@ main( ) {
 	k,
 	l;
 
-	EIdx
-	ci( 8 ),
-	cj( 1111 );
-
 	cout << endl;
 
 	typedef Tensor< int > TInt;
@@ -30,62 +26,73 @@ main( ) {
 
 	ti0[ i ][ 1 ][ k ] = 8 * i + 4 + k;
 
-	cout << endl;
+	cout << "ti0[ i ][ j ][ k ]" << endl << ti0[ i ][ j ][ k ] << endl << endl;
 
-	cout << ti0[ i ][ j ][ k ] << endl;
-
-	cout << endl;
-
+	typedef Term< double > Dbl;
 	typedef Tensor< double > TDbl;
 
 	TDbl
 	td0 = { 3, 2, 4 };
 
-	td0[ i ][ j ][ k ] = Term< double >( 2 * i + j + 10 * ti0[ i ][ j ][ k ] ) + .1 * Term< double >( k * k );
+	td0[ i ][ j ][ k ] = Dbl( 2 * i + j + 10 * ti0[ i ][ j ][ k ] ) + .1 * Dbl( k * k );
 
-	cout << endl;
-
-	cout << td0[ i ][ j ][ k ] << endl;
+	cout << endl << "td0[ i ][ j ][ k ]" << endl << td0[ i ][ j ][ k ] << endl << endl;
 
 	TInt
 	a = { 3 },
 	b = { 2 },
 	ab = { 3, 2 };
 
-	a[ i ] = i;
-	ab[ i ][ j ] = i + j;
+	a[ i ] = i + 1;
+	ab[ i ][ j ] = ( i + 1 ) * ( j - 2 );
 
 	b[ i ] = ab[ j ][ i ] * a[ j ];
 
-	cout << "a[ i ]\n" << a[ i ] << endl;
-	cout << "ab[ i ][ j ]\n" << ab[ i ][ j ] << endl;
-	cout << "b[ i ]\n" << b[ i ] << endl;
+	cout << "a[ i ]\n" << a[ i ] << endl << endl;
+	cout << "ab[ i ][ j ]\n" << ab[ i ][ j ] << endl << endl;
+	cout << "b[ i ]\n" << b[ i ] << endl << endl;
 
 
 	TInt
-	u = { 4 },
-	v = { 3 },
-	w = { 3 },
-	M = { 4, 3 },
-	N = { 3, 4 };
+	u = { 7 },
+	v = { 5 },
+	w = { 5 },
+	M = { 7, 5 },
+	N = { 5, 7 };
 
 	u[ i ] = 1 + i;
 
-	M[ i ][ j ] = 1 + 3 * i + j;
+	M[ i ][ j ] = 1 + 5 * i + j;
 
 	N[ i ][ j ] = M[ j ][ i ];
 
-	v[ i ] = u[ j ] * M[ j ][ i ];
+	v[ i ] = ( u[ j ] * M[ j ][ i ] ) * ( i + 1 );
 
-	w[ i ] = N[ i ][ j ] * u[ j ];
+	w[ i ] = N[ i ][ j ] * u[ j ] / ( i + 1 );
 
-	cout << "u[ i ]\n" << u[ i ] << endl;
-	cout << "M[ i ][ j ]\n" << M[ i ][ j ] << endl;
-	cout << "N[ i ][ j ]\n" << N[ i ][ j ] << endl;
-	cout << "v[ i ]\n" << v[ i ] << endl;
-	cout << "w[ i ]\n" << w[ i ] << endl;
+	cout << "u[ i ]\n" << u[ i ] << endl << endl;
+	cout << "M[ i ][ j ]\n" << M[ i ][ j ] << endl << endl;
+	cout << "N[ i ][ j ]\n" << N[ i ][ j ] << endl << endl;
+	cout << "v[ i ]\n" << v[ i ] << endl << endl;
+	cout << "w[ i ]\n" << w[ i ] << endl << endl;
 
 
+	TInt
+	O = { 5, 5 };
+
+	O[ i ][ j ] = i - j;
+	cout << "O[ i ][ j ]\n" << O[ i ][ j ] << endl << endl;
+
+	O[ i ][ j ] = O[ j ][ i ];
+	cout << "O[ i ][ j ]\n" << O[ i ][ j ] << endl << endl;
+
+	cout << "O[ i ][ j ] + O[ i ][ j ]\n" << ( O[ i ][ j ] + O[ j ][ i ] ).str( 5 ) << endl << endl;
+
+	TInt
+	P = { 5, 5 };
+
+	P[ i ][ j ] = O[ i ][ j ] + O[ j ][ i ];
+	cout << "P[ i ][ j ]\n" << P[ i ][ j ] << endl << endl;
 
 	return 0;
 }

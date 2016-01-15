@@ -126,7 +126,7 @@ EIdx
 //---------------------------------------------------------------------------
 
 
-TreeEinsteinIndex::TreeEinsteinIndex(const EIdx *p_eIdx ) :
+TreeEinsteinIndex::TreeEinsteinIndex( EIdx const *p_eIdx ) :
 TreeI( ),
 __einsteinIndex( p_eIdx ) {
 

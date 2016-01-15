@@ -345,9 +345,9 @@ class Term {
 		}
 
 		std::string
-		str( ) {
+		str( std::size_t const &p_width = 0 ) const {
 
-			return __tree->str( );
+			return __tree->str( p_width );
 		}
 
 	public:
