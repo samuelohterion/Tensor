@@ -13,6 +13,15 @@ __end( 0 ) {
 
 }
 
+EIdx::EIdx( EIdx const &p_idx ) :
+TermI( new TreeEinsteinIndex( this ) ),
+__isConstant( p_idx.__isConstant ),
+__begin( p_idx.__begin ),
+__current( p_idx.__current ),
+__end( p_idx.__end ) {
+
+}
+
 EIdx::EIdx( int const &p_idx ) :
 TermI( new TreeEinsteinIndex( this ) ),
 __isConstant( true ),
@@ -28,7 +37,7 @@ EIdx::~EIdx( ) {
 
 
 TreeI
-*EIdx::cpy( ) {
+*EIdx::cpy( ) const {
 
 	return new TreeEinsteinIndex( this );
 }
@@ -102,7 +111,7 @@ EIdx
 }
 
 int
-EIdx::val( ) {
+EIdx::val( ) const {
 
 	return __current;
 }
@@ -117,20 +126,20 @@ EIdx
 //---------------------------------------------------------------------------
 
 
-TreeEinsteinIndex::TreeEinsteinIndex( EIdx *p_eIdx ) :
+TreeEinsteinIndex::TreeEinsteinIndex(const EIdx *p_eIdx ) :
 TreeI( ),
 __einsteinIndex( p_eIdx ) {
 
 }
 
 TreeI
-*TreeEinsteinIndex::cpy( ) {
+*TreeEinsteinIndex::cpy( ) const {
 
 	return new TreeEinsteinIndex( __einsteinIndex );
 }
 
 int
-TreeEinsteinIndex::val( ) {
+TreeEinsteinIndex::val( ) const {
 
 	return __einsteinIndex->val( );
 }
@@ -145,12 +154,19 @@ Subscription::Subscription( ) {
 
 Subscription::~Subscription( ) {
 
+	for( auto s : *this ) {
+
+		if( s->isConstant( ) ) {
+
+			delete s;
+		}
+	}
 }
 
 Subscription
-&Subscription::addIdx( EIdx *p_idx ) {
+&Subscription::addEIdx( EIdx *p_idx ) {
 
-	push_back( p_idx );
+	push_back( p_idx->isConstant( ) ? new EIdx( *p_idx ) : p_idx );
 
 	return *this;
 }
@@ -173,7 +189,7 @@ Subscription::contains( EIdx *p_eidx ) const {
 
 
 Counter::Counter( ) :
-std::vector< EIdx * >( ) {
+Subscription( ) {
 
 }
 
@@ -190,7 +206,51 @@ Counter
 Counter
 &Counter::addEIdx( EIdx *p_eidx ) {
 
-	push_back( p_eidx );
+	Subscription::addEIdx( p_eidx );
+
+	return *this;
+}
+
+Counter
+&Counter::buildForMultiplicationInnerLoop( Subscription const &p_lhs, Subscription const &p_rhs ) {
+
+	resize( 0 );
+
+	for( auto i : p_lhs ) {
+
+		if( !i->isConstant( ) && !contains( i ) && p_rhs.contains( i ) ) {
+
+			addEIdx( i );
+		}
+	}
+
+	reset( );
+
+	return *this;
+}
+
+Counter
+&Counter::buildForMultiplicationOuterLoop( Subscription const &p_lhs, Subscription const &p_rhs ) {
+
+	resize( 0 );
+
+	for( auto i : p_lhs ) {
+
+		if( !i->isConstant( ) && !contains( i ) && !p_rhs.contains( i ) ) {
+
+			addEIdx( i );
+		}
+	}
+
+	for( auto i : p_rhs ) {
+
+		if( !i->isConstant( ) && !contains( i ) && !p_lhs.contains( i ) ) {
+
+			addEIdx( i );
+		}
+	}
+
+	reset( );
 
 	return *this;
 }
@@ -212,20 +272,6 @@ Counter
 	}
 
 	return reset( );
-}
-
-bool
-Counter::contains( EIdx *p_eidx ) const {
-
-	for( auto i : *this ) {
-
-		if( i->is( p_eidx ) ) {
-
-			return true;
-		}
-	}
-
-	return false;
 }
 
 Counter

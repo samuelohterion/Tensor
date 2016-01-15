@@ -25,6 +25,8 @@ public TermI {
 
 		EIdx( int const &p_idx );
 
+		EIdx( EIdx const &p_idx );
+
 		~EIdx( );
 
 	private:
@@ -40,7 +42,13 @@ public TermI {
 	public:
 
 		TreeI
-		*cpy( );
+		*cpy( ) const;
+
+		int
+		getCount( ) const {
+
+			return __end - __begin;
+		}
 
 		EIdx
 		&inc( );
@@ -70,7 +78,7 @@ public TermI {
 		&setFirst( int const &p_first );
 
 		int
-		val( );
+		val( ) const;
 
 	public:
 
@@ -87,20 +95,20 @@ public TreeI {
 
 	public:
 
-		TreeEinsteinIndex( EIdx *p_eIdx );
+		TreeEinsteinIndex( EIdx const *p_eIdx );
 
 	private:
 
-		EIdx
+		EIdx const
 		*__einsteinIndex;
 
 	public:
 
 		TreeI
-		*cpy( );
+		*cpy( ) const;
 
 		int
-		val( );
+		val( ) const;
 };
 
 
@@ -119,14 +127,14 @@ public std::vector< EIdx * > {
 	public:
 
 		Subscription
-		&addIdx( EIdx *p_idx );
+		&addEIdx( EIdx *p_idx );
 
 		bool
 		contains( EIdx * p_eidx ) const;
 };
 
 class Counter :
-public std::vector< EIdx * > {
+public Subscription {
 
 	public:
 
@@ -150,10 +158,13 @@ public std::vector< EIdx * > {
 		&addEIdx( EIdx *p_eidx );
 
 		Counter
-		&buildFromSubscription( Subscription const &p_subscription );
+		&buildForMultiplicationInnerLoop( Subscription const &p_lhs, Subscription const &p_rhs );
 
-		bool
-		contains( EIdx *p_edix ) const;
+		Counter
+		&buildForMultiplicationOuterLoop( Subscription const &p_lhs, Subscription const &p_rhs );
+
+		Counter
+		&buildFromSubscription( Subscription const &p_subscription );
 
 		Counter
 		&inc( );

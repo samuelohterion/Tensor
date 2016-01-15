@@ -17,83 +17,9 @@ main( ) {
 	k,
 	l;
 
-
 	EIdx
 	ci( 8 ),
 	cj( 1111 );
-
-	cout << endl;
-
-	Subscription
-	s;
-
-	s.addIdx( &i );
-	s.addIdx( &cj );
-	s.addIdx( &j );
-	s.addIdx( &ci );
-	s.addIdx( &k );
-	s.addIdx( &ci );
-	s.addIdx( &k );
-	s.addIdx( &l );
-
-	Counter
-	c;
-
-	c.buildFromSubscription( s );
-	c.reset( );
-
-	cout << setw( 8 ) << "i" << ", " << setw( 8 ) << "j" << ", " << setw( 8 ) << "k" << endl;
-
-	while( c.isOK( ) ) {
-
-		cout << setw( 8 ) << i.str( ) << ", " << setw( 8 ) << j.str( ) << ", " << setw( 8 ) << k.str( ) << endl;
-
-		++c;
-	}
-
-	cout << endl;
-
-	i.setFirst( 0 ).setCount( 2 );
-	j.setFirst( 10 ).setCount( 2 );
-	k.setFirst( 100 ).setCount( 2 );
-
-	c.reset( );
-
-	cout << setw( 8 ) << "i" << ", " << setw( 8 ) << "j" << ", " << setw( 8 ) << "k" << endl;
-
-	while( c.isOK( ) ) {
-
-		cout << setw( 8 ) << i.str( ) << ", " << setw( 8 ) << j.str( ) << ", " << setw( 8 ) << k.str( ) << endl;
-
-		++c;
-	}
-
-	cout << endl;
-
-	i.setFirst( 1 ).setCount( 2 );
-	j.setFirst( 1 ).setCount( 2 );
-	k.setFirst( 1 ).setCount( 2 );
-
-	c.reset( );
-
-	cout << endl << setw( 8 ) << "100 · i + 10 · j + k" << endl;
-
-	while( c.isOK( ) ) {
-
-		cout << setw( 8 ) << ( 100 * i + 10 * j + k ).str( ) << endl;
-
-		++c;
-	}
-
-	cout << endl << setw( 8 ) << "1000 · i - 100 · j + 10 · k / l" << endl;
-
-	int
-	cnt = 2;
-
-	for( i.setFirst( 1 ).setCount( ++cnt ), j.setFirst( 1 ).setCount( ++cnt ), k.setFirst( 1 ).setCount( ++cnt ), l.setFirst( 1 ).setCount( ++cnt ), c.reset( ); c.isOK( ); ++c ) {
-
-		cout << ( 0 < c.size( ) - c.lcd( ) ? string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << setw( 6 ) << ( 1000 * i - 100 * j + 10 * k / l ).str( );
-	}
 
 	cout << endl;
 
@@ -102,13 +28,11 @@ main( ) {
 	TInt
 	ti0 = { 3, 2, 4 };
 
-
-	ti0[ i ][ j ][ k ] = 8 * i + 4 * j + k;
-
+	ti0[ i ][ 1 ][ k ] = 8 * i + 4 + k;
 
 	cout << endl;
 
-	cout << ti0[ i ][ j ][ k ].str( 3 ) << endl;
+	cout << ti0[ i ][ j ][ k ] << endl;
 
 	cout << endl;
 
@@ -117,13 +41,51 @@ main( ) {
 	TDbl
 	td0 = { 3, 2, 4 };
 
-
-	td0[ i ][ j ][ k ] = Term< double >( 2 * i + j ) + .001 * Term< double >( k * k );
-
+	td0[ i ][ j ][ k ] = Term< double >( 2 * i + j + 10 * ti0[ i ][ j ][ k ] ) + .1 * Term< double >( k * k );
 
 	cout << endl;
 
-	cout << td0[ i ][ j ][ k ].str( 9 ) << endl;
+	cout << td0[ i ][ j ][ k ] << endl;
+
+	TInt
+	a = { 3 },
+	b = { 2 },
+	ab = { 3, 2 };
+
+	a[ i ] = i;
+	ab[ i ][ j ] = i + j;
+
+	b[ i ] = ab[ j ][ i ] * a[ j ];
+
+	cout << "a[ i ]\n" << a[ i ] << endl;
+	cout << "ab[ i ][ j ]\n" << ab[ i ][ j ] << endl;
+	cout << "b[ i ]\n" << b[ i ] << endl;
+
+
+	TInt
+	u = { 4 },
+	v = { 3 },
+	w = { 3 },
+	M = { 4, 3 },
+	N = { 3, 4 };
+
+	u[ i ] = 1 + i;
+
+	M[ i ][ j ] = 1 + 3 * i + j;
+
+	N[ i ][ j ] = M[ j ][ i ];
+
+	v[ i ] = u[ j ] * M[ j ][ i ];
+
+	w[ i ] = N[ i ][ j ] * u[ j ];
+
+	cout << "u[ i ]\n" << u[ i ] << endl;
+	cout << "M[ i ][ j ]\n" << M[ i ][ j ] << endl;
+	cout << "N[ i ][ j ]\n" << N[ i ][ j ] << endl;
+	cout << "v[ i ]\n" << v[ i ] << endl;
+	cout << "w[ i ]\n" << w[ i ] << endl;
+
+
 
 	return 0;
 }

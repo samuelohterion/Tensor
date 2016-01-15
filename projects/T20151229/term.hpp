@@ -23,10 +23,10 @@ class Tree {
 	public:
 
 		virtual Tree< T >
-		*cpy( ) = 0;
+		*cpy( ) const = 0;
 
 		std::string
-		str( std::size_t const &p_width = 0 ) {
+		str( std::size_t const &p_width = 0 ) const {
 
 			std::stringstream
 			ss;
@@ -44,7 +44,7 @@ class Tree {
 		}
 
 		virtual T
-		val( ) = 0;
+		val( ) const = 0;
 };
 
 template< typename T >
@@ -71,7 +71,7 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeValue< T >( __val );
 		}
@@ -85,7 +85,7 @@ public Tree< T > {
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return __val;
 		}
@@ -119,13 +119,13 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*lhs( bool p_copy = false ) {
+		*lhs( bool p_copy = false ) const {
 
 			return p_copy ? _lhs->cpy( ) : _lhs;
 		}
 
 		Tree< T >
-		*rhs( bool p_copy = false ) {
+		*rhs( bool p_copy = false ) const {
 
 			return p_copy ? _rhs->cpy( ) : _rhs;
 		}
@@ -150,13 +150,13 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeSum( this->lhs( true ), this->rhs( true ) );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return this->lhs( )->val( ) + this->rhs( )->val( );
 		}
@@ -181,13 +181,13 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeDif( this->lhs( true ), this->rhs( true ) );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return this->lhs( )->val( ) - this->rhs( )->val( );
 		}
@@ -212,13 +212,13 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeMul( this->lhs( true ), this->rhs( true ) );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return this->lhs( )->val( ) * this->rhs( )->val( );
 		}
@@ -243,13 +243,13 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeDiv( this->lhs( true ), this->rhs( true ) );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return this->lhs( )->val( ) / this->rhs( )->val( );
 		}
@@ -280,18 +280,17 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeCast< T, T2 >( __from->cpy( ) );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return __from->val( );
 		}
 };
-
 
 
 template< typename T >
@@ -340,7 +339,7 @@ class Term {
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return __tree->val( );
 		}
@@ -362,49 +361,49 @@ class Term {
 		}
 
 		Term< T >
-		operator +( Term< T > const &p_term ) {
+		operator +( Term< T > const &p_term ) const {
 
 			return Term< T >( new TreeSum< T >( this->cpy( ), p_term.cpy( ) ) );
 		}
 
 		Term< T >
-		operator +( T const &p_val ) {
+		operator +( T const &p_val ) const {
 
 			return Term< T >( new TreeSum< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
 		}
 
 		Term< T >
-		operator -( Term< T > const &p_term ) {
+		operator -( Term< T > const &p_term ) const {
 
 			return Term< T >( new TreeDif< T >( this->cpy( ), p_term.cpy( ) ) );
 		}
 
 		Term< T >
-		operator -( T const &p_val ) {
+		operator -( T const &p_val ) const {
 
 			return Term< T >( new TreeDif< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
 		}
 
 		Term< T >
-		operator *( Term< T > const &p_term ) {
+		operator *( Term< T > const &p_term ) const {
 
 			return Term< T >( new TreeMul< T >( this->cpy( ), p_term.cpy( ) ) );
 		}
 
 		Term< T >
-		operator *( T const &p_val ) {
+		operator *( T const &p_val ) const {
 
 			return Term< T >( new TreeMul< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
 		}
 
 		Term< T >
-		operator /( Term< T > const &p_term ) {
+		operator /( Term< T > const &p_term ) const {
 
 			return Term< T >( new TreeDiv< T >( this->cpy( ), p_term.cpy( ) ) );
 		}
 
 		Term< T >
-		operator /( T const &p_val ) {
+		operator /( T const &p_val ) const {
 
 			return Term< T >( new TreeDiv< T >( this->cpy( ), new TreeValue< T >( p_val ) ) );
 		}

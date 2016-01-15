@@ -131,6 +131,12 @@ class Tensor {
 
 			return SubTensor< T >( this, &p_eidx, true );
 		}
+
+		SubTensor< T >
+		operator [ ]( std::size_t p_eidx ) const {
+
+			return SubTensor< T >( this, EIdx( p_eidx ), true );
+		}
 };
 
 template< typename T >
@@ -138,16 +144,25 @@ class TreeSubTensor;
 
 template< typename T >
 class SubTensor :
-Term< T  > {
+public Term< T  > {
 
 	public:
 
-		SubTensor( Tensor< T > *const p_tensor, EIdx *p_eidx, bool p_reference = true ) :
+		SubTensor( Tensor< T > *p_tensor, EIdx *p_eidx, bool p_reference = true ) :
 		Term< T >( new TreeSubTensor< T >( this ) ),
 		__reference( p_reference ),
 		__t( __reference ? p_tensor : new Tensor< T >( p_tensor->properties.extents( ) ) ) {
 
-			__subscription.addIdx( p_eidx );
+			__subscription.addEIdx( p_eidx );
+		}
+
+		SubTensor( Subscription &p_subscription ) :
+		Term< T >( new TreeSubTensor< T >( this ) ),
+		__reference( false ),
+		__t( 0 ),
+		__subscription( p_subscription ) {
+
+			__buildFromSubscription( );
 		}
 
 		~SubTensor( ) {
@@ -158,7 +173,7 @@ Term< T  > {
 			}
 		}
 
-	private:
+	public:
 
 		bool
 		__reference;
@@ -172,9 +187,9 @@ Term< T  > {
 	private:
 
 		std::size_t
-		__address( ) {
+		__address( ) const {
 
-			std::size_t
+			int
 			addr = 0;
 
 			for( std::size_t i = 0; i < __t->properties.extents( ).size( ); ++i ) {
@@ -185,17 +200,33 @@ Term< T  > {
 			return addr;
 		}
 
+		void
+		__buildFromSubscription( ) {
+
+			std::vector< std::size_t >
+			extents;
+
+			for( auto i : __subscription ) {
+
+				if( !i->isConstant( ) ) {
+
+					extents.push_back( i->getCount( ) );
+				}
+			}
+
+			__t = new Tensor< T >( extents );
+		}
+
+
 	public:
 
 		SubTensor< T >
-		&operator =( Term< T > p_term ) {
+		&operator =( Term< T > const &p_term ) {
 
 			Counter
 			c;
 
 			c.buildFromSubscription( __subscription );
-
-			c.reset( );
 
 			while( c.isOK( ) ) {
 
@@ -209,6 +240,32 @@ Term< T  > {
 		}
 
 		SubTensor< T >
+		&operator =( SubTensor< T > const &p_subTensor ) {
+
+			Counter
+			c;
+
+			c.buildFromSubscription( __subscription );
+
+			while( c.isOK( ) ) {
+
+				set( p_subTensor.eval( ) );
+
+				++c;
+			}
+
+			return *this;
+		}
+
+		SubTensor< T >
+		&operator [ ]( std::size_t const &p_eidx ) {
+
+			__subscription.addEIdx( new EIdx( p_eidx ) );
+
+			return *this;
+		}
+
+		SubTensor< T >
 		&operator [ ]( EIdx &p_eidx ) {
 
 			if( !p_eidx.isConstant( ) ) {
@@ -216,13 +273,50 @@ Term< T  > {
 				p_eidx.setFirst( 0 ).setCount( __t->properties.extent( __subscription.size( ) ) ).reset( );
 			}
 
-			__subscription.addIdx( &p_eidx );
+			__subscription.addEIdx( &p_eidx );
 
 			return *this;
 		}
 
+		SubTensor< T >
+		operator *( SubTensor< T > const &p_subtensor ) const {
+
+			Counter
+			cOuter,
+			cInner;
+
+			cOuter.buildForMultiplicationOuterLoop( __subscription, p_subtensor.__subscription );
+			cInner.buildForMultiplicationInnerLoop( __subscription, p_subtensor.__subscription );
+
+			SubTensor< T >
+			ret( cOuter );
+
+			cOuter.reset( );
+
+			while( cOuter.isOK( ) ) {
+
+				T
+				sum = T( 0 );
+
+				cInner.reset( );
+
+				while( cInner.isOK( ) ) {
+
+					sum += this->eval( ) * p_subtensor.eval( );
+
+					++cInner;
+				}
+
+				ret.set( sum );
+
+				++cOuter;
+			}
+
+			return ret;
+		}
+
 		T
-		eval( ) {
+		eval( ) const {
 
 			return __t->x[ __address( ) ];
 
@@ -237,7 +331,7 @@ Term< T  > {
 		}
 
 		std::string
-		str( std::size_t const &p_width = 0 ) {
+		str( std::size_t const &p_width = 0 ) const {
 
 			std::stringstream
 			ss;
@@ -246,6 +340,46 @@ Term< T  > {
 			c;
 
 			c.buildFromSubscription( __subscription );
+
+			if( p_width < 1 ) {
+
+				std::size_t
+				width = 0;
+
+				while( c.isOK( ) ) {
+
+					ss.str( "" );
+
+					ss << eval( );
+
+					std::size_t
+					w = ss.str( ).length( );
+
+					if( width < w ) {
+
+						width = w;
+					}
+
+					++c;
+				}
+
+				width += 2;
+
+				ss.str( "" );
+				c.reset( );
+
+				while( c.isOK( ) ) {
+
+					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( width ) << eval( );
+
+					++c;
+				}
+
+				return ss.str( );
+			}
+
+			ss.str( "" );
+			c.reset( );
 
 			while( c.isOK( ) ) {
 
@@ -285,24 +419,26 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*cpy( ) {
+		*cpy( ) const {
 
 			return new TreeSubTensor< T >( __subTensor );
 		}
 
 		T
-		val( ) {
+		val( ) const {
 
 			return __subTensor->eval( );
 		}
 };
 
-//template< typename T, typename T2 >
-//Term< T >
-//operator +( T const &p_val, Term< T2 > &p_term ) {
+template< typename T >
+std::ostream
+&operator <<( std::ostream &p_os, SubTensor< T > const &p_st ) {
 
-//	return Term< T >( new TreeSum< T >( new TreeValue< T >( p_val ), new TreeCast< T, T2 >( p_term.cpy( ) ) ) );
-//}
+	p_os << p_st.str( );
+
+	return p_os;
+}
 
 
 #endif // TENSOR_HPP
