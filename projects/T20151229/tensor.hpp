@@ -15,6 +15,17 @@ class Properties {
 
 	public:
 
+		Properties( ) {
+
+			__computeSubVolumes( );
+		}
+
+		Properties( Properties const &p_properties ) :
+		__extents( p_properties.__extents.cbegin( ), p_properties.__extents.cend( ) ),
+		__subvolumes( p_properties.__subvolumes.cbegin( ), p_properties.__subvolumes.cend( ) ) {
+
+		}
+
 		Properties( std::vector< std::size_t > const &p_extents ) :
 		__extents( p_extents.cbegin( ), p_extents.cend( ) ) {
 
@@ -43,6 +54,11 @@ class Properties {
 		__computeSubVolumes( ) {
 
 			__subvolumes.resize( __extents.size( ) );
+
+			if( __extents.size( ) < 1 ) {
+
+				return;
+			}
 
 			std::size_t
 			vol = 1;
@@ -74,16 +90,28 @@ class Properties {
 			return __extents;
 		}
 
+		bool
+		isScalar( ) const {
+
+			return __extents.size( ) < 1;
+		}
+
 		std::size_t
 		subVolume( std::size_t const &p_id ) const {
 
 			return __subvolumes[ p_id ];
 		}
 
+		std::vector< std::size_t > const
+		&subVolumes( ) const {
+
+			return __subvolumes;
+		}
+
 		std::size_t
 		volume( ) const {
 
-			return __extents[ 0 ] * __subvolumes[ 0 ];
+			return isScalar( ) ? 0 : __extents[ 0 ] * __subvolumes[ 0 ];
 		}
 };
 
@@ -94,6 +122,18 @@ template< typename T >
 class Tensor {
 
 	public:
+
+		Tensor( Tensor< T > const &p_tensor ) :
+		properties( p_tensor.properties ),
+		x( p_tensor.x.cbegin( ), p_tensor.x.cend( ) ) {
+
+		}
+
+		Tensor( T const &p_scalar = 0 ) :
+		properties( ),
+		x( 1, p_scalar ) {
+
+		}
 
 		Tensor( std::vector< std::size_t > const &p_extents ) :
 		properties( p_extents ),
@@ -156,6 +196,13 @@ public Term< T  > {
 			__subscription.addEIdx( p_eidx );
 		}
 
+		SubTensor( T const &p_scalar ) :
+		Term< T >( new TreeSubTensor< T >( this ) ),
+		__reference( false ),
+		__t( new Tensor< T >( p_scalar ) ) {
+
+		}
+
 		SubTensor( Tensor< T > *p_tensor, Subscription const &p_subscription, bool p_reference = false ) :
 		Term< T >( new TreeSubTensor< T >( this ) ),
 		__reference( p_reference ),
@@ -163,6 +210,15 @@ public Term< T  > {
 		__subscription( p_subscription ) {
 
 			std::copy( p_tensor->x.cbegin( ), p_tensor->x.cend( ), __t->x.begin( ) );
+		}
+
+		SubTensor( SubTensor< T > const &p_subTensor ) :
+		Term< T >( new TreeSubTensor< T >( this ) ),
+		__reference( p_subTensor.__reference ),
+		__t( __reference ? p_subTensor.__t : new Tensor< T >( *p_subTensor.__t ) ),
+		__subscription( p_subTensor.__subscription ) {
+
+			std::copy( p_subTensor.__t->x.cbegin( ), p_subTensor.__t->x.cend( ), __t->x.begin( ) );
 		}
 
 		SubTensor( Subscription &p_subscription ) :
@@ -311,10 +367,38 @@ public Term< T  > {
 		operator *( SubTensor< T > const &p_subtensor ) const {
 
 			Counter
-			cOuter,
-			cInner;
+			cOuter;
 
 			cOuter.buildForMultiplicationOuterLoop( __subscription, p_subtensor.__subscription );
+
+			if( cOuter.size( ) < 1 ) {
+
+				Counter
+				cInner;
+
+				cInner.buildForMultiplicationInnerLoop( __subscription, p_subtensor.__subscription );
+
+				T
+				sum = T( 0 );
+
+				cInner.reset( );
+
+				while( cInner.isOK( ) ) {
+
+					sum += this->eval( ) * p_subtensor.eval( );
+
+					++cInner;
+				}
+
+				SubTensor< T >
+				ret( sum );
+
+				return ret;
+			}
+
+			Counter
+			cInner;
+
 			cInner.buildForMultiplicationInnerLoop( __subscription, p_subtensor.__subscription );
 
 			SubTensor< T >

@@ -52,13 +52,16 @@ main( ) {
 	cout << "ab[ i ][ j ]\n" << ab[ i ][ j ] << endl << endl;
 	cout << "b[ i ]\n" << b[ i ] << endl << endl;
 
+	size_t const
+	ROWS = 3,
+	COLS = 2;
 
 	TInt
-	u = { 7 },
-	v = { 5 },
-	w = { 5 },
-	M = { 7, 5 },
-	N = { 5, 7 };
+	u = { ROWS },
+	v = { COLS },
+	w = { COLS },
+	M = { ROWS, COLS },
+	N = { COLS, ROWS };
 
 	u[ i ] = 1 + i;
 
@@ -78,7 +81,7 @@ main( ) {
 
 
 	TInt
-	O = { 5, 5 };
+	O = { ROWS, ROWS };
 
 	O[ i ][ j ] = i - j;
 	cout << "O[ i ][ j ]\n" << O[ i ][ j ] << endl << endl;
@@ -89,10 +92,23 @@ main( ) {
 	cout << "O[ i ][ j ] + O[ i ][ j ]\n" << ( O[ i ][ j ] + O[ j ][ i ] ).str( 5 ) << endl << endl;
 
 	TInt
-	P = { 5, 5 };
+	P = { ROWS, ROWS };
 
 	P[ i ][ j ] = O[ i ][ j ] + O[ j ][ i ];
 	cout << "P[ i ][ j ]\n" << P[ i ][ j ] << endl << endl;
+
+	int
+	scalar = ( u[ i ] * u[ i ] ).val( );
+
+	cout << "scalar\n" << scalar << endl << endl;
+
+	scalar = ( M[ i ][ j ] * N[ j ][ i ] ).eval( );
+
+	cout << "scalar\n" << scalar << endl << endl;
+
+	v[ k ] = k * ( M[ i ][ j ] * N[ j ][ i ] );
+
+	cout << "v[ k ]\n" << v[ k ] << endl << endl;
 
 	return 0;
 }
