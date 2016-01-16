@@ -352,6 +352,11 @@ class Term {
 
 	public:
 
+		operator T( ) {
+
+			return val( );
+		}
+
 		Term< T >
 		&operator =( Term< T > &p_term ) {
 

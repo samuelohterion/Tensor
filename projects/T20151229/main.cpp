@@ -98,17 +98,30 @@ main( ) {
 	cout << "P[ i ][ j ]\n" << P[ i ][ j ] << endl << endl;
 
 	int
-	scalar = ( u[ i ] * u[ i ] ).val( );
+	scalar = u[ i ] * u[ i ];
 
 	cout << "scalar\n" << scalar << endl << endl;
 
-	scalar = ( M[ i ][ j ] * N[ j ][ i ] ).eval( );
+	scalar = M[ i ][ j ] * N[ j ][ i ];
 
 	cout << "scalar\n" << scalar << endl << endl;
 
 	v[ k ] = k * ( M[ i ][ j ] * N[ j ][ i ] );
 
 	cout << "v[ k ]\n" << v[ k ] << endl << endl;
+
+	// BUT!!!   NOTE!!!
+	// v[ k ] = k * M[ i ][ j ] * N[ j ][ i ];  means
+	// v[ k ] = ( k * M[ i ][ j ] ) * N[ j ][ i ];
+	// is not correct!!!! one cannot know, what's the range of k in k * M[ i ][ j ]
+
+
+	// this works fine!!!
+	TInt
+	Q = { ROWS, ROWS, COLS };
+
+	Q[ k ][ i ][ j ] = k * M[ i ][ j ] - N[ j ][ i ] + u[ k ] + v[ j ];
+	cout << "Q[ k ][ i ][ j ]\n" << Q[ k ][ i ][ j ] << endl << endl;
 
 	return 0;
 }
