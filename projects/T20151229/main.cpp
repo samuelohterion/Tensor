@@ -54,7 +54,7 @@ main( ) {
 
 	size_t const
 	ROWS = 3,
-	COLS = 2;
+	COLS = 4;
 
 	TInt
 	u = { ROWS },
@@ -69,7 +69,7 @@ main( ) {
 
 	N[ i ][ j ] = M[ j ][ i ];
 
-	v[ i ] = ( u[ j ] * M[ j ][ i ] ) * ( i + 1 );
+	v[ i ] = ( -u[ j ] * M[ j ][ i ] ) * ( i + 1 );
 
 	w[ i ] = N[ i ][ j ] * u[ j ] / ( i + 1 );
 
@@ -89,7 +89,7 @@ main( ) {
 	O[ i ][ j ] = O[ j ][ i ];
 	cout << "O[ i ][ j ]\n" << O[ i ][ j ] << endl << endl;
 
-	cout << "O[ i ][ j ] + O[ i ][ j ]\n" << ( O[ i ][ j ] + O[ j ][ i ] ).str( 5 ) << endl << endl;
+	cout << "O[ i ][ j ] + O[ i ][ j ]\n" << ( O[ i ][ j ] + O[ j ][ i ] ) << endl << endl;
 
 	TInt
 	P = { ROWS, ROWS };
@@ -106,22 +106,22 @@ main( ) {
 
 	cout << "scalar\n" << scalar << endl << endl;
 
-	v[ k ] = k * ( M[ i ][ j ] * N[ j ][ i ] );
+	v[ k ] = k * ( M[ i ][ j ] * N[ j ][ i ] ) / ( k + 1 );
 
 	cout << "v[ k ]\n" << v[ k ] << endl << endl;
 
 	// BUT!!!   NOTE!!!
 	// v[ k ] = k * M[ i ][ j ] * N[ j ][ i ];  means
 	// v[ k ] = ( k * M[ i ][ j ] ) * N[ j ][ i ];
-	// is not correct!!!! one cannot know, what's the range of k in k * M[ i ][ j ]
+	// this is not correct!!!! one cannot know, what's the range of k in k * M[ i ][ j ]
 
 
 	// this works fine!!!
 	TInt
 	Q = { ROWS, ROWS, COLS };
 
-	Q[ k ][ i ][ j ] = k * M[ i ][ j ] - N[ j ][ i ] + u[ k ] + v[ j ];
-	cout << "Q[ k ][ i ][ j ]\n" << Q[ k ][ i ][ j ] << endl << endl;
+	Q[ k ][ i ][ j ] = k * M[ i ][ j ] - N[ j ][ i ] + -u[ k ] + ~v[ j ];
+	cout << "Q[ i ][ j ][ k ]\n" << Q[ i ][ j ][ k ] << endl << endl;
 
 	return 0;
 }

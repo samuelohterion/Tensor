@@ -132,6 +132,101 @@ public Tree< T > {
 };
 
 template< typename T >
+class TreeQueue :
+public Tree< T > {
+
+	public:
+
+		TreeQueue( Tree< T > *p_arg ) :
+		Tree< T >( ),
+		_arg( p_arg ) {
+
+		}
+
+		~TreeQueue( ) {
+
+			delete _arg;
+		}
+
+	protected:
+
+		Tree< T >
+		*_arg;
+
+	public:
+
+		Tree< T >
+		*arg( bool p_copy = false ) const {
+
+			return p_copy ? _arg->cpy( ) : _arg;
+		}
+};
+
+template< typename T >
+class TreeAritmeticNeg :
+public TreeQueue< T > {
+
+	public:
+
+		TreeAritmeticNeg( Tree< T > *p_arg ) :
+		TreeQueue< T >( p_arg ) {
+
+		}
+
+		~TreeAritmeticNeg( ) {
+
+		}
+
+	public:
+
+
+		Tree< T >
+		*cpy( ) const {
+
+			return new TreeAritmeticNeg( this->arg( true ) );
+		}
+
+		T
+		val( ) const {
+
+			return -this->arg( )->val( );
+		}
+};
+
+template< typename T >
+class TreeLogicalNeg :
+public TreeQueue< T > {
+
+	public:
+
+		TreeLogicalNeg( Tree< T > *p_arg ) :
+		TreeQueue< T >( p_arg ) {
+
+		}
+
+		~TreeLogicalNeg( ) {
+
+		}
+
+	public:
+
+
+		Tree< T >
+		*cpy( ) const {
+
+			return new TreeLogicalNeg( this->arg( true ) );
+		}
+
+		T
+		val( ) const {
+
+			return ~this->arg( )->val( );
+		}
+};
+
+
+
+template< typename T >
 class TreeSum :
 public TreeBranch< T > {
 
@@ -363,6 +458,24 @@ class Term {
 			delete __tree;
 
 			__tree = p_term.cpy( );
+		}
+
+		Term< T >
+		operator +( ) const {
+
+			return Term< T >( this->cpy( ) );
+		}
+
+		Term< T >
+		operator -( ) const {
+
+			return Term< T >( new TreeAritmeticNeg< T >( this->cpy( ) ) );
+		}
+
+		Term< T >
+		operator ~( ) const {
+
+			return Term< T >( new TreeAritmeticNeg< T >( this->cpy( ) ) );
 		}
 
 		Term< T >
