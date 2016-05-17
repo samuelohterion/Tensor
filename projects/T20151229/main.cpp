@@ -14,8 +14,7 @@ main( ) {
 	EIdx
 	i,
 	j,
-	k,
-	l;
+	k;
 
 	cout << endl;
 
@@ -28,7 +27,8 @@ main( ) {
 
 	cout << "ti0[ i ][ j ][ k ]" << endl << ti0[ i ][ j ][ k ] << endl << endl;
 
-	typedef Term< double > Dbl;
+	// Dbl mimics type double to use it as tensor type
+	typedef Term< double >   Dbl;
 	typedef Tensor< double > TDbl;
 
 	TDbl
@@ -89,7 +89,7 @@ main( ) {
 	O[ i ][ j ] = O[ j ][ i ];
 	cout << "O[ i ][ j ]\n" << O[ i ][ j ] << endl << endl;
 
-	cout << "O[ i ][ j ] + O[ i ][ j ]\n" << ( O[ i ][ j ] + O[ j ][ i ] ) << endl << endl;
+	cout << "O[ i ][ j ] + O[ j ][ i ]\n" << ( O[ i ][ j ] + O[ j ][ i ] ) << endl << endl;
 
 	TInt
 	P = { ROWS, ROWS };
@@ -123,6 +123,7 @@ main( ) {
 	Q[ k ][ i ][ j ] = k * M[ i ][ j ] - N[ j ][ i ] + -u[ k ] + ~v[ j ];
 	cout << "Q[ i ][ j ][ k ]\n" << Q[ i ][ j ][ k ] << endl << endl;
 
+	cout << "i + j\n" << i + j << endl << endl;
 	return 0;
 }
 
