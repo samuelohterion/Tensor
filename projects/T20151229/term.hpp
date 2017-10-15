@@ -163,17 +163,17 @@ public Tree< T > {
 };
 
 template< typename T >
-class TreeAritmeticNeg :
+class TreeArithmeticNeg :
 public TreeQueue< T > {
 
 	public:
 
-		TreeAritmeticNeg( Tree< T > *p_arg ) :
+		TreeArithmeticNeg( Tree< T > *p_arg ) :
 		TreeQueue< T >( p_arg ) {
 
 		}
 
-		~TreeAritmeticNeg( ) {
+		~TreeArithmeticNeg( ) {
 
 		}
 
@@ -183,7 +183,7 @@ public TreeQueue< T > {
 		Tree< T >
 		*cpy( ) const {
 
-			return new TreeAritmeticNeg( this->arg( true ) );
+			return new TreeArithmeticNeg( this->arg( true ) );
 		}
 
 		T
@@ -469,13 +469,13 @@ class Term {
 		Term< T >
 		operator -( ) const {
 
-			return Term< T >( new TreeAritmeticNeg< T >( this->cpy( ) ) );
+			return Term< T >( new TreeArithmeticNeg< T >( this->cpy( ) ) );
 		}
 
 		Term< T >
 		operator ~( ) const {
 
-			return Term< T >( new TreeAritmeticNeg< T >( this->cpy( ) ) );
+			return Term< T >( new TreeArithmeticNeg< T >( this->cpy( ) ) );
 		}
 
 		Term< T >

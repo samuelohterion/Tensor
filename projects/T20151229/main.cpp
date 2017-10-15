@@ -11,6 +11,11 @@ main( ) {
 
 	cout << "T20151229\n---------\n\n";
 
+	/*
+	 * First we need some EINSTEIN INDICES
+	 *
+	 */
+
 	EIdx
 	i,
 	j,
@@ -20,12 +25,27 @@ main( ) {
 
 	typedef Tensor< int > TInt;
 
-	TInt
-	ti0 = { 3, 2, 4 };
+	/*
+	 *  lets start with a tensor of order 3
+	 *  4 x 3 x 2
+	 */
 
-	ti0[ i ][ 1 ][ k ] = 8 * i + 4 + k;
+	TInt
+	ti0 = { 4, 3, 2 };
+
+	ti0[ i ][ j ][ k ] = 111 + k + 10 * j + 100 * i;
 
 	cout << "ti0[ i ][ j ][ k ]" << endl << ti0[ i ][ j ][ k ] << endl << endl;
+
+	TInt
+	ti1 = { 2, 4 };
+
+//first index doesnt work
+	ti1[ j ][ i ] = ti0[ 1 ][ i ][ j ];
+
+	cout << "ti1[ i ][ j ]" << endl << ti1[ i ][ j ] << endl << endl;
+
+
 
 	// Dbl mimics type double to use it as tensor type
 	typedef Term< double >   Dbl;
@@ -46,11 +66,14 @@ main( ) {
 	a[ i ] = i + 1;
 	ab[ i ][ j ] = ( i + 1 ) * ( j - 2 );
 
-	b[ i ] = ab[ j ][ i ] * a[ j ];
+	b[ i ] = a[ j ] * ab[ j ][ i ];
 
 	cout << "a[ i ]\n" << a[ i ] << endl << endl;
 	cout << "ab[ i ][ j ]\n" << ab[ i ][ j ] << endl << endl;
-	cout << "b[ i ]\n" << b[ i ] << endl << endl;
+	cout << "b[ i ] = a[ j ] * ab[ j ][ i ]\n" << b[ i ] << endl << endl;
+
+	a[ i ] = ab[ i ][ j ] * b[ j ];
+	cout << "a[ i ] = ab[ i ][ j ] * b[ j ]\n" << a[ i ] << endl << endl;
 
 	size_t const
 	ROWS = 3,
