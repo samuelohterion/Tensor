@@ -215,27 +215,35 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 
 	CodePrinter::WFE( ); cp.print( "moment of inertia" );
 //@moment of inertia
-	v3[ i ] = 1 + i;
-	m[ i ][ j ] = Dbl( i == j ) * ( v3[ i ] * v3[ i ] ) - v3[ i ] * v3[ j ];
-	print( "v3[ i ]", v3[ i ] );
-	print( "m[ i ][ j ]", m[ i ][ j ] );
-	print( "v3[ i ] * m[ i ][ j ]", v3[ i ] * m[ i ][ j ] );
-	print( "m[ i ][ j ] * v3[ j ]", m[ i ][ j ] * v3[ j ] );
-
 	TDbl
-	v3a = { 3 },
-	v3b = { 3 };
+	axe = { 3 },
+	v3x = { 3 },
+	v3y = { 3 },
+	v3z = { 3 };
 
-	v3a[ i ] = epsilon[ i ][ j ][ k ] * v3[ j ] * u3[ k ];
-	v3b[ i ] = epsilon[ i ][ j ][ k ] * v3a[ j ] * v3[ k ] / 2.;
+	axe[ i ] = 1 - i;
+	//axe[ i ] = axe[ i ] / sqrt( axe[ i ] * axe[ i ] );
 
-	print( "v3[ i ]", v3[ i ] );
-	print( "v3a[ i ]", v3a[ i ] );
-	print( "v3b[ i ]", v3b[ i ] );
-	print( "v3[ i ] * m[ i ][ j ]", v3[ i ] * m[ i ][ j ] );
-	print( "m[ i ][ j ] * v3[ j ]", m[ i ][ j ] * v3[ j ] );
-	print( "m[ i ][ j ] * v3a[ j ]", m[ i ][ j ] * v3a[ j ] );
-	print( "m[ i ][ j ] * v3b[ j ]", m[ i ][ j ] * v3b[ j ] );
+	m[ i ][ j ] = Dbl( i == j ) * ( axe[ i ] * axe[ i ] ) - axe[ i ] * axe[ j ];
+
+	v3x[ i ] = 1 + i;
+	//v3x[ i ] = v3x[ i ] / sqrt( v3x[ i ] * v3x[ i ] );
+	v3y[ i ] = epsilon[ i ][ j ][ k ] * v3x[ j ] * axe[ k ];
+	v3z[ i ] = epsilon[ i ][ j ][ k ] * v3y[ j ] * axe[ k ];
+
+	print( "v3x[ i ]", v3x[ i ] );
+	print( "v3y[ i ]", v3y[ i ] );
+	print( "v3z[ i ]", v3z[ i ] );
+	print( "axe[ i ]", axe[ i ] );
+	print( "m[ i ][ j ]", m[ i ][ j ] );
+	print( "m[ i ][ j ] * axe[ j ]", m[ i ][ j ] * axe[ j ] );
+	print( "axe[ i ] * m[ i ][ j ]", axe[ i ] * m[ i ][ j ] );
+	print( "v3x[ i ] * m[ i ][ j ]", v3x[ i ] * m[ i ][ j ] );
+	print( "v3x[ i ] * m[ i ][ j ] * v3x[ j ]", v3x[ i ] * m[ i ][ j ] * v3x[ j ] );
+	print( "v3y[ i ] * m[ i ][ j ]", v3y[ i ] * m[ i ][ j ] );
+	print( "v3y[ i ] * m[ i ][ j ] * v3y[ j ]", v3y[ i ] * m[ i ][ j ] * v3y[ j ] );
+	print( "v3z[ i ] * m[ i ][ j ]", v3z[ i ] * m[ i ][ j ] );
+	print( "v3z[ i ] * m[ i ][ j ] * v3z[ j ]", v3z[ i ] * m[ i ][ j ] * v3z[ j ] );
 //@
 
 	return 0;
