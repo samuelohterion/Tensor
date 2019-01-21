@@ -3,12 +3,13 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp \
-    idx.cpp
+SOURCES += \
+	main.cpp \
+	src/idx.cpp
 
 QMAKE_CXXFLAGS += -std=c++11
 
 HEADERS += \
-    tensor.hpp \
-    term.hpp \
-    idx.h
+	include/tensor.hpp \
+	include/term.hpp \
+	include/idx.h

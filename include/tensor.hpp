@@ -173,9 +173,26 @@ class Tensor {
 		}
 
 		SubTensor< T >
+		operator [ ]( std::size_t p_eidx ) {
+
+			return SubTensor< T >( this, new EIdx( p_eidx ), true );
+		}
+
+		SubTensor< T >
+		operator [ ]( EIdx &p_eidx ) const {
+
+			if( !p_eidx.isConstant( ) ) {
+
+				p_eidx.setFirst( 0 ).setCount( properties.extent( 0 ) ).reset( );
+			}
+
+			return SubTensor< T >( this, &p_eidx, true );
+		}
+
+		SubTensor< T >
 		operator [ ]( std::size_t p_eidx ) const {
 
-			return SubTensor< T >( this, EIdx( p_eidx ), true );
+			return SubTensor< T >( this, new EIdx( p_eidx ), true );
 		}
 };
 
