@@ -44,8 +44,8 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	EIdx i, j, k;
 //@
 
-	CodePrinter::WFE( ); cp.print( "first create two real vectors" );
-//@first create two real vectors
+	CodePrinter::WFE( ); cp.print( "first create some real vectors" );
+//@first create some real vectors
 	TDbl
 	v2 = { 2 },
 	v3 = { 3 },
@@ -74,7 +74,7 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	m33 = { 3, 3 };
 
 	m22[ i ][ j ] = i * 2 + j;
-	m23[ i ][ j ] = i * 2 + j;
+	m23[ i ][ j ] = i * 3 + j;
 	m32[ i ][ j ] = m23[ j ][ i ];
 	m33[ i ][ j ] = i * 3 + j;
 
@@ -105,7 +105,7 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "matrices times matrices" );
-//@matrices times vectors
+//@matrices times matrices
 	print( "m32 x m23 < == > m32[ i ][ k ] * m23[ k ][ j ]", m32[ i ][ k ] * m23[ k ][ j ] );
 	print( "m23 x m32 < == > m23[ i ][ k ] * m32[ k ][ j ]", m23[ i ][ k ] * m32[ k ][ j ] );
 //@
@@ -176,9 +176,9 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	TDbl
 	mA = { 3, 3 };
 
-	mA[ 0 ][ i ] = epsilon[ i ][ j ][ k ] * m[ 1 ][ j ] * m[ 2 ][ k ];
-	mA[ 1 ][ i ] = epsilon[ i ][ j ][ k ] * m[ 2 ][ j ] * m[ 0 ][ k ];
-	mA[ 2 ][ i ] = epsilon[ i ][ j ][ k ] * m[ 0 ][ j ] * m[ 1 ][ k ];
+	mA[ i ][ 0 ] = epsilon[ i ][ j ][ k ] * m[ 1 ][ j ] * m[ 2 ][ k ];
+	mA[ i ][ 1 ] = epsilon[ i ][ j ][ k ] * m[ 2 ][ j ] * m[ 0 ][ k ];
+	mA[ i ][ 2 ] = epsilon[ i ][ j ][ k ] * m[ 0 ][ j ] * m[ 1 ][ k ];
 
 	print( "mA[ i ][ j ]", mA[ i ][ j ] );
 //@
@@ -202,50 +202,72 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	TDbl
 	mInv = { 3, 3 };
 
-	mInv[ i ][ j ] = mA[ j ][ i ] / ( epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ] );
+	mInv[ i ][ j ] = mA[ i ][ j ] / ( epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ] );
 
 	// invers of m
 	print( "mInv[ i ][ j ]", mInv[ i ][ j ] );
 //@
 
-	CodePrinter::WFE( ); cp.print( "check result, calculate invers of m times m" );
-//@check result, calculate invers of m times m
+	CodePrinter::WFE( ); cp.print( "check result, calculate inverse of m times m" );
+//@check result, calculate inverse of m times m
 	print( "mInv[ i ][ j ] * m[ j ][ k ]", mInv[ i ][ j ] * m[ j ][ k ] );
 //@
 
 	CodePrinter::WFE( ); cp.print( "moment of inertia" );
 //@moment of inertia
 	TDbl
-	axe = { 3 },
-	v3x = { 3 },
-	v3y = { 3 },
-	v3z = { 3 };
+	axis   = { 3 },
+	xyz    = { 3, 3 },
+	lambda = { 3, 3  };
 
-	axe[ i ] = 1 - i;
-	//axe[ i ] = axe[ i ] / sqrt( axe[ i ] * axe[ i ] );
+	// this doesn't work!
+	// axis[ i ] = ( 1 == i );
+	// this works
+	// axis[ i ] = ( Term< int >( new TreeValue< int >( 1 ) ) == i );
+	// possible quick solution: a macro
+	#define asEIdx( I ) Term< int >( new TreeValue< int >( I ) )
+	axis[ i ] = asEIdx( 1 ) == i;
+	// however this works!
+	//axis[ i ] = ( i == 1 );
+	//axis[ i ] = axis[ i ] / sqrt( axis[ i ] * axis[ i ] );
 
-	m[ i ][ j ] = Dbl( i == j ) * ( axe[ i ] * axe[ i ] ) - axe[ i ] * axe[ j ];
+	lambda[ i ][ j ] = Dbl( i == j ) * ( axis[ i ] * axis[ i ] ) - axis[ i ] * axis[ j ];
 
-	v3x[ i ] = 1 + i;
-	//v3x[ i ] = v3x[ i ] / sqrt( v3x[ i ] * v3x[ i ] );
-	v3y[ i ] = epsilon[ i ][ j ][ k ] * v3x[ j ] * axe[ k ];
-	v3z[ i ] = epsilon[ i ][ j ][ k ] * v3y[ j ] * axe[ k ];
+	xyz[ 0 ][ i ] = ( i == 0 ) * 1 + ( i == 1 ) * 0 + ( i == 2 ) * 0;
+//	xyz[ 0 ][ i ] = epsilon[ i ][ j ][ k ] * axis[ j ] * xyz[ 0 ][ k ];
+//	xyz[ 0 ][ i ] = xyz[ 0 ][ i ] / sqrt( xyz[ 0 ][ i ] * xyz[ 0 ][ i ] );
 
-	print( "v3x[ i ]", v3x[ i ] );
-	print( "v3y[ i ]", v3y[ i ] );
-	print( "v3z[ i ]", v3z[ i ] );
-	print( "axe[ i ]", axe[ i ] );
-	print( "m[ i ][ j ]", m[ i ][ j ] );
-	print( "m[ i ][ j ] * axe[ j ]", m[ i ][ j ] * axe[ j ] );
-	print( "axe[ i ] * m[ i ][ j ]", axe[ i ] * m[ i ][ j ] );
-	print( "v3x[ i ] * m[ i ][ j ]", v3x[ i ] * m[ i ][ j ] );
-	print( "v3x[ i ] * m[ i ][ j ] * v3x[ j ]", v3x[ i ] * m[ i ][ j ] * v3x[ j ] );
-	print( "v3y[ i ] * m[ i ][ j ]", v3y[ i ] * m[ i ][ j ] );
-	print( "v3y[ i ] * m[ i ][ j ] * v3y[ j ]", v3y[ i ] * m[ i ][ j ] * v3y[ j ] );
-	print( "v3z[ i ] * m[ i ][ j ]", v3z[ i ] * m[ i ][ j ] );
-	print( "v3z[ i ] * m[ i ][ j ] * v3z[ j ]", v3z[ i ] * m[ i ][ j ] * v3z[ j ] );
+	xyz[ 1 ][ i ] = epsilon[ i ][ j ][ k ] * axis[ j ] * xyz[ 0 ][ k ];
+	xyz[ 2 ][ i ] = epsilon[ i ][ j ][ k ] * axis[ j ] * xyz[ 1 ][ k ];
+//	xyz[ 1 ][ i ] = xyz[ 1 ][ i ] / sqrt( xyz[ 1 ][ i ] * xyz[ 1 ][ i ] );
+
+	print( "axis[ i ]",        axis[ i ] );
+	print( "xyz[ 0 ][ i ]",    xyz[ 0 ][ i ] );
+	print( "xyz[ 1 ][ i ]",    xyz[ 1 ][ i ] );
+	print( "xyz[ 2 ][ i ]",    xyz[ 2 ][ i ] );
+	print( "lambda[ i ][ j ]", lambda[ i ][ j ] );
+
+	print( "lambda[ i ][ j ] * axis[ j ]",     lambda[ i ][ j ] * axis[ j ] );
+	print( "lambda[ i ][ j ] * xyz[ 0 ][ j ]", lambda[ i ][ j ] * xyz[ 0 ][ j ] );
+	print( "lambda[ i ][ j ] * xyz[ 1 ][ j ]", lambda[ i ][ j ] * xyz[ 1 ][ j ] );
+	print( "lambda[ i ][ j ] * xyz[ 2 ][ j ]", lambda[ i ][ j ] * xyz[ 2 ][ j ] );
+
+	print( "axis[ i ] * lambda[ i ][ j ]",             axis[ i ] * lambda[ i ][ j ] );
+	print( "axis[ i ] * axis[ i ]",                    axis[ i ] * axis[ i ] );
+	print( "axis[ i ] * lambda[ i ][ j ] * axis[ j ]", axis[ i ] * lambda[ i ][ j ] * axis[ j ] );
+
+	print( "xyz[ 0 ][ i ] * lambda[ i ][ j ]",                 xyz[ 0 ][ i ] * lambda[ i ][ j ] );
+	print( "xyz[ 0 ][ i ] * xyz[ 0 ][ i ]",                    xyz[ 0 ][ i ] * xyz[ 0 ][ i ] );
+	print( "xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ]", xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ] );
+
+	print( "xyz[ 1 ][ i ] * lambda[ i ][ j ]",                 xyz[ 1 ][ i ] * lambda[ i ][ j ] );
+	print( "xyz[ 1 ][ i ] * xyz[ 1 ][ i ]",                    xyz[ 1 ][ i ] * xyz[ 1 ][ i ] );
+	print( "xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ]", xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ] );
+
+	print( "xyz[ 2 ][ i ] * lambda[ i ][ j ]",                 xyz[ 2 ][ i ] * lambda[ i ][ j ] );
+	print( "xyz[ 2 ][ i ] * xyz[ 2 ][ i ]",                    xyz[ 2 ][ i ] * xyz[ 2 ][ i ] );
+	print( "xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ]", xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ] );
 //@
 
 	return 0;
 }
-
