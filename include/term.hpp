@@ -764,6 +764,83 @@ class Term {
 
 template< typename T >
 Term< T >
+operator <( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::less< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator <=( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::less_equal< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator ==( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::equal_to< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator !=( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::not_equal_to< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator >=( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::greater_equal< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator >( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::greater< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator &( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::bit_and< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator |( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::bit_or< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator ^( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::bit_xor< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator &&( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::logical_and< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
+operator ||( T const &p_val, Term< T > const &p_term ) {
+
+	return Term< T >( new TreeBinOP_DALARA< T, std::logical_or< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+}
+
+template< typename T >
+Term< T >
 operator +( T const &p_val, Term< T > const &p_term ) {
 
 	return Term< T >( new TreeBinOP_DALARA< T, std::plus< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );

@@ -14,9 +14,13 @@
 //@print for convenience
 template< typename T >
 void
-print( std::string const & p_text, SubTensor< T > const & p_tensor ) {
+print( SubTensor< T > const & p_tensor, std::string const & p_name = "", std::string const & p_text = "" ) {
 
-	std::cout << p_text << std::endl << p_tensor << std::endl << std::endl;
+	std::cout
+		<< ( p_text.length( ) ? p_text : p_name )
+		<< ( p_name.length( ) + p_text.length( ) ? "\n" : "" )
+		<< p_tensor.str( p_name )
+		<< std::endl << std::endl;
 }
 
 template< typename T >
@@ -44,15 +48,15 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	EIdx i, j, k;
 //@
 
-	CodePrinter::WFE( ); cp.print( "first create some real vectors" );
-//@first create some real vectors
+	CodePrinter::WFE( ); cp.print( "first create some real vectors and print them" );
+//@first create some real vectors and print them
 	TDbl
 	v2 = { 2 },
 	v3 = { 3 },
 	u3 = { 3 };
-	print( "v2[ i ]", v2[ i ] );
-	print( "v3[ i ]", v3[ i ] );
-	print( "u3[ i ]", u3[ i ] );
+	print( v2[ i ] );
+	print( v3[ i ], "v3" );
+	print( u3[ i ], "u3", "u3[ i ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "init them" );
@@ -60,9 +64,9 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	v2[ i ] = 1 - 2 * i;
 	v3[ i ] = i + 1;
 	u3[ i ] = 1;
-	print( "v2[ i ]", v2[ i ] );
-	print( "v3[ i ]", v3[ i ] );
-	print( "u3[ i ]", u3[ i ] );
+	print( v2[ i ], "v2" );
+	print( v3[ i ], "v3" );
+	print( u3[ i ], "u3" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "create some matrices" );
@@ -78,36 +82,35 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	m32[ i ][ j ] = m23[ j ][ i ];
 	m33[ i ][ j ] = i * 3 + j;
 
-	print( "m22[ i ][ j ]", m22[ i ][ j ] );
-	print( "m23[ i ][ j ]", m23[ i ][ j ] );
-	print( "m32[ i ][ j ]", m32[ j ][ i ] );
-	print( "m33[ i ][ j ]", m33[ i ][ j ] );
+	print( m22[ i ][ j ], "m22" );
+	print( m23[ i ][ j ], "m23" );
+	print( m32[ j ][ i ], "m32" );
+	print( m33[ i ][ j ], "m33" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "scalar products" );
 //@scalar products
-	print( "v2[ i ] * v2[ i ]", v2[ i ] * v2[ i ] );
-	print( "v3[ i ] * v3[ i ]", v3[ i ] * v3[ i ] );
+	print( v2[ i ] * v2[ i ], "", "v2[ i ] * v2[ i ]" );
+	print( v3[ i ] * v3[ i ], "", "v3[ i ] * v3[ i ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "outer product matrices" );
 //@outer product matrices
-	print( "v2[ i ] * v3[ j ]", v2[ i ] * v3[ j ] );
-	print( "v3[ i ] * v2[ j ]", v3[ i ] * v2[ j ] );
+	print( v2[ i ] * v3[ j ], "", "v2[ i ] * v3[ j ]" );
+	print( v3[ i ] * v2[ j ], "", "v3[ i ] * v2[ j ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "matrices times vectors" );
 //@matrices times vectors
-	print( "m22 x v2 < == > m22[ i ][ j ] * v2[ j ]", m22[ i ][ j ] * v2[ j ] );
-	print( "v2 x m22 < == > v2[ i ] * m22[ i ][ j ]", v2[ i ] * m22[ i ][ j ] );
-	print( "m32 x v2 < == > m32[ i ][ j ] * v2[ j ]", m32[ i ][ j ] * v2[ j ] );
-	print( "v3 x m32 < == > v3[ i ] * m32[ i ][ j ]", v3[ i ] * m32[ i ][ j ] );
+	print( m22[ i ][ j ] * v2[ j ], "", "m22[ i ][ j ] * v2[ j ]" );
+	print( v2[ i ] * m22[ i ][ j ], "", "v2[ i ] * m22[ i ][ j ]" );
+	print( m32[ i ][ j ] * v2[ j ], "", "m32[ i ][ j ] * v2[ j ]" );
+	print( v3[ i ] * m32[ i ][ j ], "", "v3[ i ] * m32[ i ][ j ]" );
 //@
-
 	CodePrinter::WFE( ); cp.print( "matrices times matrices" );
 //@matrices times matrices
-	print( "m32 x m23 < == > m32[ i ][ k ] * m23[ k ][ j ]", m32[ i ][ k ] * m23[ k ][ j ] );
-	print( "m23 x m32 < == > m23[ i ][ k ] * m32[ k ][ j ]", m23[ i ][ k ] * m32[ k ][ j ] );
+	print( m32[ i ][ k ] * m23[ k ][ j ], "", "m32 x m23 < == > m32[ i ][ k ] * m23[ k ][ j ]" );
+	print( m23[ i ][ k ] * m32[ k ][ j ], "", "m23 x m32 < == > m23[ i ][ k ] * m32[ k ][ j ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "now create a new double 3x3 matrix" );
@@ -117,29 +120,29 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 
 	m[ i ][ j ] = ( i == j ) * ( 1 + i ) + ( i != j ) * ( i * 3 + j );
 
-	print( "m[ i ][ j ]", m[ i ][ j ] );
+	print( m[ i ][ j ], "m" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "sum of vector elements" );
 //@sum of vector elements
-	print( "u3[ i ]", u3[ i ] );
-	print( "v3[ i ]", v3[ i ] );
-	print( "u3[ i ] * v3[ i ]", u3[ i ] * v3[ i ] );
-	print( "v3[ i ] * u3[ i ]", v3[ i ] * u3[ i ] );
+	print( u3[ i ], "u3" );
+	print( v3[ i ], "v3" );
+	print( u3[ i ] * v3[ i ], "", "u3[ i ] * v3[ i ]" );
+	print( v3[ i ] * u3[ i ], "", "v3[ i ] * u3[ i ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "sum of matrix row or column elements" );
 //@sum of matrix row or column elements
-	print( "u3[ i ] * m[ i ][ j ]", u3[ i ] * m[ i ][ j ] );
-	print( "m[ i ][ j ] * u3[ j ]", m[ i ][ j ] * u3[ j ] );
+	print( u3[ i ] * m[ i ][ j ], "", "u3[ i ] * m[ i ][ j ]" );
+	print( m[ i ][ j ] * u3[ j ], "", "m[ i ][ j ] * u3[ j ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "sum of all matrix elements" );
 //@sum of all matrix elements
 	// need a matrix containing ones only
 	m33[ i ][ j ] = 1;
-	print( "m33[ i ][ j ] * m[ i ][ j ]", m33[ i ][ j ] * m[ i ][ j ] );
-	print( "m[ i ][ j ] * m33[ i ][ j ]", m[ i ][ j ] * m33[ i ][ j ] );
+	print( m33[ i ][ j ] * m[ i ][ j ], "", "m33[ i ][ j ] * m[ i ][ j ]" );
+	print( m[ i ][ j ] * m33[ i ][ j ], "", "m[ i ][ j ] * m33[ i ][ j ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "the levi cevita tensor" );
@@ -151,23 +154,23 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 		( ( ( i < j ) & ( j < k ) ) | ( ( k < i ) & ( i < j ) ) | ( ( j < k ) & ( k < i ) ) ) -
 		( ( ( i > j ) & ( j > k ) ) | ( ( k > i ) & ( i > j ) ) | ( ( j > k ) & ( k > i ) ) );
 
-	print( "epsilon[ i ][ j ][ k ]", epsilon[ i ][ j ][ k ] );
+	print( epsilon[ i ][ j ][ k ], "epsilon" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "cross product of u3 and v3" );
 //@cross product of u3 and v3
-	print( "u3[ i ]", u3[ i ] );
-	print( "v3[ i ]", v3[ i ] );
+	print( u3[ i ], "u3" );
+	print( v3[ i ], "v3" );
 
 	// cross product
-	print( "epsilon[ i ][ j ][ k ] * u3[ j ] * v3[ k ]\n", epsilon[ i ][ j ][ k ] * u3[ j ] * v3[ k ] );
-	print( "epsilon[ i ][ j ][ k ] * v3[ j ] * u3[ k ]\n", epsilon[ i ][ j ][ k ] * v3[ j ] * u3[ k ] );
+	print( epsilon[ i ][ j ][ k ] * u3[ j ] * v3[ k ], "", "epsilon[ i ][ j ][ k ] * u3[ j ] * v3[ k ]\n" );
+	print( epsilon[ i ][ j ][ k ] * v3[ j ] * u3[ k ], "", "epsilon[ i ][ j ][ k ] * v3[ j ] * u3[ k ]\n" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "remember m 1st" );
 //@remember m 1st
 	// remember matrix m
-	print( "m[ i ][ j ]", m[ i ][ j ] );
+	print( m[ i ][ j ], "m" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "create the adjugate matrix of m" );
@@ -180,7 +183,7 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	mA[ i ][ 1 ] = epsilon[ i ][ j ][ k ] * m[ 2 ][ j ] * m[ 0 ][ k ];
 	mA[ i ][ 2 ] = epsilon[ i ][ j ][ k ] * m[ 0 ][ j ] * m[ 1 ][ k ];
 
-	print( "mA[ i ][ j ]", mA[ i ][ j ] );
+	print( mA[ i ][ j ], "mA" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "calculate the determinant of m" );
@@ -188,13 +191,15 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 
 	// determinant of m
 	print(
-		"epsilon[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ]",
-		 epsilon[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ] );
+		epsilon[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ],
+		"",
+		"epsilon[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ]" );
 
 	// determinant of m
 	print(
-		"epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ]",
-		 epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ] );
+		epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ],
+		"",
+		"epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "use adjugate of m and determinant of m to create the inverse of m" );
@@ -205,12 +210,12 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	mInv[ i ][ j ] = mA[ i ][ j ] / ( epsilon[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ] );
 
 	// invers of m
-	print( "mInv[ i ][ j ]", mInv[ i ][ j ] );
+	print( mInv[ i ][ j ], "mInv" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "check result, calculate inverse of m times m" );
 //@check result, calculate inverse of m times m
-	print( "mInv[ i ][ j ] * m[ j ][ k ]", mInv[ i ][ j ] * m[ j ][ k ] );
+	print( mInv[ i ][ j ] * m[ j ][ k ], "", "mInv[ i ][ j ] * m[ j ][ k ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "moment of inertia" );
@@ -220,54 +225,69 @@ main( ) { CodePrinter cp( "../Tensor/main.cpp" );
 	xyz    = { 3, 3 },
 	lambda = { 3, 3  };
 
-	// this doesn't work!
-	// axis[ i ] = ( 1 == i );
-	// this works
-	// axis[ i ] = ( Term< int >( new TreeValue< int >( 1 ) ) == i );
-	// possible quick solution: a macro
-	#define asEIdx( I ) Term< int >( new TreeValue< int >( I ) )
-	axis[ i ] = asEIdx( 1 ) == i;
-	// however this works!
-	//axis[ i ] = ( i == 1 );
-	//axis[ i ] = axis[ i ] / sqrt( axis[ i ] * axis[ i ] );
-
+	axis[ i ] = 1 + 2 * i;
+	axis[ i ] = axis[ i ] / sqrt( axis[ j ] * axis[ j ] );
 	lambda[ i ][ j ] = Dbl( i == j ) * ( axis[ i ] * axis[ i ] ) - axis[ i ] * axis[ j ];
 
 	xyz[ 0 ][ i ] = ( i == 0 ) * 1 + ( i == 1 ) * 0 + ( i == 2 ) * 0;
 //	xyz[ 0 ][ i ] = epsilon[ i ][ j ][ k ] * axis[ j ] * xyz[ 0 ][ k ];
-//	xyz[ 0 ][ i ] = xyz[ 0 ][ i ] / sqrt( xyz[ 0 ][ i ] * xyz[ 0 ][ i ] );
+	xyz[ 0 ][ i ] = xyz[ 0 ][ i ] / sqrt( xyz[ 0 ][ i ] * xyz[ 0 ][ i ] );
 
 	xyz[ 1 ][ i ] = epsilon[ i ][ j ][ k ] * axis[ j ] * xyz[ 0 ][ k ];
+	xyz[ 1 ][ i ] = xyz[ 1 ][ i ] / sqrt( xyz[ 1 ][ i ] * xyz[ 1 ][ i ] );
 	xyz[ 2 ][ i ] = epsilon[ i ][ j ][ k ] * axis[ j ] * xyz[ 1 ][ k ];
-//	xyz[ 1 ][ i ] = xyz[ 1 ][ i ] / sqrt( xyz[ 1 ][ i ] * xyz[ 1 ][ i ] );
+	xyz[ 2 ][ i ] = xyz[ 2 ][ i ] / sqrt( xyz[ 2 ][ i ] * xyz[ 2 ][ i ] );
 
-	print( "axis[ i ]",        axis[ i ] );
-	print( "xyz[ 0 ][ i ]",    xyz[ 0 ][ i ] );
-	print( "xyz[ 1 ][ i ]",    xyz[ 1 ][ i ] );
-	print( "xyz[ 2 ][ i ]",    xyz[ 2 ][ i ] );
-	print( "lambda[ i ][ j ]", lambda[ i ][ j ] );
+	print( axis[ i ], "axis" );
+	print( xyz[ 0 ][ i ], "", "xyz[ 0 ][ i ]" );
+	print( xyz[ 1 ][ i ], "", "xyz[ 1 ][ i ]" );
+	print( xyz[ 2 ][ i ], "", "xyz[ 2 ][ i ]" );
+	print( lambda[ i ][ j ], "lambda" );
 
-	print( "lambda[ i ][ j ] * axis[ j ]",     lambda[ i ][ j ] * axis[ j ] );
-	print( "lambda[ i ][ j ] * xyz[ 0 ][ j ]", lambda[ i ][ j ] * xyz[ 0 ][ j ] );
-	print( "lambda[ i ][ j ] * xyz[ 1 ][ j ]", lambda[ i ][ j ] * xyz[ 1 ][ j ] );
-	print( "lambda[ i ][ j ] * xyz[ 2 ][ j ]", lambda[ i ][ j ] * xyz[ 2 ][ j ] );
+	print( lambda[ i ][ j ] * axis[ j ], "", "lambda[ i ][ j ] * axis[ j ]" );
+	print( lambda[ i ][ j ] * xyz[ 0 ][ j ], "", "lambda[ i ][ j ] * xyz[ 0 ][ j ]" );
+	print( lambda[ i ][ j ] * xyz[ 1 ][ j ], "", "lambda[ i ][ j ] * xyz[ 1 ][ j ]" );
+	print( lambda[ i ][ j ] * xyz[ 2 ][ j ], "", "lambda[ i ][ j ] * xyz[ 2 ][ j ]" );
 
-	print( "axis[ i ] * lambda[ i ][ j ]",             axis[ i ] * lambda[ i ][ j ] );
-	print( "axis[ i ] * axis[ i ]",                    axis[ i ] * axis[ i ] );
-	print( "axis[ i ] * lambda[ i ][ j ] * axis[ j ]", axis[ i ] * lambda[ i ][ j ] * axis[ j ] );
+	print( axis[ i ] * lambda[ i ][ j ], "", "axis[ i ] * lambda[ i ][ j ]" );
+	print( axis[ i ] * axis[ i ], "", "axis[ i ] * axis[ i ]" );
+	print( axis[ i ] * lambda[ i ][ j ] * axis[ j ], "", "axis[ i ] * lambda[ i ][ j ] * axis[ j ]" );
 
-	print( "xyz[ 0 ][ i ] * lambda[ i ][ j ]",                 xyz[ 0 ][ i ] * lambda[ i ][ j ] );
-	print( "xyz[ 0 ][ i ] * xyz[ 0 ][ i ]",                    xyz[ 0 ][ i ] * xyz[ 0 ][ i ] );
-	print( "xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ]", xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ] );
+	print( xyz[ 0 ][ i ] * lambda[ i ][ j ], "", "xyz[ 0 ][ i ] * lambda[ i ][ j ]" );
+	print( xyz[ 0 ][ i ] * xyz[ 0 ][ i ], "", "xyz[ 0 ][ i ] * xyz[ 0 ][ i ]" );
+	print( xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ], "", "xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ]" );
 
-	print( "xyz[ 1 ][ i ] * lambda[ i ][ j ]",                 xyz[ 1 ][ i ] * lambda[ i ][ j ] );
-	print( "xyz[ 1 ][ i ] * xyz[ 1 ][ i ]",                    xyz[ 1 ][ i ] * xyz[ 1 ][ i ] );
-	print( "xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ]", xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ] );
+	print( xyz[ 1 ][ i ] * lambda[ i ][ j ], "", "xyz[ 1 ][ i ] * lambda[ i ][ j ]" );
+	print( xyz[ 1 ][ i ] * xyz[ 1 ][ i ], "", "xyz[ 1 ][ i ] * xyz[ 1 ][ i ]" );
+	print( xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ], "", "xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ]" );
 
-	print( "xyz[ 2 ][ i ] * lambda[ i ][ j ]",                 xyz[ 2 ][ i ] * lambda[ i ][ j ] );
-	print( "xyz[ 2 ][ i ] * xyz[ 2 ][ i ]",                    xyz[ 2 ][ i ] * xyz[ 2 ][ i ] );
-	print( "xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ]", xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ] );
+	print( xyz[ 2 ][ i ] * lambda[ i ][ j ], "", "xyz[ 2 ][ i ] * lambda[ i ][ j ]" );
+	print( xyz[ 2 ][ i ] * xyz[ 2 ][ i ], "", "xyz[ 2 ][ i ] * xyz[ 2 ][ i ]" );
+	print( xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ], "", "xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ]" );
 //@
 
+	CodePrinter::WFE( ); cp.print( "big one" );
+//@big one
+	Tensor< int >
+	big = { 2, 3, 4, 5, 6, 7 };
+
+	EIdx
+	a, b, c, d, e, f;
+
+	big[ a ][ b ][ c ][ d ][ e ][ f ] =
+		( 7 * 6 * 5 * 4 * 3 ) * a +
+		( 7 * 6 * 5 * 4 ) * b +
+		( 7 * 6 * 5 ) * c +
+		( 7 * 6 ) * d +
+		( 7 ) * e +
+			f +
+		1;
+
+	print( big[ a ][ b ][ c ][ d ][ e ][ f ], "big" );
+
+	big[ a ][ b ][ c ][ d ][ e ][ f ] = 1 + f + 7 * ( e + 6 * ( d + 5 * ( c + 4 * ( b + 3 * a ) ) ) );
+
+	print( big[ a ][ b ][ c ][ d ][ e ][ f ], "big" );
+//@
 	return 0;
 }

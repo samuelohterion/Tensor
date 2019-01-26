@@ -482,7 +482,70 @@ public Term< T  > {
 		}
 
 		std::string
-		str( std::size_t const &p_width = 0 ) const {
+		rep( Counter const & p_counter, std::string const & p_name = "" ) const {
+
+			if( static_cast< std::size_t >( p_counter.lcd( ) + 1 ) == p_counter.size( ) ) {
+
+				return "";
+			}
+
+			if( static_cast< std::size_t >( p_counter.lcd( ) + 2 ) == p_counter.size( ) ) {
+
+				return "\n";
+			}
+
+			std::stringstream
+			ss;
+
+			if( static_cast< std::size_t >( p_counter.lcd( ) ) < p_counter.size( )  ) {
+
+				ss << std::endl;
+			}
+
+			if( p_counter.size( ) == 0 ) {
+
+				ss << ( p_name.length( ) < 1 ? "Scalar" : p_name ) << std::endl;
+
+				return ss.str( );
+			}
+
+			if( p_counter.size( ) == 1 ) {
+
+				ss << ( p_name.length( ) < 1 ? "Vector" : p_name ) << "[1.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) << "]" << std::endl;
+
+				return ss.str( );
+			}
+
+			if( p_counter.size( ) == 2 ) {
+
+				ss << ( p_name.length( ) < 1 ? "Matrix" : p_name ) << "[1.." << p_counter[ p_counter.size( ) - 2 ]->getCount( ) << "][1.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) << "]" << std::endl;
+
+				return ss.str( );
+			}
+
+			if( static_cast< std::size_t >( p_counter.lcd( ) + 2 ) < p_counter.size( ) ) {
+
+				ss << std::string( p_counter.size( ) - p_counter.lcd( ) - 2, '\n' );
+			}
+
+			ss << ( p_name.length( ) < 1 ? "Tensor" : p_name );
+
+			for( std::size_t i = 0; i < p_counter.size( ) - 2; ++ i ) {
+
+				ss << "[" << p_counter[ i ]->val( ) + 1 << "]";
+			}
+
+			ss << "[1.." << p_counter[ p_counter.size( ) - 2 ]->getCount( ) << "][1.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) << "]";
+
+			if( 0 < p_counter.size( ) )
+
+				ss << std::endl;
+
+			return ss.str( );
+		}
+
+		std::string
+		str( std::string const & p_name = "", std::size_t const & p_width = 0 ) const {
 
 			std::stringstream
 			ss;
@@ -517,11 +580,14 @@ public Term< T  > {
 				width += 2;
 
 				ss.str( "" );
+
 				c.reset( );
 
 				while( c.isOK( ) ) {
 
-					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( width ) << eval( );
+//					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( width ) << eval( );
+//					ss << ( 0 < c.size( ) - c.lcd( ) ? rep( c.size( ), c.size( ) - c.lcd( ) - 1u ) : "" ) << std::setw( width ) << eval( );
+					ss << rep( c, p_name ) << std::setw( width ) << eval( );
 
 					++c;
 				}
@@ -530,17 +596,21 @@ public Term< T  > {
 			}
 
 			ss.str( "" );
+
 			c.reset( );
 
 			while( c.isOK( ) ) {
 
 				if( p_width ) {
 
-					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( p_width ) << eval( );
+//					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( p_width ) << eval( );
+//					ss << ( 0 < c.size( ) - c.lcd( ) ? rep( c.size( ), c.size( ) - c.lcd( ) - 1u ) : "" ) << std::setw( p_width ) << eval( );
+					ss << rep( c, p_name ) << std::setw( p_width ) << eval( );
 				}
 				else {
 
-					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << eval( );
+//					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << eval( );
+					ss << rep( c, p_name ) << eval( );
 				}
 
 				++c;
@@ -584,12 +654,19 @@ public Tree< T > {
 
 template< typename T >
 std::ostream
-&operator <<( std::ostream &p_os, SubTensor< T > const &p_st ) {
+&operator <<( std::ostream & p_os, SubTensor< T > const & p_st ) {
 
 	p_os << p_st.str( );
 
 	return p_os;
 }
+
+//template< typename T >
+//void
+//print( std::string const & p_name, SubTensor< T > const & p_st ) {
+
+//	std::cout << p_st.str( p_name );
+//}
 
 
 #endif // TENSOR_HPP
