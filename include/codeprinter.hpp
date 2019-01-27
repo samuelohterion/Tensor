@@ -11,7 +11,7 @@ class CodePrinter {
 
 	public:
 
-		CodePrinter( std::string const &p_filename ) {
+		CodePrinter( std::string const &p_filename, bool const & p_welcomeMessage = true ) {
 
 			std::ifstream
 			fs( p_filename );
@@ -50,6 +50,13 @@ class CodePrinter {
 					}
 				}
 			}
+
+			if( ! p_welcomeMessage ) {
+
+				return;
+			}
+
+			std::cout << "\n  - next frame by pressing ENTER or RETURN\n  - to finish the show press one of these keys\n    q, Q, x, X\n    followed by ENTER or RETURN\n\n";
 		}
 
 	public:
@@ -61,18 +68,18 @@ class CodePrinter {
 		print( std::string const & p_snippetname ) {
 
 			std::cout <<
-				"----------------------------------------------------------------------------------------------------------------" <<
-				"\n[" <<
-				p_snippetname <<
-				"]\nc++:\n" <<
-				text[ p_snippetname ] <<
-				"\nout:\n";
+			"----------------------------------------------------------------------------------------------------------------" <<
+			"\n[" <<
+			p_snippetname <<
+			"]\nc++:\n" <<
+			text[ p_snippetname ] <<
+			"\nout:\n";
 		}
 
 		static bool
 		waitForENTER( ) {
 
-			std::cout << "Press [ENTER] for next show!\n";
+			std::cout << "[ENTER] for next frame!\n";
 
 			int
 			c = std::cin.get( );

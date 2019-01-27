@@ -1,7 +1,6 @@
 #ifndef TENSOR_HPP
 #define TENSOR_HPP
 
-
 #include <iomanip>
 #include <iostream>
 #include <ostream>
@@ -470,7 +469,6 @@ public Term< T  > {
 		eval( ) const {
 
 			return __t->x[ __address( ) ];
-
 		}
 
 		SubTensor< T >
@@ -482,7 +480,7 @@ public Term< T  > {
 		}
 
 		std::string
-		rep( Counter const & p_counter, std::string const & p_name = "" ) const {
+		rep( Counter const & p_counter ) const {
 
 			if( static_cast< std::size_t >( p_counter.lcd( ) + 1 ) == p_counter.size( ) ) {
 
@@ -504,38 +502,40 @@ public Term< T  > {
 
 			if( p_counter.size( ) == 0 ) {
 
-				ss << ( p_name.length( ) < 1 ? "Scalar" : p_name ) << std::endl;
+//				ss << "Scalar" << std::endl;
 
 				return ss.str( );
 			}
 
 			if( p_counter.size( ) == 1 ) {
 
-				ss << ( p_name.length( ) < 1 ? "Vector" : p_name ) << "[1.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) << "]" << std::endl;
+//				ss << "Vector";
+				ss << "[ 0.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) - 1 << " ]" << std::endl;
 
 				return ss.str( );
 			}
 
 			if( p_counter.size( ) == 2 ) {
 
-				ss << ( p_name.length( ) < 1 ? "Matrix" : p_name ) << "[1.." << p_counter[ p_counter.size( ) - 2 ]->getCount( ) << "][1.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) << "]" << std::endl;
+//				ss << "Matrix";
+				ss << "[ 0.." << p_counter[ 0 ]->getCount( ) - 1 << " ][ 0.." << p_counter[ 1 ]->getCount( ) - 1 << " ]" << std::endl;
 
 				return ss.str( );
 			}
 
 			if( static_cast< std::size_t >( p_counter.lcd( ) + 2 ) < p_counter.size( ) ) {
 
-				ss << std::string( p_counter.size( ) - p_counter.lcd( ) - 2, '\n' );
+				ss << std::string( p_counter.size( ) - static_cast< std::size_t >( p_counter.lcd( ) ) - 2, '\n' );
 			}
 
-			ss << ( p_name.length( ) < 1 ? "Tensor" : p_name );
+//			ss << "Tensor";
 
 			for( std::size_t i = 0; i < p_counter.size( ) - 2; ++ i ) {
 
-				ss << "[" << p_counter[ i ]->val( ) + 1 << "]";
+				ss << "[ " << p_counter[ i ]->val( ) << " ]";
 			}
 
-			ss << "[1.." << p_counter[ p_counter.size( ) - 2 ]->getCount( ) << "][1.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) << "]";
+			ss << "[ 0.." << p_counter[ p_counter.size( ) - 2 ]->getCount( ) - 1 << " ][ 0.." << p_counter[ p_counter.size( ) - 1 ]->getCount( ) - 1 << " ]";
 
 			if( 0 < p_counter.size( ) )
 
@@ -545,7 +545,7 @@ public Term< T  > {
 		}
 
 		std::string
-		str( std::string const & p_name = "", std::size_t const & p_width = 0 ) const {
+		str( std::size_t const & p_width = 0 ) const {
 
 			std::stringstream
 			ss;
@@ -587,7 +587,7 @@ public Term< T  > {
 
 //					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( width ) << eval( );
 //					ss << ( 0 < c.size( ) - c.lcd( ) ? rep( c.size( ), c.size( ) - c.lcd( ) - 1u ) : "" ) << std::setw( width ) << eval( );
-					ss << rep( c, p_name ) << std::setw( width ) << eval( );
+					ss << rep( c ) << std::setw( width ) << eval( );
 
 					++c;
 				}
@@ -605,12 +605,12 @@ public Term< T  > {
 
 //					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << std::setw( p_width ) << eval( );
 //					ss << ( 0 < c.size( ) - c.lcd( ) ? rep( c.size( ), c.size( ) - c.lcd( ) - 1u ) : "" ) << std::setw( p_width ) << eval( );
-					ss << rep( c, p_name ) << std::setw( p_width ) << eval( );
+					ss << rep( c ) << std::setw( p_width ) << eval( );
 				}
 				else {
 
 //					ss << ( 0 < c.size( ) - c.lcd( ) ? std::string( c.size( ) - c.lcd( ) - 1u, '\n' ) : "" ) << eval( );
-					ss << rep( c, p_name ) << eval( );
+					ss << rep( c ) << eval( );
 				}
 
 				++c;
