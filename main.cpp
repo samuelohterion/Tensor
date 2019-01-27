@@ -27,7 +27,7 @@ print( std::string const & p_text, Term< T > const & p_term ) {
 
 int
 main( ) {
-
+//@Main
 	// to use code printer create an instance with the name of the cpp file as argument
 	CodePrinter
 	cp( "../Tensor/main.cpp" );
@@ -43,13 +43,10 @@ main( ) {
 
 	// and print snippet by:
 	// cp.print( "some unique snippet identifying text" );
-
-//@Main
+//@
 	std::cout << "Tensor\n------\n\n";
-
 	CodePrinter::WFE( ); cp.print( "Main" );
 	CodePrinter::WFE( ); cp.print( "just some code for convenience" );
-//@
 
 	CodePrinter::WFE( ); cp.print( "create some double vector" );
 //@create some double vector
@@ -79,14 +76,14 @@ main( ) {
 //@
 
 	CodePrinter::WFE( ); cp.print( "now create some more vectors and print them" );
-//@first create some real vectors and print them
+//@now create some more vectors and print them
 	TDbl
-	v2 = { 2 },
-	u3 = { 3 },
-	v3 = { 3 };
-	print( v2[ i ] );
-	print( u3[ i ], "u3");
-	print( v3[ i ], "v3" );
+	five_ten = { 2 },
+	three_ones = { 3 },
+	one_two_three = { 3 };
+	print( five_ten[ i ] );
+	print( three_ones[ i ], "three_ones");
+	print( one_two_three[ i ], "one_two_three" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "init them" );
@@ -95,12 +92,12 @@ main( ) {
 	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
 	// EINSTEIN INDICES start at 0
 
-	v2[ i ] = 1 - 2 * i;  // +1 -1
-	u3[ i ] = 1;          //  1  1  1
-	v3[ i ] = i + 1;      //  1  2  3
-	print( v2[ i ], "v2" );
-	print( u3[ i ], "u3" );
-	print( v3[ i ], "v3" );
+	five_ten[ i ] = 5 * ( i + 1 ); //  0  1
+	three_ones[ i ] = 1;           //  1  1  1
+	one_two_three[ i ] = i + 1;    //  1  2  3
+	print( five_ten[ i ], "five_ten" );
+	print( three_ones[ i ], "three_ones" );
+	print( one_two_three[ i ], "one_two_three" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "now create some matrices" );
@@ -141,26 +138,26 @@ main( ) {
 
 	CodePrinter::WFE( ); cp.print( "the scalar product" );
 //@the scalar product
-	print( u3[ i ], "u3[ i ]" );
-	print( v3[ i ], "v3[ i ]" );
-	print( u3[ i ] * u3[ i ], "u3[ i ] * u3[ i ]" );
-	print( u3[ i ] * v3[ i ], "u3[ i ] * v3[ i ]" );
-	print( v3[ i ] * u3[ i ], "v3[ i ] * u3[ i ]" );
-	print( v3[ i ] * v3[ i ], "v3[ i ] * v3[ i ]" );
+	print( three_ones[ i ], "three_ones[ i ]" );
+	print( one_two_three[ i ], "one_two_three[ i ]" );
+	print( three_ones[ i ] * three_ones[ i ], "three_ones[ i ] * three_ones[ i ]" );
+	print( three_ones[ i ] * one_two_three[ i ], "three_ones[ i ] * one_two_three[ i ]" );
+	print( one_two_three[ i ] * three_ones[ i ], "one_two_three[ i ] * three_ones[ i ]" );
+	print( one_two_three[ i ] * one_two_three[ i ], "one_two_three[ i ] * one_two_three[ i ]" );
 //@
 
-	CodePrinter::WFE( ); cp.print( "outer product matrices" );
-//@outer product matrices
-	print( v2[ i ] * v3[ j ], "v2[ i ] * v3[ j ]" );
-	print( v3[ i ] * v2[ j ], "v3[ i ] * v2[ j ]" );
+	CodePrinter::WFE( ); cp.print( "create a 2x2 matrix via outer product of two vectors" );
+//@create a 2x2 matrix via outer product of two vectors
+	print( five_ten[ i ] * one_two_three[ j ], "five_ten[ i ] * one_two_three[ j ]" );
+	print( one_two_three[ i ] * five_ten[ j ], "one_two_three[ i ] * five_ten[ j ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "matrices times vectors" );
 //@matrices times vectors
-	print( m22[ i ][ j ] * v2[ j ], "m22[ i ][ j ] * v2[ j ]" );
-	print( v2[ i ] * m22[ i ][ j ], "v2[ i ] * m22[ i ][ j ]" );
-	print( m32[ i ][ j ] * v2[ j ], "m32[ i ][ j ] * v2[ j ]" );
-	print( v3[ i ] * m32[ i ][ j ], "v3[ i ] * m32[ i ][ j ]" );
+	print( m22[ i ][ j ] * five_ten[ j ], "m22[ i ][ j ] * five_ten[ j ]" );
+	print( five_ten[ i ] * m22[ i ][ j ], "five_ten[ i ] * m22[ i ][ j ]" );
+	print( m32[ i ][ j ] * five_ten[ j ], "m32[ i ][ j ] * five_ten[ j ]" );
+	print( one_two_three[ i ] * m32[ i ][ j ], "one_two_three[ i ] * m32[ i ][ j ]" );
 //@
 	CodePrinter::WFE( ); cp.print( "matrices times matrices" );
 //@matrices times matrices
@@ -184,16 +181,16 @@ main( ) {
 
 	CodePrinter::WFE( ); cp.print( "sum of vector elements" );
 //@sum of vector elements
-	print( u3[ i ], "u3" );
-	print( v3[ i ], "v3" );
-	print( u3[ i ] * v3[ i ], "u3[ i ] * v3[ i ]" );
-	print( v3[ i ] * u3[ i ], "v3[ i ] * u3[ i ]" );
+	print( three_ones[ i ], "three_ones" );
+	print( one_two_three[ i ], "one_two_three" );
+	print( three_ones[ i ] * one_two_three[ i ], "three_ones[ i ] * one_two_three[ i ]" );
+	print( one_two_three[ i ] * three_ones[ i ], "one_two_three[ i ] * three_ones[ i ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "sum of matrix row or column elements" );
 //@sum of matrix row or column elements
-	print( u3[ i ] * m[ i ][ j ], "u3[ i ] * m[ i ][ j ]" );
-	print( m[ i ][ j ] * u3[ j ], "m[ i ][ j ] * u3[ j ]" );
+	print( three_ones[ i ] * m[ i ][ j ], "three_ones[ i ] * m[ i ][ j ]" );
+	print( m[ i ][ j ] * three_ones[ j ], "m[ i ][ j ] * three_ones[ j ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "sum of all matrix elements" );
@@ -216,20 +213,14 @@ main( ) {
 	print( eps[ i ][ j ][ k ], "eps" );
 //@
 
-	CodePrinter::WFE( ); cp.print( "cross product of u3 and v3" );
-//@cross product of u3 and v3
-	print( u3[ i ], "u3" );
-	print( v3[ i ], "v3" );
+	CodePrinter::WFE( ); cp.print( "cross product of three_ones and one_two_three" );
+//@cross product of three_ones and one_two_three
+	print( three_ones[ i ], "three_ones" );
+	print( one_two_three[ i ], "one_two_three" );
 
 	// cross product
-	print( eps[ i ][ j ][ k ] * u3[ j ] * v3[ k ], "eps[ i ][ j ][ k ] * u3[ j ] * v3[ k ]" );
-	print( eps[ i ][ j ][ k ] * v3[ j ] * u3[ k ], "eps[ i ][ j ][ k ] * v3[ j ] * u3[ k ]" );
-//@
-
-	CodePrinter::WFE( ); cp.print( "remember m 1st" );
-//@remember m 1st
-	// remember matrix m
-	print( m[ i ][ j ], "m" );
+	print( eps[ i ][ j ][ k ] * three_ones[ j ] * one_two_three[ k ], "eps[ i ][ j ][ k ] * three_ones[ j ] * one_two_three[ k ]" );
+	print( eps[ i ][ j ][ k ] * one_two_three[ j ] * three_ones[ k ], "eps[ i ][ j ][ k ] * one_two_three[ j ] * three_ones[ k ]" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "create the adjugate matrix of m" );
@@ -242,18 +233,19 @@ main( ) {
 	mA[ i ][ 1 ] = eps[ i ][ j ][ k ] * m[ 2 ][ j ] * m[ 0 ][ k ];
 	mA[ i ][ 2 ] = eps[ i ][ j ][ k ] * m[ 0 ][ j ] * m[ 1 ][ k ];
 
+	print( m[ i ][ j ], "m" );
 	print( mA[ i ][ j ], "mA" );
 //@
 
 	CodePrinter::WFE( ); cp.print( "calculate the determinant of m" );
 //@calculate the determinant of m
 
-	// determinant of m
+	// determinant of m by rows
 	print(
 		 eps[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ],
 		"eps[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ]" );
 
-	// determinant of m
+	// determinant of m by columns
 	print(
 		 eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ],
 		"eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ]" );
@@ -334,7 +326,10 @@ main( ) {
 	big[ a ][ b ][ c ][ d ][ e ][ f ] = 0 + f + 7 * ( e + 6 * ( d + 5 * ( c + 4 * ( b + 3 * a ) ) ) );
 
 	print( big[ a ][ b ][ c ][ d ][ e ][ f ], "big" );
+//@
 
+	CodePrinter::WFE( ); cp.print( "cut out some sub tensors" );
+//@cut out some sub tensors
 	print( big[ i ][ 0 ][ j ][ 1 ][ k ][ 2 ], "big[ i ][ 0 ][ j ][ 1 ][ k ][ 2 ]" );
 	print( big[ 0 ][ 0 ][ 0 ][ 0 ][ i ][ j ], "big[ 0 ][ 0 ][ 0 ][ 0 ][ i ][ j ]" );
 	print( big[ i ][ 0 ][ 0 ][ 0 ][ 0 ][ j ], "big[ i ][ 0 ][ 0 ][ 0 ][ 0 ][ j ]" );
@@ -344,33 +339,22 @@ main( ) {
 	small[ i ][ j ] = big[ j ][ 0 ][ 0 ][ 0 ][ 0 ][ i ];
 
 	print( small[ i ][ j ], "small[ i ][ j ]" );
+//@
 
+	CodePrinter::WFE( ); cp.print( "hadamard product of two vectors" );
+//@hadamard product of two vectors
 	Tensor< int >
-	t0 = { 3 },
 	t1 = { 3, 2 };
 
-	t1[ i ][ j ] = 1 + 2 * i + j;
-	t0[ i ] = t1[ i ][ 1 ] - t1[ i ][ 0 ];
-
-	print( t1[ i ][ j ], "t1[ i ][ j ] = 1 + 2 * i + j" );
-	print( t0[ i ], "t0[ i ] = t1[ i ][ 1 ] - t1[ i ][ 0 ]" );
+	t1[ i ][ j ] = 5 * j + i + 1;
 
 	Tensor< int >
 	mul = { 3, 3 };
 
-	mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ] * ( i == j );
-	t0[ i ] = mul[ i ][ i ];
+	mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ];
 
-	print( mul[ i ][ j ], "mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ] * ( i == j )" );
-	print( mul[ i ][ i ], "mul[ i ][ i ]" );
-	print( t0[ i ], "t0[ i ] = mul[ i ][ i ]" );
-
-	mul[ i ][ j ] = ( i == j ) * t1[ i ][ 0 ] * t1[ j ][ 1 ];
-	t0[ i ] = mul[ i ][ i ];
-
-	print( mul[ i ][ j ], "mul[ i ][ j ] = ( i == j ) * t1[ i ][ 0 ] * t1[ j ][ 1 ]" );
-	print( mul[ i ][ i ], "mul[ i ][ i ]" );
-	print( t0[ i ], "t0[ i ] = mul[ i ][ i ]" );
+	print( t1[ i ][ j ], "t1[ i ][ j ] = 5 * j + i + 1" );
+	print( mul[ i ][ i ], "mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ]\nmul[ i ][ i ]" );
 //@
 	return 0;
 }

@@ -661,12 +661,4 @@ std::ostream
 	return p_os;
 }
 
-//template< typename T >
-//void
-//print( std::string const & p_name, SubTensor< T > const & p_st ) {
-
-//	std::cout << p_st.str( p_name );
-//}
-
-
 #endif // TENSOR_HPP
