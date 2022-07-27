@@ -92,7 +92,7 @@ main( ) {
 	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
 	// EINSTEIN INDICES start at 0
 
-	five_ten[ i ] = 5 * ( i + 1 ); //  0  1
+    five_ten[ i ] = 5 * ( i + 1 ); //  5  10
 	three_ones[ i ] = 1;           //  1  1  1
 	one_two_three[ i ] = i + 1;    //  1  2  3
 	print( five_ten[ i ], "five_ten" );
@@ -346,15 +346,16 @@ main( ) {
 	Tensor< int >
 	t1 = { 3, 2 };
 
-	t1[ i ][ j ] = 5 * j + i + 1;
+    t1[ i ][ j ] = 3 * j + i + 1;
 
 	Tensor< int >
 	mul = { 3, 3 };
 
 	mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ];
 
-	print( t1[ i ][ j ], "t1[ i ][ j ] = 5 * j + i + 1" );
-	print( mul[ i ][ i ], "mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ]\nmul[ i ][ i ]" );
+    print( t1[ i ][ j ], "t1[ i ][ j ] = 3 * j + i + 1" );
+    print( mul[ i ][ j ], "mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ]" );
+    print( mul[ i ][ i ], "mul[ i ][ i ]" );
 //@
 	return 0;
 }
