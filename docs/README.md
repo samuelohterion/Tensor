@@ -1,6 +1,51 @@
 # Tensor
-cpp template for tensors using einstein sumation
+Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions.  
+For example a matrix product:
+- in the paper:  
+  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$
+  $$A_{i}^j = 1 + 4 i + j$$
+  $$B_{i}^j = 1 + 4 j + i$$
+  $$C_{i}^j = A_{i}^k B_{k}^j$$
+- in your c++ code
+  ```
+  // 3 Tensors, Matrices 
+  Tensor< double >
+    A = {2, 3},
+    B = {3, 4},
+    C = {2, 4};
+  
+  // 3 Einstein Indices
+  EIdx i, j, k;
 
+  A[i][j] =   1 + 4 * i + j;
+  B[i][j] = -(1 + 4 * j + i);
+  C[i][j] = A[i][k] * B[k][j];
+
+  print(A[i][j], "A");
+  print(B[i][j], "B");
+  print(C[i][j], "C");
+  ```
+
+  out:
+  ```
+  A
+  [ 0..1 ][ 0..3 ]
+    0  1  2  3
+    4  5  6  7
+
+  B
+  [ 0..3 ][ 0..2 ]
+    0   4   8
+    1   5   9
+    2   6  10
+    3   7  11
+
+  C
+  [ 0..2 ][ 0..2 ]
+              14            38            62
+              38           126           214
+             0  2.98262e-319             0
+```
 ## Start the Example-Program!  
 ### Qt-Creator
   Press ***Play***!
