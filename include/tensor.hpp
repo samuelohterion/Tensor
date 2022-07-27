@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "idx.h"
+//#include "../src/idx.cpp"
 #include "term.hpp"
 
 class Properties {
