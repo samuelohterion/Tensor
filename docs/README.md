@@ -3,9 +3,9 @@ Tensor is a **c++ class** that can be used to formulate ***tensor expressions***
 For example a matrix product:
 - in the paper:  
   $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$
-  $$A_{i}^j = 1 + 4 i + j$$
-  $$B_{i}^j = 1 + 4 j + i$$
-  $$C_{i}^j = A_{i}^k B_{k}^j$$
+  $$A_{j}^i = 1 + 4 i + j$$
+  $$B_{j}^i = 1 + 4 j + i$$
+  $$C_{j}^i = A_{k}^i B_{j}^k$$
 - in your c++ code
   ```
   // 3 Tensors, Matrices 
@@ -17,8 +17,8 @@ For example a matrix product:
   // 3 Einstein Indices
   EIdx i, j, k;
 
-  A[i][j] =   1 + 4 * i + j;
-  B[i][j] = -(1 + 4 * j + i);
+  A[i][j] =   1 + 3 * i + j;
+  B[i][j] = -(1 + 3 * j + i);
   C[i][j] = A[i][k] * B[k][j];
 
   print(A[i][j], "A");
@@ -29,23 +29,21 @@ For example a matrix product:
   out:
   ```
   A
-  [ 0..1 ][ 0..3 ]
-    0  1  2  3
-    4  5  6  7
+  [ 0..1 ][ 0..2 ]
+    1  2  3
+    4  5  6
 
   B
-  [ 0..3 ][ 0..2 ]
-    0   4   8
-    1   5   9
-    2   6  10
-    3   7  11
+  [ 0..2 ][ 0..3 ]
+    -1   -4   -7  -10
+    -2   -5   -8  -11
+    -3   -6   -9  -12
 
   C
-  [ 0..2 ][ 0..2 ]
-              14            38            62
-              38           126           214
-             0  2.98262e-319             0
-```
+  [ 0..1 ][ 0..3 ]
+    -14   -32   -50   -68
+    -32   -77  -122  -167
+  ```
 ## Start the Example-Program!  
 ### Qt-Creator
   Press ***Play***!

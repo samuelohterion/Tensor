@@ -27,7 +27,7 @@ print( std::string const & p_text, Term< T > const & p_term ) {
 
 int
 main( ) {
-//@Main
+/@Main
 	// to use code printer create an instance with the name of the cpp file as argument
 	CodePrinter
 	cp( "../Tensor/main.cpp" );
