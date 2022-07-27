@@ -29,3 +29,7 @@
 
 # User related Files
 *.pro.user
+
+.vscode
+build
+.x*
