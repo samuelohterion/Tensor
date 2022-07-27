@@ -357,5 +357,5 @@ main( ) {
     print( mul[ i ][ j ], "mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ]" );
     print( mul[ i ][ i ], "mul[ i ][ i ]" );
 //@
-	return 0;
+    return 0;
 }
