@@ -125,6 +125,12 @@ print(std::string const & p_text, Term< T > const & p_term) {
 out:
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
+```
+$$tDbl_i \; i \in {1,2}$$
+$$tDbl_1  = 3.14$$
+$$tDbl_2  = 2.72$$
+
+```
 [create some double vector]
 c++:
 
@@ -272,6 +278,15 @@ c++:
 out:
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
+```
+### Scalar Product:  
+$$<x,x> = \sum^{i=n}_{i=1} x_i \cdot x^i = x_i x^i = = x_i x_i = = x^i x^i$$
+Examples:
+$$three\_ones\_i \; three\_ones_i$$
+$$three\_ones\_i \; one\_two\_three_i$$
+$$one\_two\_three_i \; three\_ones\_i$$
+$$one\_two\_three_i \; one\_two\_three_i$$
+```
 [the scalar product]
 c++:
 	print(three_ones[i], "three_ones[i]");
@@ -289,7 +304,6 @@ three_ones[i]
 one_two_three[i]
 [0..2]
   1  2  3
-
 three_ones[i] * three_ones[i]
   3
 
@@ -304,6 +318,15 @@ one_two_three[i] * one_two_three[i]
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
+```
+### Outer product:
+$$M^i_j=v^i u_j$$
+$$M_{i,j}=v_i u_j$$
+$$M^{i,j}=v^i u^j$$
+$$M^j_i =v_i u^j$$
+$$five\_ten_i \; one\_two\_three_j$$
+$$one\_two\_three_i \; five\_ten_j$$
+```
 [create a 2x2 matrix via outer product of two vectors]
 c++:
 	print(five_ten[i] * one_two_three[j], "five_ten[i] * one_two_three[j]");
