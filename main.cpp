@@ -174,15 +174,36 @@ main() {
 	TDbl
 	m = {3, 3};
 
-	m[i][j] = (i == j) * (1 + i) + (i != j) * (i * 3 + j);
+	m[i][j] = (1 + i + 3 * j) *(1 + i + 3 * j);
 
-	print(m[i][j], "m");
+	print(m[i][j], "m[i][j]");
 //@
 
 	CodePrinter::WFE(); cp.print("trace of a matrix");
 //@trace of a matrix
+	// we can use a unit matrix
+	TDbl
+	mUnit3x3 = {3, 3};
+
+	// mUnit3x3[i][j] = i == j;
+	// or simply
+	mUnit3x3[i][i] = 1;
 	
-	print((i==j) * m[i][j], "m");
+	print(
+		mUnit3x3[i][j],
+		"mUnit3x3[i][j]"
+	);
+	
+	print(
+		mUnit3x3[i][j] * m[i][j],
+		"mUnit3x3[i][j] * m[i][j]"
+	);	
+
+	// or we can simply use our vector three_ones: (1,1,1)	
+	print(
+		m[i][i] * three_ones[i],
+		"m[i][i] * three_ones[i]"
+	);	
 //@
 
 	CodePrinter::WFE(); cp.print("sum of vector elements");
