@@ -61,13 +61,14 @@ For example a matrix product:
     -50  -122
     -68  -167
   ```
-## Start the Example-Program either in 
-### Qt-Creator
- or in 
-### Console via CMake
-  
-You will see the following output.  
 ---
+## Start the Example-Program either in 
+- Qt-Creator
+ or in 
+- Console via CMake  
+
+
+You will see the following output.  
 
 ```
   - next frame by pressing ENTER or RETURN
