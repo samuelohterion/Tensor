@@ -92,9 +92,9 @@ main() {
 	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
 	// EINSTEIN INDICES start at 0
 
-    five_ten[i] = 5 * (i + 1); //  5  10
-	three_ones[i] = 1;           //  1  1  1
-	one_two_three[i] = i + 1;    //  1  2  3
+	five_ten[i] = 5 * (i + 1); //  5  10
+	three_ones[i] = 1;         //  1  1  1
+	one_two_three[i] = i + 1;  //  1  2  3
 	print(five_ten[i], "five_ten");
 	print(three_ones[i], "three_ones");
 	print(one_two_three[i], "one_two_three");

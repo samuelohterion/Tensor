@@ -71,6 +71,7 @@ For example a matrix product:
 You will see the following output.  
 
 ```
+
   - next frame by pressing ENTER or RETURN
   - to finish the show press one of these keys
     q, Q, x, X
@@ -85,7 +86,7 @@ Tensor
 c++:
 	// to use code printer create an instance with the name of the cpp file as argument
 	CodePrinter
-	cp("../Tensor/main.cpp");
+	cp("../main.cpp");
 
 	// then use @ instead of AT to frame all snippets by:
 	//ATsome unique snippet identifying text'
@@ -186,8 +187,8 @@ c++:
 	// EINSTEIN INDICES can be used to initialize a tensor with values
 	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
 	// EINSTEIN INDICES start at 0
-  
-    five_ten[i] = 5 * (i + 1); //  5  10
+
+	five_ten[i] = 5 * (i + 1); //  5  10
 	three_ones[i] = 1;         //  1  1  1
 	one_two_three[i] = i + 1;  //  1  2  3
 	print(five_ten[i], "five_ten");
@@ -376,16 +377,57 @@ c++:
 	TDbl
 	m = {3, 3};
 
-	m[i][j] = (i == j) * (1 + i) + (i != j) * (i * 3 + j);
+	m[i][j] = (1 + i + 3 * j) *(1 + i + 3 * j);
 
-	print(m[i][j], "m");
+	print(m[i][j], "m[i][j]");
 
 out:
-m
+m[i][j]
 [0..2][0..2]
-  1  1  2
-  3  2  5
-  6  7  3
+   1  16  49
+   4  25  64
+   9  36  81
+
+[ENTER] for next frame!
+----------------------------------------------------------------------------------------------------------------
+[trace of a matrix]
+c++:
+	// we can use a unit matrix
+	TDbl
+	mUnit3x3 = {3, 3};
+
+	// mUnit3x3[i][j] = i == j;
+	// or simply
+	mUnit3x3[i][i] = 1;
+	
+	print(
+		mUnit3x3[i][j],
+		"mUnit3x3[i][j]"
+	);
+	
+	print(
+		mUnit3x3[i][j] * m[i][j],
+		"mUnit3x3[i][j] * m[i][j]"
+	);	
+
+	// or we can simply use our vector three_ones: (1,1,1)	
+	print(
+		m[i][i] * three_ones[i],
+		"m[i][i] * three_ones[i]"
+	);	
+
+out:
+mUnit3x3[i][j]
+[0..2][0..2]
+  1  0  0
+  0  1  0
+  0  0  1
+
+mUnit3x3[i][j] * m[i][j]
+  107
+
+m[i][i] * three_ones[i]
+  107
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
@@ -421,11 +463,11 @@ c++:
 out:
 three_ones[i] * m[i][j]
 [0..2]
-  10  10  10
+   14   77  194
 
 m[i][j] * three_ones[j]
 [0..2]
-   4  10  16
+   66   93  126
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
@@ -438,10 +480,10 @@ c++:
 
 out:
 m33[i][j] * m[i][j]
-  30
+  285
 
 m[i][j] * m33[i][j]
-  30
+  285
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
@@ -519,15 +561,15 @@ c++:
 out:
 m
 [0..2][0..2]
-  1  1  2
-  3  2  5
-  6  7  3
+   1  16  49
+   4  25  64
+   9  36  81
 
 mA
 [0..2][0..2]
-  -29   11    1
-   21   -9    1
-    9   -1   -1
+  -279   468  -201
+   252  -360   132
+   -81   108   -39
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
@@ -546,10 +588,10 @@ c++:
 
 out:
 eps[i][j][k] * m[0][i] * m[1][j] * m[2][k]
-  10
+  -216
 
 eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]
-  10
+  -216
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
@@ -566,9 +608,9 @@ c++:
 out:
 mInv
 [0..2][0..2]
-  -2.9   1.1   0.1
-   2.1  -0.9   0.1
-   0.9  -0.1  -0.1
+    1.29167   -2.16667   0.930556
+   -1.16667    1.66667  -0.611111
+      0.375       -0.5   0.180556
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
@@ -579,9 +621,9 @@ c++:
 out:
 mInv[i][j] * m[j][k]
 [0..2][0..2]
-             1   3.33067e-16   2.22045e-16
-             0             1   2.22045e-16
-  -1.11022e-16  -1.11022e-16             1
+             1             0   1.42109e-14
+             0             1  -7.10543e-15
+             0             0             1
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
