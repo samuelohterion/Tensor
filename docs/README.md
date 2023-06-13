@@ -3,8 +3,8 @@ Tensor is a **c++ class** that can be used to formulate ***tensor expressions***
 For example a matrix product:
 - in the paper:  
   $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$
-  $$A_{j}^i = 1 + 4 i + j$$
-  $$B_{j}^i = 1 + 4 j + i$$
+  $$A_{j}^i = 3 i + 1 j - 3$$
+  $$B_{j}^i = - i - 3 j + 3$$
   $$C_{j}^i = A_{k}^i B_{j}^k$$
 - in your c++ code
   ```
@@ -12,45 +12,60 @@ For example a matrix product:
   Tensor< double >
     A = {2, 3},
     B = {3, 4},
-    C = {2, 4};
+    C = {2, 4},
+    D = {4, 2};
   
   // 3 Einstein Indices
   EIdx i, j, k;
 
+  // these Einstein Indices start az zero
+  // so one has to convert them from the paper to code algebra
+  
+  // A[i][j] =   3 * (i + 1) + (j + 1) - 3 =
   A[i][j] =   1 + 3 * i + j;
+
+  // B[i][j] = - (i + 1) - 3 * (j + 1) + 3 = 
   B[i][j] = -(1 + 3 * j + i);
+  
   C[i][j] = A[i][k] * B[k][j];
+  D[j][i] = A[i][k] * B[k][j];
 
   print(A[i][j], "A");
   print(B[i][j], "B");
   print(C[i][j], "C");
-  ```
+  print(D[i][j], "D");
+  ```  
 
-  out:
+  out:  
   ```
   A
-  [ 0..1 ][ 0..2 ]
+  [0..1][0..2]
     1  2  3
     4  5  6
 
   B
-  [ 0..2 ][ 0..3 ]
+  [0..2][0..3]
     -1   -4   -7  -10
     -2   -5   -8  -11
     -3   -6   -9  -12
 
   C
-  [ 0..1 ][ 0..3 ]
+  [0..1][0..3]
     -14   -32   -50   -68
     -32   -77  -122  -167
-  ```
-## Start the Example-Program!  
-### Qt-Creator
-  Press ***Play***!
-  
-### Console
- `$ make`  
 
+  D
+  [0..3][0..1]
+    -14   -32
+    -32   -77
+    -50  -122
+    -68  -167
+  ```
+## Start the Example-Program either in 
+### Qt-Creator
+ or in 
+### Console via CMake
+  
 You will see the following output.  
 ---
 
@@ -69,7 +84,7 @@ Tensor
 c++:
 	// to use code printer create an instance with the name of the cpp file as argument
 	CodePrinter
-	cp( "../Tensor/main.cpp" );
+	cp("../Tensor/main.cpp");
 
 	// then use @ instead of AT to frame all snippets by:
 	//ATsome unique snippet identifying text'
@@ -78,10 +93,10 @@ c++:
 	//AT
 
 	// wait for a key:
-	// CodePrinter::WFE( );
+	// CodePrinter::WFE();
 
 	// and print snippet by:
-	// cp.print( "some unique snippet identifying text" );
+	// cp.print("some unique snippet identifying text");
 
 out:
 [ENTER] for next frame!
@@ -93,16 +108,16 @@ typedef Tensor< double >  TDbl;
 
 template< typename T >
 void
-print( SubTensor< T > const & p_tensor, std::string const & p_text = "" ) {
+print(SubTensor< T > const & p_tensor, std::string const & p_text = "") {
 
-	std::cout << p_text << ( p_text.length( ) ? "\n" : "" ) << p_tensor.str( ) << std::endl << std::endl;
+	std::cout << p_text << (p_text.length() ? "\n" : "") << p_tensor.str() << std::endl << std::endl;
 }
 
 template< typename T >
 void
-print( std::string const & p_text, Term< T > const & p_term ) {
+print(std::string const & p_text, Term< T > const & p_term) {
 
-	std::cout << p_text << std::endl << p_term.str( ) << std::endl << std::endl;
+	std::cout << p_text << std::endl << p_term.str() << std::endl << std::endl;
 }
 
 out:
@@ -111,13 +126,13 @@ out:
 [create some double vector]
 c++:
 
-	// create a vector ( tensor of degree 1 and 2 dimensions )
+	// create a vector (tensor of degree 1 and 2 dimensions)
 	Tensor< double >
-	tDbl = { 2 };
+	tDbl = {2};
 
 	// initit
-	tDbl[ 0 ] = 3.14;
-	tDbl[ 1 ] = 2.72;
+	tDbl[0] = 3.14;
+	tDbl[1] = 2.72;
 
 	// but how to print?
 	// this is not possible
@@ -134,33 +149,33 @@ c++:
 	i;
 
 	// to print a tensor of deg 1 we need 1 Einstein Index
-	std::cout << tDbl[ i ] << std::endl;
+	std::cout << tDbl[i] << std::endl;
 
 out:
-[ 0..1 ]
+[0..1]
   3.14  2.72
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
 [now create some more vectors and print them]
 c++:
 	TDbl
-	five_ten = { 2 },
-	three_ones = { 3 },
-	one_two_three = { 3 };
-	print( five_ten[ i ] );
-	print( three_ones[ i ], "three_ones");
-	print( one_two_three[ i ], "one_two_three" );
+	five_ten = {2},
+	three_ones = {3},
+	one_two_three = {3};
+	print(five_ten[i]);
+	print(three_ones[i], "three_ones");
+	print(one_two_three[i], "one_two_three");
 
 out:
-[ 0..1 ]
+[0..1]
   0  0
 
 three_ones
-[ 0..2 ]
+[0..2]
   0  0  0
 
 one_two_three
-[ 0..2 ]
+[0..2]
   0  0  0
 
 [ENTER] for next frame!
@@ -170,25 +185,25 @@ c++:
 	// EINSTEIN INDICES can be used to initialize a tensor with values
 	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
 	// EINSTEIN INDICES start at 0
-
-    five_ten[ i ] = 5 * ( i + 1 ); //  5  10
-	three_ones[ i ] = 1;           //  1  1  1
-	one_two_three[ i ] = i + 1;    //  1  2  3
-	print( five_ten[ i ], "five_ten" );
-	print( three_ones[ i ], "three_ones" );
-	print( one_two_three[ i ], "one_two_three" );
+  
+    five_ten[i] = 5 * (i + 1); //  5  10
+	three_ones[i] = 1;         //  1  1  1
+	one_two_three[i] = i + 1;  //  1  2  3
+	print(five_ten[i], "five_ten");
+	print(three_ones[i], "three_ones");
+	print(one_two_three[i], "one_two_three");
 
 out:
 five_ten
-[ 0..1 ]
+[0..1]
    5  10
 
 three_ones
-[ 0..2 ]
+[0..2]
   1  1  1
 
 one_two_three
-[ 0..2 ]
+[0..2]
   1  2  3
 
 [ENTER] for next frame!
@@ -199,44 +214,44 @@ c++:
 	EIdx
 	j;
 
-	// create some double matrices ( tensors of deg 2 )
+	// create some double matrices (tensors of deg 2)
 	TDbl
-	m22 = { 2, 2 }, // 2 x 2
-	m23 = { 2, 3 }, // 2 x 3
-	m32 = { 3, 2 }, // 3 x 2
-	m33 = { 3, 3 }; // 3 x 3
+	m22 = {2, 2}, // 2 x 2
+	m23 = {2, 3}, // 2 x 3
+	m32 = {3, 2}, // 3 x 2
+	m33 = {3, 3}; // 3 x 3
 
 	// initialize them again with i and j
-	m22[ i ][ j ] = i * 2 + j;
-	m23[ i ][ j ] = i * 3 + j;
-	m32[ i ][ j ] = m23[ j ][ i ];
-	m33[ i ][ j ] = i * 3 + j;
+	m22[i][j] = i * 2 + j;
+	m23[i][j] = i * 3 + j;
+	m32[i][j] = m23[j][i];
+	m33[i][j] = i * 3 + j;
 
 	// show the results now using the two indices i and j
-	print( m22[ i ][ j ], "m22" );
-	print( m23[ i ][ j ], "m23" );
-	print( m32[ j ][ i ], "m32" );
-	print( m33[ i ][ j ], "m33" );
+	print(m22[i][j], "m22");
+	print(m23[i][j], "m23");
+	print(m32[j][i], "m32");
+	print(m33[i][j], "m33");
 
 out:
 m22
-[ 0..1 ][ 0..1 ]
+[0..1][0..1]
   0  1
   2  3
 
 m23
-[ 0..1 ][ 0..2 ]
+[0..1][0..2]
   0  1  2
   3  4  5
 
 m32
-[ 0..2 ][ 0..1 ]
+[0..2][0..1]
   0  3
   1  4
   2  5
 
 m33
-[ 0..2 ][ 0..2 ]
+[0..2][0..2]
   0  1  2
   3  4  5
   6  7  8
@@ -249,7 +264,7 @@ c++:
 	// if one has the same index in a product of two tensors
 	// then all elements are multiplied pairwise and summed up afterwards
 	// thats the classical scalar product
-	// v = ( 1, 2, 3 ), u = ( -1, 0, +1 ) u[i]*v[i] = 1 * (-1) + 2 * 0 + 3 * 1 = 2
+	// v = (1, 2, 3), u = (-1, 0, +1) u[i]*v[i] = 1 * (-1) + 2 * 0 + 3 * 1 = 2
 	// so let's see whtat's possible here!
 
 out:
@@ -257,49 +272,49 @@ out:
 ----------------------------------------------------------------------------------------------------------------
 [the scalar product]
 c++:
-	print( three_ones[ i ], "three_ones[ i ]" );
-	print( one_two_three[ i ], "one_two_three[ i ]" );
-	print( three_ones[ i ] * three_ones[ i ], "three_ones[ i ] * three_ones[ i ]" );
-	print( three_ones[ i ] * one_two_three[ i ], "three_ones[ i ] * one_two_three[ i ]" );
-	print( one_two_three[ i ] * three_ones[ i ], "one_two_three[ i ] * three_ones[ i ]" );
-	print( one_two_three[ i ] * one_two_three[ i ], "one_two_three[ i ] * one_two_three[ i ]" );
+	print(three_ones[i], "three_ones[i]");
+	print(one_two_three[i], "one_two_three[i]");
+	print(three_ones[i] * three_ones[i], "three_ones[i] * three_ones[i]");
+	print(three_ones[i] * one_two_three[i], "three_ones[i] * one_two_three[i]");
+	print(one_two_three[i] * three_ones[i], "one_two_three[i] * three_ones[i]");
+	print(one_two_three[i] * one_two_three[i], "one_two_three[i] * one_two_three[i]");
 
 out:
-three_ones[ i ]
-[ 0..2 ]
+three_ones[i]
+[0..2]
   1  1  1
 
-one_two_three[ i ]
-[ 0..2 ]
+one_two_three[i]
+[0..2]
   1  2  3
 
-three_ones[ i ] * three_ones[ i ]
+three_ones[i] * three_ones[i]
   3
 
-three_ones[ i ] * one_two_three[ i ]
+three_ones[i] * one_two_three[i]
   6
 
-one_two_three[ i ] * three_ones[ i ]
+one_two_three[i] * three_ones[i]
   6
 
-one_two_three[ i ] * one_two_three[ i ]
+one_two_three[i] * one_two_three[i]
   14
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
 [create a 2x2 matrix via outer product of two vectors]
 c++:
-	print( five_ten[ i ] * one_two_three[ j ], "five_ten[ i ] * one_two_three[ j ]" );
-	print( one_two_three[ i ] * five_ten[ j ], "one_two_three[ i ] * five_ten[ j ]" );
+	print(five_ten[i] * one_two_three[j], "five_ten[i] * one_two_three[j]");
+	print(one_two_three[i] * five_ten[j], "one_two_three[i] * five_ten[j]");
 
 out:
-five_ten[ i ] * one_two_three[ j ]
-[ 0..1 ][ 0..2 ]
+five_ten[i] * one_two_three[j]
+[0..1][0..2]
    5  10  15
   10  20  30
 
-one_two_three[ i ] * five_ten[ j ]
-[ 0..2 ][ 0..1 ]
+one_two_three[i] * five_ten[j]
+[0..2][0..1]
    5  10
   10  20
   15  30
@@ -308,26 +323,26 @@ one_two_three[ i ] * five_ten[ j ]
 ----------------------------------------------------------------------------------------------------------------
 [matrices times vectors]
 c++:
-	print( m22[ i ][ j ] * five_ten[ j ], "m22[ i ][ j ] * five_ten[ j ]" );
-	print( five_ten[ i ] * m22[ i ][ j ], "five_ten[ i ] * m22[ i ][ j ]" );
-	print( m32[ i ][ j ] * five_ten[ j ], "m32[ i ][ j ] * five_ten[ j ]" );
-	print( one_two_three[ i ] * m32[ i ][ j ], "one_two_three[ i ] * m32[ i ][ j ]" );
+	print(m22[i][j] * five_ten[j], "m22[i][j] * five_ten[j]");
+	print(five_ten[i] * m22[i][j], "five_ten[i] * m22[i][j]");
+	print(m32[i][j] * five_ten[j], "m32[i][j] * five_ten[j]");
+	print(one_two_three[i] * m32[i][j], "one_two_three[i] * m32[i][j]");
 
 out:
-m22[ i ][ j ] * five_ten[ j ]
-[ 0..1 ]
+m22[i][j] * five_ten[j]
+[0..1]
   10  40
 
-five_ten[ i ] * m22[ i ][ j ]
-[ 0..1 ]
+five_ten[i] * m22[i][j]
+[0..1]
   20  35
 
-m32[ i ][ j ] * five_ten[ j ]
-[ 0..2 ]
+m32[i][j] * five_ten[j]
+[0..2]
   30  45  60
 
-one_two_three[ i ] * m32[ i ][ j ]
-[ 0..1 ]
+one_two_three[i] * m32[i][j]
+[0..1]
    8  26
 
 [ENTER] for next frame!
@@ -338,18 +353,18 @@ c++:
 	EIdx
 	k;
 
-	print( m32[ i ][ k ] * m23[ k ][ j ], "m32 x m23 < == > m32[ i ][ k ] * m23[ k ][ j ]" );
-	print( m23[ i ][ k ] * m32[ k ][ j ], "m23 x m32 < == > m23[ i ][ k ] * m32[ k ][ j ]" );
+	print(m32[i][k] * m23[k][j], "m32 x m23 < == > m32[i][k] * m23[k][j]");
+	print(m23[i][k] * m32[k][j], "m23 x m32 < == > m23[i][k] * m32[k][j]");
 
 out:
-m32 x m23 < == > m32[ i ][ k ] * m23[ k ][ j ]
-[ 0..2 ][ 0..2 ]
+m32 x m23 < == > m32[i][k] * m23[k][j]
+[0..2][0..2]
    9  12  15
   12  17  22
   15  22  29
 
-m23 x m32 < == > m23[ i ][ k ] * m32[ k ][ j ]
-[ 0..1 ][ 0..1 ]
+m23 x m32 < == > m23[i][k] * m32[k][j]
+[0..1][0..1]
    5  14
   14  50
 
@@ -358,15 +373,15 @@ m23 x m32 < == > m23[ i ][ k ] * m32[ k ][ j ]
 [now create a new double 3x3 matrix]
 c++:
 	TDbl
-	m = { 3, 3 };
+	m = {3, 3};
 
-	m[ i ][ j ] = ( i == j ) * ( 1 + i ) + ( i != j ) * ( i * 3 + j );
+	m[i][j] = (i == j) * (1 + i) + (i != j) * (i * 3 + j);
 
-	print( m[ i ][ j ], "m" );
+	print(m[i][j], "m");
 
 out:
 m
-[ 0..2 ][ 0..2 ]
+[0..2][0..2]
   1  1  2
   3  2  5
   6  7  3
@@ -375,40 +390,40 @@ m
 ----------------------------------------------------------------------------------------------------------------
 [sum of vector elements]
 c++:
-	print( three_ones[ i ], "three_ones" );
-	print( one_two_three[ i ], "one_two_three" );
-	print( three_ones[ i ] * one_two_three[ i ], "three_ones[ i ] * one_two_three[ i ]" );
-	print( one_two_three[ i ] * three_ones[ i ], "one_two_three[ i ] * three_ones[ i ]" );
+	print(three_ones[i], "three_ones");
+	print(one_two_three[i], "one_two_three");
+	print(three_ones[i] * one_two_three[i], "three_ones[i] * one_two_three[i]");
+	print(one_two_three[i] * three_ones[i], "one_two_three[i] * three_ones[i]");
 
 out:
 three_ones
-[ 0..2 ]
+[0..2]
   1  1  1
 
 one_two_three
-[ 0..2 ]
+[0..2]
   1  2  3
 
-three_ones[ i ] * one_two_three[ i ]
+three_ones[i] * one_two_three[i]
   6
 
-one_two_three[ i ] * three_ones[ i ]
+one_two_three[i] * three_ones[i]
   6
 
 [ENTER] for next frame!
 ----------------------------------------------------------------------------------------------------------------
 [sum of matrix row or column elements]
 c++:
-	print( three_ones[ i ] * m[ i ][ j ], "three_ones[ i ] * m[ i ][ j ]" );
-	print( m[ i ][ j ] * three_ones[ j ], "m[ i ][ j ] * three_ones[ j ]" );
+	print(three_ones[i] * m[i][j], "three_ones[i] * m[i][j]");
+	print(m[i][j] * three_ones[j], "m[i][j] * three_ones[j]");
 
 out:
-three_ones[ i ] * m[ i ][ j ]
-[ 0..2 ]
+three_ones[i] * m[i][j]
+[0..2]
   10  10  10
 
-m[ i ][ j ] * three_ones[ j ]
-[ 0..2 ]
+m[i][j] * three_ones[j]
+[0..2]
    4  10  16
 
 [ENTER] for next frame!
@@ -416,15 +431,15 @@ m[ i ][ j ] * three_ones[ j ]
 [sum of all matrix elements]
 c++:
 	// need a matrix containing ones only
-	m33[ i ][ j ] = 1;
-	print( m33[ i ][ j ] * m[ i ][ j ], "m33[ i ][ j ] * m[ i ][ j ]" );
-	print( m[ i ][ j ] * m33[ i ][ j ], "m[ i ][ j ] * m33[ i ][ j ]" );
+	m33[i][j] = 1;
+	print(m33[i][j] * m[i][j], "m33[i][j] * m[i][j]");
+	print(m[i][j] * m33[i][j], "m[i][j] * m33[i][j]");
 
 out:
-m33[ i ][ j ] * m[ i ][ j ]
+m33[i][j] * m[i][j]
   30
 
-m[ i ][ j ] * m33[ i ][ j ]
+m[i][j] * m33[i][j]
   30
 
 [ENTER] for next frame!
@@ -432,27 +447,27 @@ m[ i ][ j ] * m33[ i ][ j ]
 [the levi cevita tensor]
 c++:
 	TDbl
-	eps = { 3, 3, 3 };
+	eps = {3, 3, 3};
 
-	eps[ i ][ j ][ k ] =
-		( ( ( i < j ) & ( j < k ) ) | ( ( k < i ) & ( i < j ) ) | ( ( j < k ) & ( k < i ) ) ) -
-		( ( ( i > j ) & ( j > k ) ) | ( ( k > i ) & ( i > j ) ) | ( ( j > k ) & ( k > i ) ) );
+	eps[i][j][k] =
+		(((i < j) & (j < k)) | ((k < i) & (i < j)) | ((j < k) & (k < i))) -
+		(((i > j) & (j > k)) | ((k > i) & (i > j)) | ((j > k) & (k > i)));
 
-	print( eps[ i ][ j ][ k ], "eps" );
+	print(eps[i][j][k], "eps");
 
 out:
 eps
-[ 0 ][ 0..2 ][ 0..2 ]
+[0][0..2][0..2]
    0   0   0
    0   0   1
    0  -1   0
 
-[ 1 ][ 0..2 ][ 0..2 ]
+[1][0..2][0..2]
    0   0  -1
    0   0   0
    1   0   0
 
-[ 2 ][ 0..2 ][ 0..2 ]
+[2][0..2][0..2]
    0   1   0
   -1   0   0
    0   0   0
@@ -461,28 +476,28 @@ eps
 ----------------------------------------------------------------------------------------------------------------
 [cross product of three_ones and one_two_three]
 c++:
-	print( three_ones[ i ], "three_ones" );
-	print( one_two_three[ i ], "one_two_three" );
+	print(three_ones[i], "three_ones");
+	print(one_two_three[i], "one_two_three");
 
 	// cross product
-	print( eps[ i ][ j ][ k ] * three_ones[ j ] * one_two_three[ k ], "eps[ i ][ j ][ k ] * three_ones[ j ] * one_two_three[ k ]" );
-	print( eps[ i ][ j ][ k ] * one_two_three[ j ] * three_ones[ k ], "eps[ i ][ j ][ k ] * one_two_three[ j ] * three_ones[ k ]" );
+	print(eps[i][j][k] * three_ones[j] * one_two_three[k], "eps[i][j][k] * three_ones[j] * one_two_three[k]");
+	print(eps[i][j][k] * one_two_three[j] * three_ones[k], "eps[i][j][k] * one_two_three[j] * three_ones[k]");
 
 out:
 three_ones
-[ 0..2 ]
+[0..2]
   1  1  1
 
 one_two_three
-[ 0..2 ]
+[0..2]
   1  2  3
 
-eps[ i ][ j ][ k ] * three_ones[ j ] * one_two_three[ k ]
-[ 0..2 ]
+eps[i][j][k] * three_ones[j] * one_two_three[k]
+[0..2]
    1  -2   1
 
-eps[ i ][ j ][ k ] * one_two_three[ j ] * three_ones[ k ]
-[ 0..2 ]
+eps[i][j][k] * one_two_three[j] * three_ones[k]
+[0..2]
   -1   2  -1
 
 [ENTER] for next frame!
@@ -491,24 +506,24 @@ eps[ i ][ j ][ k ] * one_two_three[ j ] * three_ones[ k ]
 c++:
 	// adjugate matrix
 	TDbl
-	mA = { 3, 3 };
+	mA = {3, 3};
 
-	mA[ i ][ 0 ] = eps[ i ][ j ][ k ] * m[ 1 ][ j ] * m[ 2 ][ k ];
-	mA[ i ][ 1 ] = eps[ i ][ j ][ k ] * m[ 2 ][ j ] * m[ 0 ][ k ];
-	mA[ i ][ 2 ] = eps[ i ][ j ][ k ] * m[ 0 ][ j ] * m[ 1 ][ k ];
+	mA[i][0] = eps[i][j][k] * m[1][j] * m[2][k];
+	mA[i][1] = eps[i][j][k] * m[2][j] * m[0][k];
+	mA[i][2] = eps[i][j][k] * m[0][j] * m[1][k];
 
-	print( m[ i ][ j ], "m" );
-	print( mA[ i ][ j ], "mA" );
+	print(m[i][j], "m");
+	print(mA[i][j], "mA");
 
 out:
 m
-[ 0..2 ][ 0..2 ]
+[0..2][0..2]
   1  1  2
   3  2  5
   6  7  3
 
 mA
-[ 0..2 ][ 0..2 ]
+[0..2][0..2]
   -29   11    1
    21   -9    1
     9   -1   -1
@@ -520,19 +535,19 @@ c++:
 
 	// determinant of m by rows
 	print(
-		 eps[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ],
-		"eps[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ]" );
+		 eps[i][j][k] * m[0][i] * m[1][j] * m[2][k],
+		"eps[i][j][k] * m[0][i] * m[1][j] * m[2][k]");
 
 	// determinant of m by columns
 	print(
-		 eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ],
-		"eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ]" );
+		 eps[i][j][k] * m[i][0] * m[j][1] * m[k][2],
+		"eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]");
 
 out:
-eps[ i ][ j ][ k ] * m[ 0 ][ i ] * m[ 1 ][ j ] * m[ 2 ][ k ]
+eps[i][j][k] * m[0][i] * m[1][j] * m[2][k]
   10
 
-eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ]
+eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]
   10
 
 [ENTER] for next frame!
@@ -540,16 +555,16 @@ eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ]
 [use adjugate of m and determinant of m to create the inverse of m]
 c++:
 	TDbl
-	mInv = { 3, 3 };
+	mInv = {3, 3};
 
-	mInv[ i ][ j ] = mA[ i ][ j ] / ( eps[ i ][ j ][ k ] * m[ i ][ 0 ] * m[ j ][ 1 ] * m[ k ][ 2 ] );
+	mInv[i][j] = mA[i][j] / (eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]);
 
 	// invers of m
-	print( mInv[ i ][ j ], "mInv" );
+	print(mInv[i][j], "mInv");
 
 out:
 mInv
-[ 0..2 ][ 0..2 ]
+[0..2][0..2]
   -2.9   1.1   0.1
    2.1  -0.9   0.1
    0.9  -0.1  -0.1
@@ -558,11 +573,11 @@ mInv
 ----------------------------------------------------------------------------------------------------------------
 [check result, calculate inverse of m times m]
 c++:
-	print( mInv[ i ][ j ] * m[ j ][ k ], "mInv[ i ][ j ] * m[ j ][ k ]" );
+	print(mInv[i][j] * m[j][k], "mInv[i][j] * m[j][k]");
 
 out:
-mInv[ i ][ j ] * m[ j ][ k ]
-[ 0..2 ][ 0..2 ]
+mInv[i][j] * m[j][k]
+[0..2][0..2]
              1   3.33067e-16   2.22045e-16
              0             1   2.22045e-16
   -1.11022e-16  -1.11022e-16             1
@@ -572,127 +587,127 @@ mInv[ i ][ j ] * m[ j ][ k ]
 [moment of inertia]
 c++:
 	TDbl
-	axis   = { 3 },
-	xyz    = { 3, 3 },
-	lambda = { 3, 3  };
+	axis   = {3},
+	xyz    = {3, 3},
+	lambda = {3, 3};
 
-	axis[ i ] = 1 + 2 * i;
-	axis[ i ] = axis[ i ] / sqrt( axis[ j ] * axis[ j ] );
-	lambda[ i ][ j ] = Dbl( i == j ) * ( axis[ i ] * axis[ i ] ) - axis[ i ] * axis[ j ];
+	axis[i] = 1 + 2 * i;
+	axis[i] = axis[i] / sqrt(axis[j] * axis[j]);
+	lambda[i][j] = Dbl(i == j) * (axis[i] * axis[i]) - axis[i] * axis[j];
 
-	xyz[ 0 ][ i ] = ( i == 0 ) * 1 + ( i == 1 ) * 0 + ( i == 2 ) * 0;
-//	xyz[ 0 ][ i ] = eps[ i ][ j ][ k ] * axis[ j ] * xyz[ 0 ][ k ];
-	xyz[ 0 ][ i ] = xyz[ 0 ][ i ] / sqrt( xyz[ 0 ][ i ] * xyz[ 0 ][ i ] );
+	xyz[0][i] = (i == 0) * 1 + (i == 1) * 0 + (i == 2) * 0;
+//	xyz[0][i] = eps[i][j][k] * axis[j] * xyz[0][k];
+	xyz[0][i] = xyz[0][i] / sqrt(xyz[0][i] * xyz[0][i]);
 
-	xyz[ 1 ][ i ] = eps[ i ][ j ][ k ] * axis[ j ] * xyz[ 0 ][ k ];
-	xyz[ 1 ][ i ] = xyz[ 1 ][ i ] / sqrt( xyz[ 1 ][ i ] * xyz[ 1 ][ i ] );
-	xyz[ 2 ][ i ] = eps[ i ][ j ][ k ] * axis[ j ] * xyz[ 1 ][ k ];
-	xyz[ 2 ][ i ] = xyz[ 2 ][ i ] / sqrt( xyz[ 2 ][ i ] * xyz[ 2 ][ i ] );
+	xyz[1][i] = eps[i][j][k] * axis[j] * xyz[0][k];
+	xyz[1][i] = xyz[1][i] / sqrt(xyz[1][i] * xyz[1][i]);
+	xyz[2][i] = eps[i][j][k] * axis[j] * xyz[1][k];
+	xyz[2][i] = xyz[2][i] / sqrt(xyz[2][i] * xyz[2][i]);
 
-	print( axis[ i ], "axis" );
-	print( xyz[ 0 ][ i ], "xyz[ 0 ][ i ]" );
-	print( xyz[ 1 ][ i ], "xyz[ 1 ][ i ]" );
-	print( xyz[ 2 ][ i ], "xyz[ 2 ][ i ]" );
-	print( lambda[ i ][ j ], "lambda" );
+	print(axis[i], "axis");
+	print(xyz[0][i], "xyz[0][i]");
+	print(xyz[1][i], "xyz[1][i]");
+	print(xyz[2][i], "xyz[2][i]");
+	print(lambda[i][j], "lambda");
 
-	print( lambda[ i ][ j ] * axis[ j ], "lambda[ i ][ j ] * axis[ j ]" );
-	print( lambda[ i ][ j ] * xyz[ 0 ][ j ], "lambda[ i ][ j ] * xyz[ 0 ][ j ]" );
-	print( lambda[ i ][ j ] * xyz[ 1 ][ j ], "lambda[ i ][ j ] * xyz[ 1 ][ j ]" );
-	print( lambda[ i ][ j ] * xyz[ 2 ][ j ], "lambda[ i ][ j ] * xyz[ 2 ][ j ]" );
+	print(lambda[i][j] * axis[j], "lambda[i][j] * axis[j]");
+	print(lambda[i][j] * xyz[0][j], "lambda[i][j] * xyz[0][j]");
+	print(lambda[i][j] * xyz[1][j], "lambda[i][j] * xyz[1][j]");
+	print(lambda[i][j] * xyz[2][j], "lambda[i][j] * xyz[2][j]");
 
-	print( axis[ i ] * lambda[ i ][ j ], "axis[ i ] * lambda[ i ][ j ]" );
-	print( axis[ i ] * axis[ i ], "axis[ i ] * axis[ i ]" );
-	print( axis[ i ] * lambda[ i ][ j ] * axis[ j ], "axis[ i ] * lambda[ i ][ j ] * axis[ j ]" );
+	print(axis[i] * lambda[i][j], "axis[i] * lambda[i][j]");
+	print(axis[i] * axis[i], "axis[i] * axis[i]");
+	print(axis[i] * lambda[i][j] * axis[j], "axis[i] * lambda[i][j] * axis[j]");
 
-	print( xyz[ 0 ][ i ] * lambda[ i ][ j ], "xyz[ 0 ][ i ] * lambda[ i ][ j ]" );
-	print( xyz[ 0 ][ i ] * xyz[ 0 ][ i ], "xyz[ 0 ][ i ] * xyz[ 0 ][ i ]" );
-	print( xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ], "xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ]" );
+	print(xyz[0][i] * lambda[i][j], "xyz[0][i] * lambda[i][j]");
+	print(xyz[0][i] * xyz[0][i], "xyz[0][i] * xyz[0][i]");
+	print(xyz[0][i] * lambda[i][j] * xyz[0][j], "xyz[0][i] * lambda[i][j] * xyz[0][j]");
 
-	print( xyz[ 1 ][ i ] * lambda[ i ][ j ], "xyz[ 1 ][ i ] * lambda[ i ][ j ]" );
-	print( xyz[ 1 ][ i ] * xyz[ 1 ][ i ], "xyz[ 1 ][ i ] * xyz[ 1 ][ i ]" );
-	print( xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ], "xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ]" );
+	print(xyz[1][i] * lambda[i][j], "xyz[1][i] * lambda[i][j]");
+	print(xyz[1][i] * xyz[1][i], "xyz[1][i] * xyz[1][i]");
+	print(xyz[1][i] * lambda[i][j] * xyz[1][j], "xyz[1][i] * lambda[i][j] * xyz[1][j]");
 
-	print( xyz[ 2 ][ i ] * lambda[ i ][ j ], "xyz[ 2 ][ i ] * lambda[ i ][ j ]" );
-	print( xyz[ 2 ][ i ] * xyz[ 2 ][ i ], "xyz[ 2 ][ i ] * xyz[ 2 ][ i ]" );
-	print( xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ], "xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ]" );
+	print(xyz[2][i] * lambda[i][j], "xyz[2][i] * lambda[i][j]");
+	print(xyz[2][i] * xyz[2][i], "xyz[2][i] * xyz[2][i]");
+	print(xyz[2][i] * lambda[i][j] * xyz[2][j], "xyz[2][i] * lambda[i][j] * xyz[2][j]");
 
 out:
 axis
-[ 0..2 ]
+[0..2]
   0.169031  0.507093  0.845154
 
-xyz[ 0 ][ i ]
-[ 0..2 ]
+xyz[0][i]
+[0..2]
   1  0  0
 
-xyz[ 1 ][ i ]
-[ 0..2 ]
+xyz[1][i]
+[0..2]
           0   0.857493  -0.514496
 
-xyz[ 2 ][ i ]
-[ 0..2 ]
+xyz[2][i]
+[0..2]
   -0.985611  0.0869657   0.144943
 
 lambda
-[ 0..2 ][ 0..2 ]
+[0..2][0..2]
     0.971429  -0.0857143   -0.142857
   -0.0857143    0.742857   -0.428571
    -0.142857   -0.428571    0.285714
 
-lambda[ i ][ j ] * axis[ j ]
-[ 0..2 ]
+lambda[i][j] * axis[j]
+[0..2]
              0  -5.55112e-17  -2.77556e-17
 
-lambda[ i ][ j ] * xyz[ 0 ][ j ]
-[ 0..2 ]
+lambda[i][j] * xyz[0][j]
+[0..2]
     0.971429  -0.0857143   -0.142857
 
-lambda[ i ][ j ] * xyz[ 1 ][ j ]
-[ 0..2 ]
+lambda[i][j] * xyz[1][j]
+[0..2]
           0   0.857493  -0.514496
 
-lambda[ i ][ j ] * xyz[ 2 ][ j ]
-[ 0..2 ]
+lambda[i][j] * xyz[2][j]
+[0..2]
   -0.985611  0.0869657   0.144943
 
-axis[ i ] * lambda[ i ][ j ]
-[ 0..2 ]
+axis[i] * lambda[i][j]
+[0..2]
              0  -5.55112e-17  -2.77556e-17
 
-axis[ i ] * axis[ i ]
+axis[i] * axis[i]
   1
 
-axis[ i ] * lambda[ i ][ j ] * axis[ j ]
+axis[i] * lambda[i][j] * axis[j]
   -5.1607e-17
 
-xyz[ 0 ][ i ] * lambda[ i ][ j ]
-[ 0..2 ]
+xyz[0][i] * lambda[i][j]
+[0..2]
     0.971429  -0.0857143   -0.142857
 
-xyz[ 0 ][ i ] * xyz[ 0 ][ i ]
+xyz[0][i] * xyz[0][i]
   1
 
-xyz[ 0 ][ i ] * lambda[ i ][ j ] * xyz[ 0 ][ j ]
+xyz[0][i] * lambda[i][j] * xyz[0][j]
   0.971429
 
-xyz[ 1 ][ i ] * lambda[ i ][ j ]
-[ 0..2 ]
+xyz[1][i] * lambda[i][j]
+[0..2]
           0   0.857493  -0.514496
 
-xyz[ 1 ][ i ] * xyz[ 1 ][ i ]
+xyz[1][i] * xyz[1][i]
   1
 
-xyz[ 1 ][ i ] * lambda[ i ][ j ] * xyz[ 1 ][ j ]
+xyz[1][i] * lambda[i][j] * xyz[1][j]
   1
 
-xyz[ 2 ][ i ] * lambda[ i ][ j ]
-[ 0..2 ]
+xyz[2][i] * lambda[i][j]
+[0..2]
   -0.985611  0.0869657   0.144943
 
-xyz[ 2 ][ i ] * xyz[ 2 ][ i ]
+xyz[2][i] * xyz[2][i]
   1
 
-xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ]
+xyz[2][i] * lambda[i][j] * xyz[2][j]
   1
 
 [ENTER] for next frame!
@@ -700,18 +715,18 @@ xyz[ 2 ][ i ] * lambda[ i ][ j ] * xyz[ 2 ][ j ]
 [big one]
 c++:
 	Tensor< int >
-	big = { 2, 3, 4, 5, 6, 7 };
+	big = {2, 3, 4, 5, 6, 7};
 
 	EIdx
 	a, b, c, d, e, f;
 
-	big[ a ][ b ][ c ][ d ][ e ][ f ] = 0 + f + 7 * ( e + 6 * ( d + 5 * ( c + 4 * ( b + 3 * a ) ) ) );
+	big[a][b][c][d][e][f] = 0 + f + 7 * (e + 6 * (d + 5 * (c + 4 * (b + 3 * a))));
 
-	print( big[ a ][ b ][ c ][ d ][ e ][ f ], "big" );
+	print(big[a][b][c][d][e][f], "big");
 
 out:
 big
-[ 0 ][ 0 ][ 0 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][0][0][0][0..5][0..6]
      0     1     2     3     4     5     6
      7     8     9    10    11    12    13
     14    15    16    17    18    19    20
@@ -719,7 +734,7 @@ big
     28    29    30    31    32    33    34
     35    36    37    38    39    40    41
 
-[ 0 ][ 0 ][ 0 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][0][0][1][0..5][0..6]
     42    43    44    45    46    47    48
     49    50    51    52    53    54    55
     56    57    58    59    60    61    62
@@ -727,7 +742,7 @@ big
     70    71    72    73    74    75    76
     77    78    79    80    81    82    83
 
-[ 0 ][ 0 ][ 0 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][0][0][2][0..5][0..6]
     84    85    86    87    88    89    90
     91    92    93    94    95    96    97
     98    99   100   101   102   103   104
@@ -735,7 +750,7 @@ big
    112   113   114   115   116   117   118
    119   120   121   122   123   124   125
 
-[ 0 ][ 0 ][ 0 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][0][0][3][0..5][0..6]
    126   127   128   129   130   131   132
    133   134   135   136   137   138   139
    140   141   142   143   144   145   146
@@ -743,7 +758,7 @@ big
    154   155   156   157   158   159   160
    161   162   163   164   165   166   167
 
-[ 0 ][ 0 ][ 0 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][0][0][4][0..5][0..6]
    168   169   170   171   172   173   174
    175   176   177   178   179   180   181
    182   183   184   185   186   187   188
@@ -752,7 +767,7 @@ big
    203   204   205   206   207   208   209
 
 
-[ 0 ][ 0 ][ 1 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][0][1][0][0..5][0..6]
    210   211   212   213   214   215   216
    217   218   219   220   221   222   223
    224   225   226   227   228   229   230
@@ -760,7 +775,7 @@ big
    238   239   240   241   242   243   244
    245   246   247   248   249   250   251
 
-[ 0 ][ 0 ][ 1 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][0][1][1][0..5][0..6]
    252   253   254   255   256   257   258
    259   260   261   262   263   264   265
    266   267   268   269   270   271   272
@@ -768,7 +783,7 @@ big
    280   281   282   283   284   285   286
    287   288   289   290   291   292   293
 
-[ 0 ][ 0 ][ 1 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][0][1][2][0..5][0..6]
    294   295   296   297   298   299   300
    301   302   303   304   305   306   307
    308   309   310   311   312   313   314
@@ -776,7 +791,7 @@ big
    322   323   324   325   326   327   328
    329   330   331   332   333   334   335
 
-[ 0 ][ 0 ][ 1 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][0][1][3][0..5][0..6]
    336   337   338   339   340   341   342
    343   344   345   346   347   348   349
    350   351   352   353   354   355   356
@@ -784,7 +799,7 @@ big
    364   365   366   367   368   369   370
    371   372   373   374   375   376   377
 
-[ 0 ][ 0 ][ 1 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][0][1][4][0..5][0..6]
    378   379   380   381   382   383   384
    385   386   387   388   389   390   391
    392   393   394   395   396   397   398
@@ -793,7 +808,7 @@ big
    413   414   415   416   417   418   419
 
 
-[ 0 ][ 0 ][ 2 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][0][2][0][0..5][0..6]
    420   421   422   423   424   425   426
    427   428   429   430   431   432   433
    434   435   436   437   438   439   440
@@ -801,7 +816,7 @@ big
    448   449   450   451   452   453   454
    455   456   457   458   459   460   461
 
-[ 0 ][ 0 ][ 2 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][0][2][1][0..5][0..6]
    462   463   464   465   466   467   468
    469   470   471   472   473   474   475
    476   477   478   479   480   481   482
@@ -809,7 +824,7 @@ big
    490   491   492   493   494   495   496
    497   498   499   500   501   502   503
 
-[ 0 ][ 0 ][ 2 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][0][2][2][0..5][0..6]
    504   505   506   507   508   509   510
    511   512   513   514   515   516   517
    518   519   520   521   522   523   524
@@ -817,7 +832,7 @@ big
    532   533   534   535   536   537   538
    539   540   541   542   543   544   545
 
-[ 0 ][ 0 ][ 2 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][0][2][3][0..5][0..6]
    546   547   548   549   550   551   552
    553   554   555   556   557   558   559
    560   561   562   563   564   565   566
@@ -825,7 +840,7 @@ big
    574   575   576   577   578   579   580
    581   582   583   584   585   586   587
 
-[ 0 ][ 0 ][ 2 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][0][2][4][0..5][0..6]
    588   589   590   591   592   593   594
    595   596   597   598   599   600   601
    602   603   604   605   606   607   608
@@ -834,7 +849,7 @@ big
    623   624   625   626   627   628   629
 
 
-[ 0 ][ 0 ][ 3 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][0][3][0][0..5][0..6]
    630   631   632   633   634   635   636
    637   638   639   640   641   642   643
    644   645   646   647   648   649   650
@@ -842,7 +857,7 @@ big
    658   659   660   661   662   663   664
    665   666   667   668   669   670   671
 
-[ 0 ][ 0 ][ 3 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][0][3][1][0..5][0..6]
    672   673   674   675   676   677   678
    679   680   681   682   683   684   685
    686   687   688   689   690   691   692
@@ -850,7 +865,7 @@ big
    700   701   702   703   704   705   706
    707   708   709   710   711   712   713
 
-[ 0 ][ 0 ][ 3 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][0][3][2][0..5][0..6]
    714   715   716   717   718   719   720
    721   722   723   724   725   726   727
    728   729   730   731   732   733   734
@@ -858,7 +873,7 @@ big
    742   743   744   745   746   747   748
    749   750   751   752   753   754   755
 
-[ 0 ][ 0 ][ 3 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][0][3][3][0..5][0..6]
    756   757   758   759   760   761   762
    763   764   765   766   767   768   769
    770   771   772   773   774   775   776
@@ -866,7 +881,7 @@ big
    784   785   786   787   788   789   790
    791   792   793   794   795   796   797
 
-[ 0 ][ 0 ][ 3 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][0][3][4][0..5][0..6]
    798   799   800   801   802   803   804
    805   806   807   808   809   810   811
    812   813   814   815   816   817   818
@@ -876,7 +891,7 @@ big
 
 
 
-[ 0 ][ 1 ][ 0 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][1][0][0][0..5][0..6]
    840   841   842   843   844   845   846
    847   848   849   850   851   852   853
    854   855   856   857   858   859   860
@@ -884,7 +899,7 @@ big
    868   869   870   871   872   873   874
    875   876   877   878   879   880   881
 
-[ 0 ][ 1 ][ 0 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][1][0][1][0..5][0..6]
    882   883   884   885   886   887   888
    889   890   891   892   893   894   895
    896   897   898   899   900   901   902
@@ -892,7 +907,7 @@ big
    910   911   912   913   914   915   916
    917   918   919   920   921   922   923
 
-[ 0 ][ 1 ][ 0 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][1][0][2][0..5][0..6]
    924   925   926   927   928   929   930
    931   932   933   934   935   936   937
    938   939   940   941   942   943   944
@@ -900,7 +915,7 @@ big
    952   953   954   955   956   957   958
    959   960   961   962   963   964   965
 
-[ 0 ][ 1 ][ 0 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][1][0][3][0..5][0..6]
    966   967   968   969   970   971   972
    973   974   975   976   977   978   979
    980   981   982   983   984   985   986
@@ -908,7 +923,7 @@ big
    994   995   996   997   998   999  1000
   1001  1002  1003  1004  1005  1006  1007
 
-[ 0 ][ 1 ][ 0 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][1][0][4][0..5][0..6]
   1008  1009  1010  1011  1012  1013  1014
   1015  1016  1017  1018  1019  1020  1021
   1022  1023  1024  1025  1026  1027  1028
@@ -917,7 +932,7 @@ big
   1043  1044  1045  1046  1047  1048  1049
 
 
-[ 0 ][ 1 ][ 1 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][1][1][0][0..5][0..6]
   1050  1051  1052  1053  1054  1055  1056
   1057  1058  1059  1060  1061  1062  1063
   1064  1065  1066  1067  1068  1069  1070
@@ -925,7 +940,7 @@ big
   1078  1079  1080  1081  1082  1083  1084
   1085  1086  1087  1088  1089  1090  1091
 
-[ 0 ][ 1 ][ 1 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][1][1][1][0..5][0..6]
   1092  1093  1094  1095  1096  1097  1098
   1099  1100  1101  1102  1103  1104  1105
   1106  1107  1108  1109  1110  1111  1112
@@ -933,7 +948,7 @@ big
   1120  1121  1122  1123  1124  1125  1126
   1127  1128  1129  1130  1131  1132  1133
 
-[ 0 ][ 1 ][ 1 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][1][1][2][0..5][0..6]
   1134  1135  1136  1137  1138  1139  1140
   1141  1142  1143  1144  1145  1146  1147
   1148  1149  1150  1151  1152  1153  1154
@@ -941,7 +956,7 @@ big
   1162  1163  1164  1165  1166  1167  1168
   1169  1170  1171  1172  1173  1174  1175
 
-[ 0 ][ 1 ][ 1 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][1][1][3][0..5][0..6]
   1176  1177  1178  1179  1180  1181  1182
   1183  1184  1185  1186  1187  1188  1189
   1190  1191  1192  1193  1194  1195  1196
@@ -949,7 +964,7 @@ big
   1204  1205  1206  1207  1208  1209  1210
   1211  1212  1213  1214  1215  1216  1217
 
-[ 0 ][ 1 ][ 1 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][1][1][4][0..5][0..6]
   1218  1219  1220  1221  1222  1223  1224
   1225  1226  1227  1228  1229  1230  1231
   1232  1233  1234  1235  1236  1237  1238
@@ -958,7 +973,7 @@ big
   1253  1254  1255  1256  1257  1258  1259
 
 
-[ 0 ][ 1 ][ 2 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][1][2][0][0..5][0..6]
   1260  1261  1262  1263  1264  1265  1266
   1267  1268  1269  1270  1271  1272  1273
   1274  1275  1276  1277  1278  1279  1280
@@ -966,7 +981,7 @@ big
   1288  1289  1290  1291  1292  1293  1294
   1295  1296  1297  1298  1299  1300  1301
 
-[ 0 ][ 1 ][ 2 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][1][2][1][0..5][0..6]
   1302  1303  1304  1305  1306  1307  1308
   1309  1310  1311  1312  1313  1314  1315
   1316  1317  1318  1319  1320  1321  1322
@@ -974,7 +989,7 @@ big
   1330  1331  1332  1333  1334  1335  1336
   1337  1338  1339  1340  1341  1342  1343
 
-[ 0 ][ 1 ][ 2 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][1][2][2][0..5][0..6]
   1344  1345  1346  1347  1348  1349  1350
   1351  1352  1353  1354  1355  1356  1357
   1358  1359  1360  1361  1362  1363  1364
@@ -982,7 +997,7 @@ big
   1372  1373  1374  1375  1376  1377  1378
   1379  1380  1381  1382  1383  1384  1385
 
-[ 0 ][ 1 ][ 2 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][1][2][3][0..5][0..6]
   1386  1387  1388  1389  1390  1391  1392
   1393  1394  1395  1396  1397  1398  1399
   1400  1401  1402  1403  1404  1405  1406
@@ -990,7 +1005,7 @@ big
   1414  1415  1416  1417  1418  1419  1420
   1421  1422  1423  1424  1425  1426  1427
 
-[ 0 ][ 1 ][ 2 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][1][2][4][0..5][0..6]
   1428  1429  1430  1431  1432  1433  1434
   1435  1436  1437  1438  1439  1440  1441
   1442  1443  1444  1445  1446  1447  1448
@@ -999,7 +1014,7 @@ big
   1463  1464  1465  1466  1467  1468  1469
 
 
-[ 0 ][ 1 ][ 3 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][1][3][0][0..5][0..6]
   1470  1471  1472  1473  1474  1475  1476
   1477  1478  1479  1480  1481  1482  1483
   1484  1485  1486  1487  1488  1489  1490
@@ -1007,7 +1022,7 @@ big
   1498  1499  1500  1501  1502  1503  1504
   1505  1506  1507  1508  1509  1510  1511
 
-[ 0 ][ 1 ][ 3 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][1][3][1][0..5][0..6]
   1512  1513  1514  1515  1516  1517  1518
   1519  1520  1521  1522  1523  1524  1525
   1526  1527  1528  1529  1530  1531  1532
@@ -1015,7 +1030,7 @@ big
   1540  1541  1542  1543  1544  1545  1546
   1547  1548  1549  1550  1551  1552  1553
 
-[ 0 ][ 1 ][ 3 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][1][3][2][0..5][0..6]
   1554  1555  1556  1557  1558  1559  1560
   1561  1562  1563  1564  1565  1566  1567
   1568  1569  1570  1571  1572  1573  1574
@@ -1023,7 +1038,7 @@ big
   1582  1583  1584  1585  1586  1587  1588
   1589  1590  1591  1592  1593  1594  1595
 
-[ 0 ][ 1 ][ 3 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][1][3][3][0..5][0..6]
   1596  1597  1598  1599  1600  1601  1602
   1603  1604  1605  1606  1607  1608  1609
   1610  1611  1612  1613  1614  1615  1616
@@ -1031,7 +1046,7 @@ big
   1624  1625  1626  1627  1628  1629  1630
   1631  1632  1633  1634  1635  1636  1637
 
-[ 0 ][ 1 ][ 3 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][1][3][4][0..5][0..6]
   1638  1639  1640  1641  1642  1643  1644
   1645  1646  1647  1648  1649  1650  1651
   1652  1653  1654  1655  1656  1657  1658
@@ -1041,7 +1056,7 @@ big
 
 
 
-[ 0 ][ 2 ][ 0 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][2][0][0][0..5][0..6]
   1680  1681  1682  1683  1684  1685  1686
   1687  1688  1689  1690  1691  1692  1693
   1694  1695  1696  1697  1698  1699  1700
@@ -1049,7 +1064,7 @@ big
   1708  1709  1710  1711  1712  1713  1714
   1715  1716  1717  1718  1719  1720  1721
 
-[ 0 ][ 2 ][ 0 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][2][0][1][0..5][0..6]
   1722  1723  1724  1725  1726  1727  1728
   1729  1730  1731  1732  1733  1734  1735
   1736  1737  1738  1739  1740  1741  1742
@@ -1057,7 +1072,7 @@ big
   1750  1751  1752  1753  1754  1755  1756
   1757  1758  1759  1760  1761  1762  1763
 
-[ 0 ][ 2 ][ 0 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][2][0][2][0..5][0..6]
   1764  1765  1766  1767  1768  1769  1770
   1771  1772  1773  1774  1775  1776  1777
   1778  1779  1780  1781  1782  1783  1784
@@ -1065,7 +1080,7 @@ big
   1792  1793  1794  1795  1796  1797  1798
   1799  1800  1801  1802  1803  1804  1805
 
-[ 0 ][ 2 ][ 0 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][2][0][3][0..5][0..6]
   1806  1807  1808  1809  1810  1811  1812
   1813  1814  1815  1816  1817  1818  1819
   1820  1821  1822  1823  1824  1825  1826
@@ -1073,7 +1088,7 @@ big
   1834  1835  1836  1837  1838  1839  1840
   1841  1842  1843  1844  1845  1846  1847
 
-[ 0 ][ 2 ][ 0 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][2][0][4][0..5][0..6]
   1848  1849  1850  1851  1852  1853  1854
   1855  1856  1857  1858  1859  1860  1861
   1862  1863  1864  1865  1866  1867  1868
@@ -1082,7 +1097,7 @@ big
   1883  1884  1885  1886  1887  1888  1889
 
 
-[ 0 ][ 2 ][ 1 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][2][1][0][0..5][0..6]
   1890  1891  1892  1893  1894  1895  1896
   1897  1898  1899  1900  1901  1902  1903
   1904  1905  1906  1907  1908  1909  1910
@@ -1090,7 +1105,7 @@ big
   1918  1919  1920  1921  1922  1923  1924
   1925  1926  1927  1928  1929  1930  1931
 
-[ 0 ][ 2 ][ 1 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][2][1][1][0..5][0..6]
   1932  1933  1934  1935  1936  1937  1938
   1939  1940  1941  1942  1943  1944  1945
   1946  1947  1948  1949  1950  1951  1952
@@ -1098,7 +1113,7 @@ big
   1960  1961  1962  1963  1964  1965  1966
   1967  1968  1969  1970  1971  1972  1973
 
-[ 0 ][ 2 ][ 1 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][2][1][2][0..5][0..6]
   1974  1975  1976  1977  1978  1979  1980
   1981  1982  1983  1984  1985  1986  1987
   1988  1989  1990  1991  1992  1993  1994
@@ -1106,7 +1121,7 @@ big
   2002  2003  2004  2005  2006  2007  2008
   2009  2010  2011  2012  2013  2014  2015
 
-[ 0 ][ 2 ][ 1 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][2][1][3][0..5][0..6]
   2016  2017  2018  2019  2020  2021  2022
   2023  2024  2025  2026  2027  2028  2029
   2030  2031  2032  2033  2034  2035  2036
@@ -1114,7 +1129,7 @@ big
   2044  2045  2046  2047  2048  2049  2050
   2051  2052  2053  2054  2055  2056  2057
 
-[ 0 ][ 2 ][ 1 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][2][1][4][0..5][0..6]
   2058  2059  2060  2061  2062  2063  2064
   2065  2066  2067  2068  2069  2070  2071
   2072  2073  2074  2075  2076  2077  2078
@@ -1123,7 +1138,7 @@ big
   2093  2094  2095  2096  2097  2098  2099
 
 
-[ 0 ][ 2 ][ 2 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][2][2][0][0..5][0..6]
   2100  2101  2102  2103  2104  2105  2106
   2107  2108  2109  2110  2111  2112  2113
   2114  2115  2116  2117  2118  2119  2120
@@ -1131,7 +1146,7 @@ big
   2128  2129  2130  2131  2132  2133  2134
   2135  2136  2137  2138  2139  2140  2141
 
-[ 0 ][ 2 ][ 2 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][2][2][1][0..5][0..6]
   2142  2143  2144  2145  2146  2147  2148
   2149  2150  2151  2152  2153  2154  2155
   2156  2157  2158  2159  2160  2161  2162
@@ -1139,7 +1154,7 @@ big
   2170  2171  2172  2173  2174  2175  2176
   2177  2178  2179  2180  2181  2182  2183
 
-[ 0 ][ 2 ][ 2 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][2][2][2][0..5][0..6]
   2184  2185  2186  2187  2188  2189  2190
   2191  2192  2193  2194  2195  2196  2197
   2198  2199  2200  2201  2202  2203  2204
@@ -1147,7 +1162,7 @@ big
   2212  2213  2214  2215  2216  2217  2218
   2219  2220  2221  2222  2223  2224  2225
 
-[ 0 ][ 2 ][ 2 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][2][2][3][0..5][0..6]
   2226  2227  2228  2229  2230  2231  2232
   2233  2234  2235  2236  2237  2238  2239
   2240  2241  2242  2243  2244  2245  2246
@@ -1155,7 +1170,7 @@ big
   2254  2255  2256  2257  2258  2259  2260
   2261  2262  2263  2264  2265  2266  2267
 
-[ 0 ][ 2 ][ 2 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][2][2][4][0..5][0..6]
   2268  2269  2270  2271  2272  2273  2274
   2275  2276  2277  2278  2279  2280  2281
   2282  2283  2284  2285  2286  2287  2288
@@ -1164,7 +1179,7 @@ big
   2303  2304  2305  2306  2307  2308  2309
 
 
-[ 0 ][ 2 ][ 3 ][ 0 ][ 0..5 ][ 0..6 ]
+[0][2][3][0][0..5][0..6]
   2310  2311  2312  2313  2314  2315  2316
   2317  2318  2319  2320  2321  2322  2323
   2324  2325  2326  2327  2328  2329  2330
@@ -1172,7 +1187,7 @@ big
   2338  2339  2340  2341  2342  2343  2344
   2345  2346  2347  2348  2349  2350  2351
 
-[ 0 ][ 2 ][ 3 ][ 1 ][ 0..5 ][ 0..6 ]
+[0][2][3][1][0..5][0..6]
   2352  2353  2354  2355  2356  2357  2358
   2359  2360  2361  2362  2363  2364  2365
   2366  2367  2368  2369  2370  2371  2372
@@ -1180,7 +1195,7 @@ big
   2380  2381  2382  2383  2384  2385  2386
   2387  2388  2389  2390  2391  2392  2393
 
-[ 0 ][ 2 ][ 3 ][ 2 ][ 0..5 ][ 0..6 ]
+[0][2][3][2][0..5][0..6]
   2394  2395  2396  2397  2398  2399  2400
   2401  2402  2403  2404  2405  2406  2407
   2408  2409  2410  2411  2412  2413  2414
@@ -1188,7 +1203,7 @@ big
   2422  2423  2424  2425  2426  2427  2428
   2429  2430  2431  2432  2433  2434  2435
 
-[ 0 ][ 2 ][ 3 ][ 3 ][ 0..5 ][ 0..6 ]
+[0][2][3][3][0..5][0..6]
   2436  2437  2438  2439  2440  2441  2442
   2443  2444  2445  2446  2447  2448  2449
   2450  2451  2452  2453  2454  2455  2456
@@ -1196,7 +1211,7 @@ big
   2464  2465  2466  2467  2468  2469  2470
   2471  2472  2473  2474  2475  2476  2477
 
-[ 0 ][ 2 ][ 3 ][ 4 ][ 0..5 ][ 0..6 ]
+[0][2][3][4][0..5][0..6]
   2478  2479  2480  2481  2482  2483  2484
   2485  2486  2487  2488  2489  2490  2491
   2492  2493  2494  2495  2496  2497  2498
@@ -1207,7 +1222,7 @@ big
 
 
 
-[ 1 ][ 0 ][ 0 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][0][0][0][0..5][0..6]
   2520  2521  2522  2523  2524  2525  2526
   2527  2528  2529  2530  2531  2532  2533
   2534  2535  2536  2537  2538  2539  2540
@@ -1215,7 +1230,7 @@ big
   2548  2549  2550  2551  2552  2553  2554
   2555  2556  2557  2558  2559  2560  2561
 
-[ 1 ][ 0 ][ 0 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][0][0][1][0..5][0..6]
   2562  2563  2564  2565  2566  2567  2568
   2569  2570  2571  2572  2573  2574  2575
   2576  2577  2578  2579  2580  2581  2582
@@ -1223,7 +1238,7 @@ big
   2590  2591  2592  2593  2594  2595  2596
   2597  2598  2599  2600  2601  2602  2603
 
-[ 1 ][ 0 ][ 0 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][0][0][2][0..5][0..6]
   2604  2605  2606  2607  2608  2609  2610
   2611  2612  2613  2614  2615  2616  2617
   2618  2619  2620  2621  2622  2623  2624
@@ -1231,7 +1246,7 @@ big
   2632  2633  2634  2635  2636  2637  2638
   2639  2640  2641  2642  2643  2644  2645
 
-[ 1 ][ 0 ][ 0 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][0][0][3][0..5][0..6]
   2646  2647  2648  2649  2650  2651  2652
   2653  2654  2655  2656  2657  2658  2659
   2660  2661  2662  2663  2664  2665  2666
@@ -1239,7 +1254,7 @@ big
   2674  2675  2676  2677  2678  2679  2680
   2681  2682  2683  2684  2685  2686  2687
 
-[ 1 ][ 0 ][ 0 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][0][0][4][0..5][0..6]
   2688  2689  2690  2691  2692  2693  2694
   2695  2696  2697  2698  2699  2700  2701
   2702  2703  2704  2705  2706  2707  2708
@@ -1248,7 +1263,7 @@ big
   2723  2724  2725  2726  2727  2728  2729
 
 
-[ 1 ][ 0 ][ 1 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][0][1][0][0..5][0..6]
   2730  2731  2732  2733  2734  2735  2736
   2737  2738  2739  2740  2741  2742  2743
   2744  2745  2746  2747  2748  2749  2750
@@ -1256,7 +1271,7 @@ big
   2758  2759  2760  2761  2762  2763  2764
   2765  2766  2767  2768  2769  2770  2771
 
-[ 1 ][ 0 ][ 1 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][0][1][1][0..5][0..6]
   2772  2773  2774  2775  2776  2777  2778
   2779  2780  2781  2782  2783  2784  2785
   2786  2787  2788  2789  2790  2791  2792
@@ -1264,7 +1279,7 @@ big
   2800  2801  2802  2803  2804  2805  2806
   2807  2808  2809  2810  2811  2812  2813
 
-[ 1 ][ 0 ][ 1 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][0][1][2][0..5][0..6]
   2814  2815  2816  2817  2818  2819  2820
   2821  2822  2823  2824  2825  2826  2827
   2828  2829  2830  2831  2832  2833  2834
@@ -1272,7 +1287,7 @@ big
   2842  2843  2844  2845  2846  2847  2848
   2849  2850  2851  2852  2853  2854  2855
 
-[ 1 ][ 0 ][ 1 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][0][1][3][0..5][0..6]
   2856  2857  2858  2859  2860  2861  2862
   2863  2864  2865  2866  2867  2868  2869
   2870  2871  2872  2873  2874  2875  2876
@@ -1280,7 +1295,7 @@ big
   2884  2885  2886  2887  2888  2889  2890
   2891  2892  2893  2894  2895  2896  2897
 
-[ 1 ][ 0 ][ 1 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][0][1][4][0..5][0..6]
   2898  2899  2900  2901  2902  2903  2904
   2905  2906  2907  2908  2909  2910  2911
   2912  2913  2914  2915  2916  2917  2918
@@ -1289,7 +1304,7 @@ big
   2933  2934  2935  2936  2937  2938  2939
 
 
-[ 1 ][ 0 ][ 2 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][0][2][0][0..5][0..6]
   2940  2941  2942  2943  2944  2945  2946
   2947  2948  2949  2950  2951  2952  2953
   2954  2955  2956  2957  2958  2959  2960
@@ -1297,7 +1312,7 @@ big
   2968  2969  2970  2971  2972  2973  2974
   2975  2976  2977  2978  2979  2980  2981
 
-[ 1 ][ 0 ][ 2 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][0][2][1][0..5][0..6]
   2982  2983  2984  2985  2986  2987  2988
   2989  2990  2991  2992  2993  2994  2995
   2996  2997  2998  2999  3000  3001  3002
@@ -1305,7 +1320,7 @@ big
   3010  3011  3012  3013  3014  3015  3016
   3017  3018  3019  3020  3021  3022  3023
 
-[ 1 ][ 0 ][ 2 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][0][2][2][0..5][0..6]
   3024  3025  3026  3027  3028  3029  3030
   3031  3032  3033  3034  3035  3036  3037
   3038  3039  3040  3041  3042  3043  3044
@@ -1313,7 +1328,7 @@ big
   3052  3053  3054  3055  3056  3057  3058
   3059  3060  3061  3062  3063  3064  3065
 
-[ 1 ][ 0 ][ 2 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][0][2][3][0..5][0..6]
   3066  3067  3068  3069  3070  3071  3072
   3073  3074  3075  3076  3077  3078  3079
   3080  3081  3082  3083  3084  3085  3086
@@ -1321,7 +1336,7 @@ big
   3094  3095  3096  3097  3098  3099  3100
   3101  3102  3103  3104  3105  3106  3107
 
-[ 1 ][ 0 ][ 2 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][0][2][4][0..5][0..6]
   3108  3109  3110  3111  3112  3113  3114
   3115  3116  3117  3118  3119  3120  3121
   3122  3123  3124  3125  3126  3127  3128
@@ -1330,7 +1345,7 @@ big
   3143  3144  3145  3146  3147  3148  3149
 
 
-[ 1 ][ 0 ][ 3 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][0][3][0][0..5][0..6]
   3150  3151  3152  3153  3154  3155  3156
   3157  3158  3159  3160  3161  3162  3163
   3164  3165  3166  3167  3168  3169  3170
@@ -1338,7 +1353,7 @@ big
   3178  3179  3180  3181  3182  3183  3184
   3185  3186  3187  3188  3189  3190  3191
 
-[ 1 ][ 0 ][ 3 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][0][3][1][0..5][0..6]
   3192  3193  3194  3195  3196  3197  3198
   3199  3200  3201  3202  3203  3204  3205
   3206  3207  3208  3209  3210  3211  3212
@@ -1346,7 +1361,7 @@ big
   3220  3221  3222  3223  3224  3225  3226
   3227  3228  3229  3230  3231  3232  3233
 
-[ 1 ][ 0 ][ 3 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][0][3][2][0..5][0..6]
   3234  3235  3236  3237  3238  3239  3240
   3241  3242  3243  3244  3245  3246  3247
   3248  3249  3250  3251  3252  3253  3254
@@ -1354,7 +1369,7 @@ big
   3262  3263  3264  3265  3266  3267  3268
   3269  3270  3271  3272  3273  3274  3275
 
-[ 1 ][ 0 ][ 3 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][0][3][3][0..5][0..6]
   3276  3277  3278  3279  3280  3281  3282
   3283  3284  3285  3286  3287  3288  3289
   3290  3291  3292  3293  3294  3295  3296
@@ -1362,7 +1377,7 @@ big
   3304  3305  3306  3307  3308  3309  3310
   3311  3312  3313  3314  3315  3316  3317
 
-[ 1 ][ 0 ][ 3 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][0][3][4][0..5][0..6]
   3318  3319  3320  3321  3322  3323  3324
   3325  3326  3327  3328  3329  3330  3331
   3332  3333  3334  3335  3336  3337  3338
@@ -1372,7 +1387,7 @@ big
 
 
 
-[ 1 ][ 1 ][ 0 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][1][0][0][0..5][0..6]
   3360  3361  3362  3363  3364  3365  3366
   3367  3368  3369  3370  3371  3372  3373
   3374  3375  3376  3377  3378  3379  3380
@@ -1380,7 +1395,7 @@ big
   3388  3389  3390  3391  3392  3393  3394
   3395  3396  3397  3398  3399  3400  3401
 
-[ 1 ][ 1 ][ 0 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][1][0][1][0..5][0..6]
   3402  3403  3404  3405  3406  3407  3408
   3409  3410  3411  3412  3413  3414  3415
   3416  3417  3418  3419  3420  3421  3422
@@ -1388,7 +1403,7 @@ big
   3430  3431  3432  3433  3434  3435  3436
   3437  3438  3439  3440  3441  3442  3443
 
-[ 1 ][ 1 ][ 0 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][1][0][2][0..5][0..6]
   3444  3445  3446  3447  3448  3449  3450
   3451  3452  3453  3454  3455  3456  3457
   3458  3459  3460  3461  3462  3463  3464
@@ -1396,7 +1411,7 @@ big
   3472  3473  3474  3475  3476  3477  3478
   3479  3480  3481  3482  3483  3484  3485
 
-[ 1 ][ 1 ][ 0 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][1][0][3][0..5][0..6]
   3486  3487  3488  3489  3490  3491  3492
   3493  3494  3495  3496  3497  3498  3499
   3500  3501  3502  3503  3504  3505  3506
@@ -1404,7 +1419,7 @@ big
   3514  3515  3516  3517  3518  3519  3520
   3521  3522  3523  3524  3525  3526  3527
 
-[ 1 ][ 1 ][ 0 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][1][0][4][0..5][0..6]
   3528  3529  3530  3531  3532  3533  3534
   3535  3536  3537  3538  3539  3540  3541
   3542  3543  3544  3545  3546  3547  3548
@@ -1413,7 +1428,7 @@ big
   3563  3564  3565  3566  3567  3568  3569
 
 
-[ 1 ][ 1 ][ 1 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][1][1][0][0..5][0..6]
   3570  3571  3572  3573  3574  3575  3576
   3577  3578  3579  3580  3581  3582  3583
   3584  3585  3586  3587  3588  3589  3590
@@ -1421,7 +1436,7 @@ big
   3598  3599  3600  3601  3602  3603  3604
   3605  3606  3607  3608  3609  3610  3611
 
-[ 1 ][ 1 ][ 1 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][1][1][1][0..5][0..6]
   3612  3613  3614  3615  3616  3617  3618
   3619  3620  3621  3622  3623  3624  3625
   3626  3627  3628  3629  3630  3631  3632
@@ -1429,7 +1444,7 @@ big
   3640  3641  3642  3643  3644  3645  3646
   3647  3648  3649  3650  3651  3652  3653
 
-[ 1 ][ 1 ][ 1 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][1][1][2][0..5][0..6]
   3654  3655  3656  3657  3658  3659  3660
   3661  3662  3663  3664  3665  3666  3667
   3668  3669  3670  3671  3672  3673  3674
@@ -1437,7 +1452,7 @@ big
   3682  3683  3684  3685  3686  3687  3688
   3689  3690  3691  3692  3693  3694  3695
 
-[ 1 ][ 1 ][ 1 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][1][1][3][0..5][0..6]
   3696  3697  3698  3699  3700  3701  3702
   3703  3704  3705  3706  3707  3708  3709
   3710  3711  3712  3713  3714  3715  3716
@@ -1445,7 +1460,7 @@ big
   3724  3725  3726  3727  3728  3729  3730
   3731  3732  3733  3734  3735  3736  3737
 
-[ 1 ][ 1 ][ 1 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][1][1][4][0..5][0..6]
   3738  3739  3740  3741  3742  3743  3744
   3745  3746  3747  3748  3749  3750  3751
   3752  3753  3754  3755  3756  3757  3758
@@ -1454,7 +1469,7 @@ big
   3773  3774  3775  3776  3777  3778  3779
 
 
-[ 1 ][ 1 ][ 2 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][1][2][0][0..5][0..6]
   3780  3781  3782  3783  3784  3785  3786
   3787  3788  3789  3790  3791  3792  3793
   3794  3795  3796  3797  3798  3799  3800
@@ -1462,7 +1477,7 @@ big
   3808  3809  3810  3811  3812  3813  3814
   3815  3816  3817  3818  3819  3820  3821
 
-[ 1 ][ 1 ][ 2 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][1][2][1][0..5][0..6]
   3822  3823  3824  3825  3826  3827  3828
   3829  3830  3831  3832  3833  3834  3835
   3836  3837  3838  3839  3840  3841  3842
@@ -1470,7 +1485,7 @@ big
   3850  3851  3852  3853  3854  3855  3856
   3857  3858  3859  3860  3861  3862  3863
 
-[ 1 ][ 1 ][ 2 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][1][2][2][0..5][0..6]
   3864  3865  3866  3867  3868  3869  3870
   3871  3872  3873  3874  3875  3876  3877
   3878  3879  3880  3881  3882  3883  3884
@@ -1478,7 +1493,7 @@ big
   3892  3893  3894  3895  3896  3897  3898
   3899  3900  3901  3902  3903  3904  3905
 
-[ 1 ][ 1 ][ 2 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][1][2][3][0..5][0..6]
   3906  3907  3908  3909  3910  3911  3912
   3913  3914  3915  3916  3917  3918  3919
   3920  3921  3922  3923  3924  3925  3926
@@ -1486,7 +1501,7 @@ big
   3934  3935  3936  3937  3938  3939  3940
   3941  3942  3943  3944  3945  3946  3947
 
-[ 1 ][ 1 ][ 2 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][1][2][4][0..5][0..6]
   3948  3949  3950  3951  3952  3953  3954
   3955  3956  3957  3958  3959  3960  3961
   3962  3963  3964  3965  3966  3967  3968
@@ -1495,7 +1510,7 @@ big
   3983  3984  3985  3986  3987  3988  3989
 
 
-[ 1 ][ 1 ][ 3 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][1][3][0][0..5][0..6]
   3990  3991  3992  3993  3994  3995  3996
   3997  3998  3999  4000  4001  4002  4003
   4004  4005  4006  4007  4008  4009  4010
@@ -1503,7 +1518,7 @@ big
   4018  4019  4020  4021  4022  4023  4024
   4025  4026  4027  4028  4029  4030  4031
 
-[ 1 ][ 1 ][ 3 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][1][3][1][0..5][0..6]
   4032  4033  4034  4035  4036  4037  4038
   4039  4040  4041  4042  4043  4044  4045
   4046  4047  4048  4049  4050  4051  4052
@@ -1511,7 +1526,7 @@ big
   4060  4061  4062  4063  4064  4065  4066
   4067  4068  4069  4070  4071  4072  4073
 
-[ 1 ][ 1 ][ 3 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][1][3][2][0..5][0..6]
   4074  4075  4076  4077  4078  4079  4080
   4081  4082  4083  4084  4085  4086  4087
   4088  4089  4090  4091  4092  4093  4094
@@ -1519,7 +1534,7 @@ big
   4102  4103  4104  4105  4106  4107  4108
   4109  4110  4111  4112  4113  4114  4115
 
-[ 1 ][ 1 ][ 3 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][1][3][3][0..5][0..6]
   4116  4117  4118  4119  4120  4121  4122
   4123  4124  4125  4126  4127  4128  4129
   4130  4131  4132  4133  4134  4135  4136
@@ -1527,7 +1542,7 @@ big
   4144  4145  4146  4147  4148  4149  4150
   4151  4152  4153  4154  4155  4156  4157
 
-[ 1 ][ 1 ][ 3 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][1][3][4][0..5][0..6]
   4158  4159  4160  4161  4162  4163  4164
   4165  4166  4167  4168  4169  4170  4171
   4172  4173  4174  4175  4176  4177  4178
@@ -1537,7 +1552,7 @@ big
 
 
 
-[ 1 ][ 2 ][ 0 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][2][0][0][0..5][0..6]
   4200  4201  4202  4203  4204  4205  4206
   4207  4208  4209  4210  4211  4212  4213
   4214  4215  4216  4217  4218  4219  4220
@@ -1545,7 +1560,7 @@ big
   4228  4229  4230  4231  4232  4233  4234
   4235  4236  4237  4238  4239  4240  4241
 
-[ 1 ][ 2 ][ 0 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][2][0][1][0..5][0..6]
   4242  4243  4244  4245  4246  4247  4248
   4249  4250  4251  4252  4253  4254  4255
   4256  4257  4258  4259  4260  4261  4262
@@ -1553,7 +1568,7 @@ big
   4270  4271  4272  4273  4274  4275  4276
   4277  4278  4279  4280  4281  4282  4283
 
-[ 1 ][ 2 ][ 0 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][2][0][2][0..5][0..6]
   4284  4285  4286  4287  4288  4289  4290
   4291  4292  4293  4294  4295  4296  4297
   4298  4299  4300  4301  4302  4303  4304
@@ -1561,7 +1576,7 @@ big
   4312  4313  4314  4315  4316  4317  4318
   4319  4320  4321  4322  4323  4324  4325
 
-[ 1 ][ 2 ][ 0 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][2][0][3][0..5][0..6]
   4326  4327  4328  4329  4330  4331  4332
   4333  4334  4335  4336  4337  4338  4339
   4340  4341  4342  4343  4344  4345  4346
@@ -1569,7 +1584,7 @@ big
   4354  4355  4356  4357  4358  4359  4360
   4361  4362  4363  4364  4365  4366  4367
 
-[ 1 ][ 2 ][ 0 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][2][0][4][0..5][0..6]
   4368  4369  4370  4371  4372  4373  4374
   4375  4376  4377  4378  4379  4380  4381
   4382  4383  4384  4385  4386  4387  4388
@@ -1578,7 +1593,7 @@ big
   4403  4404  4405  4406  4407  4408  4409
 
 
-[ 1 ][ 2 ][ 1 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][2][1][0][0..5][0..6]
   4410  4411  4412  4413  4414  4415  4416
   4417  4418  4419  4420  4421  4422  4423
   4424  4425  4426  4427  4428  4429  4430
@@ -1586,7 +1601,7 @@ big
   4438  4439  4440  4441  4442  4443  4444
   4445  4446  4447  4448  4449  4450  4451
 
-[ 1 ][ 2 ][ 1 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][2][1][1][0..5][0..6]
   4452  4453  4454  4455  4456  4457  4458
   4459  4460  4461  4462  4463  4464  4465
   4466  4467  4468  4469  4470  4471  4472
@@ -1594,7 +1609,7 @@ big
   4480  4481  4482  4483  4484  4485  4486
   4487  4488  4489  4490  4491  4492  4493
 
-[ 1 ][ 2 ][ 1 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][2][1][2][0..5][0..6]
   4494  4495  4496  4497  4498  4499  4500
   4501  4502  4503  4504  4505  4506  4507
   4508  4509  4510  4511  4512  4513  4514
@@ -1602,7 +1617,7 @@ big
   4522  4523  4524  4525  4526  4527  4528
   4529  4530  4531  4532  4533  4534  4535
 
-[ 1 ][ 2 ][ 1 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][2][1][3][0..5][0..6]
   4536  4537  4538  4539  4540  4541  4542
   4543  4544  4545  4546  4547  4548  4549
   4550  4551  4552  4553  4554  4555  4556
@@ -1610,7 +1625,7 @@ big
   4564  4565  4566  4567  4568  4569  4570
   4571  4572  4573  4574  4575  4576  4577
 
-[ 1 ][ 2 ][ 1 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][2][1][4][0..5][0..6]
   4578  4579  4580  4581  4582  4583  4584
   4585  4586  4587  4588  4589  4590  4591
   4592  4593  4594  4595  4596  4597  4598
@@ -1619,7 +1634,7 @@ big
   4613  4614  4615  4616  4617  4618  4619
 
 
-[ 1 ][ 2 ][ 2 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][2][2][0][0..5][0..6]
   4620  4621  4622  4623  4624  4625  4626
   4627  4628  4629  4630  4631  4632  4633
   4634  4635  4636  4637  4638  4639  4640
@@ -1627,7 +1642,7 @@ big
   4648  4649  4650  4651  4652  4653  4654
   4655  4656  4657  4658  4659  4660  4661
 
-[ 1 ][ 2 ][ 2 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][2][2][1][0..5][0..6]
   4662  4663  4664  4665  4666  4667  4668
   4669  4670  4671  4672  4673  4674  4675
   4676  4677  4678  4679  4680  4681  4682
@@ -1635,7 +1650,7 @@ big
   4690  4691  4692  4693  4694  4695  4696
   4697  4698  4699  4700  4701  4702  4703
 
-[ 1 ][ 2 ][ 2 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][2][2][2][0..5][0..6]
   4704  4705  4706  4707  4708  4709  4710
   4711  4712  4713  4714  4715  4716  4717
   4718  4719  4720  4721  4722  4723  4724
@@ -1643,7 +1658,7 @@ big
   4732  4733  4734  4735  4736  4737  4738
   4739  4740  4741  4742  4743  4744  4745
 
-[ 1 ][ 2 ][ 2 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][2][2][3][0..5][0..6]
   4746  4747  4748  4749  4750  4751  4752
   4753  4754  4755  4756  4757  4758  4759
   4760  4761  4762  4763  4764  4765  4766
@@ -1651,7 +1666,7 @@ big
   4774  4775  4776  4777  4778  4779  4780
   4781  4782  4783  4784  4785  4786  4787
 
-[ 1 ][ 2 ][ 2 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][2][2][4][0..5][0..6]
   4788  4789  4790  4791  4792  4793  4794
   4795  4796  4797  4798  4799  4800  4801
   4802  4803  4804  4805  4806  4807  4808
@@ -1660,7 +1675,7 @@ big
   4823  4824  4825  4826  4827  4828  4829
 
 
-[ 1 ][ 2 ][ 3 ][ 0 ][ 0..5 ][ 0..6 ]
+[1][2][3][0][0..5][0..6]
   4830  4831  4832  4833  4834  4835  4836
   4837  4838  4839  4840  4841  4842  4843
   4844  4845  4846  4847  4848  4849  4850
@@ -1668,7 +1683,7 @@ big
   4858  4859  4860  4861  4862  4863  4864
   4865  4866  4867  4868  4869  4870  4871
 
-[ 1 ][ 2 ][ 3 ][ 1 ][ 0..5 ][ 0..6 ]
+[1][2][3][1][0..5][0..6]
   4872  4873  4874  4875  4876  4877  4878
   4879  4880  4881  4882  4883  4884  4885
   4886  4887  4888  4889  4890  4891  4892
@@ -1676,7 +1691,7 @@ big
   4900  4901  4902  4903  4904  4905  4906
   4907  4908  4909  4910  4911  4912  4913
 
-[ 1 ][ 2 ][ 3 ][ 2 ][ 0..5 ][ 0..6 ]
+[1][2][3][2][0..5][0..6]
   4914  4915  4916  4917  4918  4919  4920
   4921  4922  4923  4924  4925  4926  4927
   4928  4929  4930  4931  4932  4933  4934
@@ -1684,7 +1699,7 @@ big
   4942  4943  4944  4945  4946  4947  4948
   4949  4950  4951  4952  4953  4954  4955
 
-[ 1 ][ 2 ][ 3 ][ 3 ][ 0..5 ][ 0..6 ]
+[1][2][3][3][0..5][0..6]
   4956  4957  4958  4959  4960  4961  4962
   4963  4964  4965  4966  4967  4968  4969
   4970  4971  4972  4973  4974  4975  4976
@@ -1692,7 +1707,7 @@ big
   4984  4985  4986  4987  4988  4989  4990
   4991  4992  4993  4994  4995  4996  4997
 
-[ 1 ][ 2 ][ 3 ][ 4 ][ 0..5 ][ 0..6 ]
+[1][2][3][4][0..5][0..6]
   4998  4999  5000  5001  5002  5003  5004
   5005  5006  5007  5008  5009  5010  5011
   5012  5013  5014  5015  5016  5017  5018
@@ -1704,32 +1719,32 @@ big
 ----------------------------------------------------------------------------------------------------------------
 [cut out some sub tensors]
 c++:
-	print( big[ i ][ 0 ][ j ][ 1 ][ k ][ 2 ], "big[ i ][ 0 ][ j ][ 1 ][ k ][ 2 ]" );
-	print( big[ 0 ][ 0 ][ 0 ][ 0 ][ i ][ j ], "big[ 0 ][ 0 ][ 0 ][ 0 ][ i ][ j ]" );
-	print( big[ i ][ 0 ][ 0 ][ 0 ][ 0 ][ j ], "big[ i ][ 0 ][ 0 ][ 0 ][ 0 ][ j ]" );
+	print(big[i][0][j][1][k][2], "big[i][0][j][1][k][2]");
+	print(big[0][0][0][0][i][j], "big[0][0][0][0][i][j]");
+	print(big[i][0][0][0][0][j], "big[i][0][0][0][0][j]");
 
 	Tensor< int >
-	small = { 7, 2 };
-	small[ i ][ j ] = big[ j ][ 0 ][ 0 ][ 0 ][ 0 ][ i ];
+	small = {7, 2};
+	small[i][j] = big[j][0][0][0][0][i];
 
-	print( small[ i ][ j ], "small[ i ][ j ]" );
+	print(small[i][j], "small[i][j]");
 
 out:
-big[ i ][ 0 ][ j ][ 1 ][ k ][ 2 ]
-[ 0 ][ 0..3 ][ 0..5 ]
+big[i][0][j][1][k][2]
+[0][0..3][0..5]
     44    51    58    65    72    79
    254   261   268   275   282   289
    464   471   478   485   492   499
    674   681   688   695   702   709
 
-[ 1 ][ 0..3 ][ 0..5 ]
+[1][0..3][0..5]
   2564  2571  2578  2585  2592  2599
   2774  2781  2788  2795  2802  2809
   2984  2991  2998  3005  3012  3019
   3194  3201  3208  3215  3222  3229
 
-big[ 0 ][ 0 ][ 0 ][ 0 ][ i ][ j ]
-[ 0..5 ][ 0..6 ]
+big[0][0][0][0][i][j]
+[0..5][0..6]
    0   1   2   3   4   5   6
    7   8   9  10  11  12  13
   14  15  16  17  18  19  20
@@ -1737,13 +1752,13 @@ big[ 0 ][ 0 ][ 0 ][ 0 ][ i ][ j ]
   28  29  30  31  32  33  34
   35  36  37  38  39  40  41
 
-big[ i ][ 0 ][ 0 ][ 0 ][ 0 ][ j ]
-[ 0..1 ][ 0..6 ]
+big[i][0][0][0][0][j]
+[0..1][0..6]
      0     1     2     3     4     5     6
   2520  2521  2522  2523  2524  2525  2526
 
-small[ i ][ j ]
-[ 0..6 ][ 0..1 ]
+small[i][j]
+[0..6][0..1]
      0  2520
      1  2521
      2  2522
@@ -1757,33 +1772,33 @@ small[ i ][ j ]
 [hadamard product of two vectors]
 c++:
 	Tensor< int >
-	t1 = { 3, 2 };
+	t1 = {3, 2};
 
-    t1[ i ][ j ] = 3 * j + i + 1;
+    t1[i][j] = 3 * j + i + 1;
 
 	Tensor< int >
-	mul = { 3, 3 };
+	mul = {3, 3};
 
-	mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ];
+	mul[i][j] = t1[i][0] * t1[j][1];
 
-    print( t1[ i ][ j ], "t1[ i ][ j ] = 3 * j + i + 1" );
-    print( mul[ i ][ j ], "mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ]" );
-    print( mul[ i ][ i ], "mul[ i ][ i ]" );
+    print(t1[i][j], "t1[i][j] = 3 * j + i + 1");
+    print(mul[i][j], "mul[i][j] = t1[i][0] * t1[j][1]");
+    print(mul[i][i], "mul[i][i]");
 
 out:
-t1[ i ][ j ] = 3 * j + i + 1
-[ 0..2 ][ 0..1 ]
+t1[i][j] = 3 * j + i + 1
+[0..2][0..1]
   1  4
   2  5
   3  6
 
-mul[ i ][ j ] = t1[ i ][ 0 ] * t1[ j ][ 1 ]
-[ 0..2 ][ 0..2 ]
+mul[i][j] = t1[i][0] * t1[j][1]
+[0..2][0..2]
    4   5   6
    8  10  12
   12  15  18
 
-mul[ i ][ i ]
-[ 0..2 ]
+mul[i][i]
+[0..2]
    4  10  18
 ```

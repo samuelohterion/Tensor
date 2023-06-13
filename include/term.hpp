@@ -11,40 +11,40 @@ class Tree {
 
 	public:
 
-		Tree( ) {
+		Tree() {
 
 		}
 
 		virtual
-		~Tree( ) {
+		~Tree() {
 
 		}
 
 	public:
 
 		virtual Tree< T >
-		*cpy( ) const = 0;
+		*cpy() const = 0;
 
 		std::string
-		str( std::size_t const &p_width = 0 ) const {
+		str(std::size_t const &p_width = 0) const {
 
 			std::stringstream
 			ss;
 
-			if( p_width ) {
+			if(p_width) {
 
-				ss << std::setw( p_width ) << val( );
+				ss << std::setw(p_width) << val();
 
-				return ss.str( );
+				return ss.str();
 			}
 
-			ss << val( );
+			ss << val();
 
-			return ss.str( );
+			return ss.str();
 		}
 
 		virtual T
-		val( ) const = 0;
+		val() const = 0;
 };
 
 template< typename T >
@@ -53,13 +53,13 @@ public Tree< T > {
 
 	public:
 
-		TreeValue( T const &p_val ) :
-		Tree< T >( ),
-		__val( p_val ) {
+		TreeValue(T const &p_val) :
+		Tree< T >(),
+		__val(p_val) {
 
 		}
 
-		~TreeValue( ) {
+		~TreeValue() {
 
 		}
 
@@ -71,13 +71,13 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeValue< T >( __val );
+			return new TreeValue< T >(__val);
 		}
 
 		TreeValue< T >
-		&set( T const &p_val ) {
+		&set(T const &p_val) {
 
 			__val = p_val;
 
@@ -85,7 +85,7 @@ public Tree< T > {
 		}
 
 		T
-		val( ) const {
+		val() const {
 
 			return __val;
 		}
@@ -97,13 +97,13 @@ public Tree< T > {
 
 	public:
 
-		TreeCast( Tree< T2 > *p_tree ) :
-		Tree< T >( ),
-		__from( p_tree ) {
+		TreeCast(Tree< T2 > *p_tree) :
+		Tree< T >(),
+		__from(p_tree) {
 
 		}
 
-		~TreeCast( ) {
+		~TreeCast() {
 
 			delete __from;
 		}
@@ -116,15 +116,15 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeCast< T, T2 >( __from->cpy( ) );
+			return new TreeCast< T, T2 >(__from->cpy());
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return __from->val( );
+			return __from->val();
 		}
 };
 
@@ -134,13 +134,13 @@ public Tree< T > {
 
 	public:
 
-		TreeQueue( Tree< T > *p_arg ) :
-		Tree< T >( ),
-		_arg( p_arg ) {
+		TreeQueue(Tree< T > *p_arg) :
+		Tree< T >(),
+		_arg(p_arg) {
 
 		}
 
-		~TreeQueue( ) {
+		~TreeQueue() {
 
 			delete _arg;
 		}
@@ -153,9 +153,9 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*arg( bool p_copy = false ) const {
+		*arg(bool p_copy = false) const {
 
-			return p_copy ? _arg->cpy( ) : _arg;
+			return p_copy ? _arg->cpy() : _arg;
 		}
 };
 
@@ -165,14 +165,14 @@ public Tree< T > {
 
 	public:
 
-		TreeBranch( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
-		Tree< T >( ),
-		_lhs( p_lhs ),
-		_rhs( p_rhs ) {
+		TreeBranch(Tree< T > *p_lhs, Tree< T > *p_rhs) :
+		Tree< T >(),
+		_lhs(p_lhs),
+		_rhs(p_rhs) {
 
 		}
 
-		~TreeBranch( ) {
+		~TreeBranch() {
 
 			delete _lhs;
 			delete _rhs;
@@ -187,15 +187,15 @@ public Tree< T > {
 	public:
 
 		Tree< T >
-		*lhs( bool p_copy = false ) const {
+		*lhs(bool p_copy = false) const {
 
-			return p_copy ? _lhs->cpy( ) : _lhs;
+			return p_copy ? _lhs->cpy() : _lhs;
 		}
 
 		Tree< T >
-		*rhs( bool p_copy = false ) const {
+		*rhs(bool p_copy = false) const {
 
-			return p_copy ? _rhs->cpy( ) : _rhs;
+			return p_copy ? _rhs->cpy() : _rhs;
 		}
 };
 
@@ -206,12 +206,12 @@ public TreeQueue< T > {
 
 	public:
 
-		TreeArithmeticNeg( Tree< T > *p_arg ) :
-		TreeQueue< T >( p_arg ) {
+		TreeArithmeticNeg(Tree< T > *p_arg) :
+		TreeQueue< T >(p_arg) {
 
 		}
 
-		~TreeArithmeticNeg( ) {
+		~TreeArithmeticNeg() {
 
 		}
 
@@ -219,15 +219,15 @@ public TreeQueue< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeArithmeticNeg( this->arg( true ) );
+			return new TreeArithmeticNeg(this->arg(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return -this->arg( )->val( );
+			return -this->arg()->val();
 		}
 };
 
@@ -237,12 +237,12 @@ public TreeQueue< T > {
 
 	public:
 
-		TreeLogicalNeg( Tree< T > *p_arg ) :
-		TreeQueue< T >( p_arg ) {
+		TreeLogicalNeg(Tree< T > *p_arg) :
+		TreeQueue< T >(p_arg) {
 
 		}
 
-		~TreeLogicalNeg( ) {
+		~TreeLogicalNeg() {
 
 		}
 
@@ -250,15 +250,15 @@ public TreeQueue< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeLogicalNeg( this->arg( true ) );
+			return new TreeLogicalNeg(this->arg(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return ~this->arg( )->val( );
+			return ~this->arg()->val();
 		}
 };
 */
@@ -269,12 +269,12 @@ public TreeBranch< T > {
 
 	public:
 
-		TreeSum( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
-		TreeBranch< T >( p_lhs, p_rhs ) {
+		TreeSum(Tree< T > *p_lhs, Tree< T > *p_rhs) :
+		TreeBranch< T >(p_lhs, p_rhs) {
 
 		}
 
-		~TreeSum( ) {
+		~TreeSum() {
 
 		}
 
@@ -282,15 +282,15 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeSum( this->lhs( true ), this->rhs( true ) );
+			return new TreeSum(this->lhs(true), this->rhs(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return this->lhs( )->val( ) + this->rhs( )->val( );
+			return this->lhs()->val() + this->rhs()->val();
 		}
 };
 
@@ -300,12 +300,12 @@ public TreeBranch< T > {
 
 	public:
 
-		TreeDif( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
-		TreeBranch< T >( p_lhs, p_rhs ) {
+		TreeDif(Tree< T > *p_lhs, Tree< T > *p_rhs) :
+		TreeBranch< T >(p_lhs, p_rhs) {
 
 		}
 
-		~TreeDif( ) {
+		~TreeDif() {
 
 		}
 
@@ -313,15 +313,15 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeDif( this->lhs( true ), this->rhs( true ) );
+			return new TreeDif(this->lhs(true), this->rhs(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return this->lhs( )->val( ) - this->rhs( )->val( );
+			return this->lhs()->val() - this->rhs()->val();
 		}
 };
 
@@ -331,12 +331,12 @@ public TreeBranch< T > {
 
 	public:
 
-		TreeMul( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
-		TreeBranch< T >( p_lhs, p_rhs ) {
+		TreeMul(Tree< T > *p_lhs, Tree< T > *p_rhs) :
+		TreeBranch< T >(p_lhs, p_rhs) {
 
 		}
 
-		~TreeMul( ) {
+		~TreeMul() {
 
 		}
 
@@ -344,15 +344,15 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeMul( this->lhs( true ), this->rhs( true ) );
+			return new TreeMul(this->lhs(true), this->rhs(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return this->lhs( )->val( ) * this->rhs( )->val( );
+			return this->lhs()->val() * this->rhs()->val();
 		}
 };
 
@@ -362,12 +362,12 @@ public TreeBranch< T > {
 
 	public:
 
-		TreeDiv( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
-		TreeBranch< T >( p_lhs, p_rhs ) {
+		TreeDiv(Tree< T > *p_lhs, Tree< T > *p_rhs) :
+		TreeBranch< T >(p_lhs, p_rhs) {
 
 		}
 
-		~TreeDiv( ) {
+		~TreeDiv() {
 
 		}
 
@@ -375,15 +375,15 @@ public TreeBranch< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeDiv( this->lhs( true ), this->rhs( true ) );
+			return new TreeDiv(this->lhs(true), this->rhs(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return this->lhs( )->val( ) / this->rhs( )->val( );
+			return this->lhs()->val() / this->rhs()->val();
 		}
 };
 */
@@ -394,12 +394,12 @@ public TreeQueue< T > {
 
 	public:
 
-		TreeArithmeticNeg( Tree< T > *p_arg ) :
-		TreeQueue< T >( p_arg ) {
+		TreeArithmeticNeg(Tree< T > *p_arg) :
+		TreeQueue< T >(p_arg) {
 
 		}
 
-		~TreeArithmeticNeg( ) {
+		~TreeArithmeticNeg() {
 
 		}
 
@@ -407,15 +407,15 @@ public TreeQueue< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeArithmeticNeg( this->arg( true ) );
+			return new TreeArithmeticNeg(this->arg(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return -this->arg( )->val( );
+			return -this->arg()->val();
 		}
 };
 */
@@ -426,12 +426,12 @@ public TreeQueue< T > {
 
 	public:
 
-		TreeUnOp_DASA( Tree< T > *p_arg ) :
-		TreeQueue< T >( p_arg ) {
+		TreeUnOp_DASA(Tree< T > *p_arg) :
+		TreeQueue< T >(p_arg) {
 
 		}
 
-		~TreeUnOp_DASA( ) {
+		~TreeUnOp_DASA() {
 
 		}
 
@@ -439,15 +439,15 @@ public TreeQueue< T > {
 
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeUnOp_DASA< T, FUNC >( this->arg( true ) );
+			return new TreeUnOp_DASA< T, FUNC >(this->arg(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return FUNC( )( this->arg( )->val( ) );
+			return FUNC()(this->arg()->val());
 		}
 };
 
@@ -457,25 +457,25 @@ public TreeBranch< T > {
 
 	public:
 
-		TreeBinOP_DALARA( Tree< T > *p_lhs, Tree< T > *p_rhs ) :
-		TreeBranch< T >( p_lhs, p_rhs ) {
+		TreeBinOP_DALARA(Tree< T > *p_lhs, Tree< T > *p_rhs) :
+		TreeBranch< T >(p_lhs, p_rhs) {
 		}
 
-		~TreeBinOP_DALARA( ) {
+		~TreeBinOP_DALARA() {
 		}
 
 	public:
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return new TreeBinOP_DALARA< T, FUNC >( this->lhs( true ), this->rhs( true ) );
+			return new TreeBinOP_DALARA< T, FUNC >(this->lhs(true), this->rhs(true));
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return FUNC( )( this->lhs( )->val( ), this->rhs( )->val( ) );
+			return FUNC()(this->lhs()->val(), this->rhs()->val());
 		}
 };
 
@@ -484,23 +484,23 @@ class Term {
 
 	public:
 
-		Term(  ) :
-		__tree( 0 ) {
+		Term() :
+		__tree(0) {
 
 		}
 
-		Term( Tree< T > *p_tree ) :
-		__tree( p_tree ) {
+		Term(Tree< T > *p_tree) :
+		__tree(p_tree) {
 
 		}
 
 		template< typename T2 >
-		Term( Term< T2 > const &p_term ) :
-		__tree( new TreeCast< T, T2 >( p_term.cpy( ) ) ) {
+		Term(Term< T2 > const &p_term) :
+		__tree(new TreeCast< T, T2 >(p_term.cpy())) {
 
 		}
 
-		~Term(  ) {
+		~Term() {
 
 			delete __tree;
 		}
@@ -513,358 +513,358 @@ class Term {
 	public:
 
 		Tree< T >
-		*cpy( ) const {
+		*cpy() const {
 
-			return __tree->cpy( );
+			return __tree->cpy();
 		}
 
 		Tree< T >
-		*tree( ) const {
+		*tree() const {
 
 			return __tree;
 		}
 
 		T
-		val( ) const {
+		val() const {
 
-			return __tree->val( );
+			return __tree->val();
 		}
 
 		std::string
-		str( std::size_t const &p_width = 0 ) const {
+		str(std::size_t const &p_width = 0) const {
 
-			return __tree->str( p_width );
+			return __tree->str(p_width);
 		}
 
 	public:
 
-		operator T( ) {
+		operator T() {
 
-			return val( );
+			return val();
 		}
 
 		Term< T >
-		&operator =( Term< T > &p_term ) {
+		&operator =(Term< T > &p_term) {
 
 			delete __tree;
 
-			__tree = p_term.cpy( );
+			__tree = p_term.cpy();
 		}
 
 		Term< T >
-		operator +( ) const {
+		operator +() const {
 
-			return Term< T >( this->cpy( ) );
+			return Term< T >(this->cpy());
 		}
 
 		Term< T >
-		operator -( ) const {
+		operator -() const {
 
-			return Term< T >( new TreeUnOp_DASA< T, std::negate< T > >( this->cpy( ) ) );
+			return Term< T >(new TreeUnOp_DASA< T, std::negate< T > >(this->cpy()));
 		}
 
 		Term< T >
-		operator ~( ) const {
+		operator ~() const {
 
-			return Term< T >( new TreeUnOp_DASA< T, std::bit_not< T > >( this->cpy( ) ) );
+			return Term< T >(new TreeUnOp_DASA< T, std::bit_not< T > >(this->cpy()));
 		}
 
 		Term< T >
-		operator !( ) const {
+		operator !() const {
 
-			return Term< T >( new TreeUnOp_DASA< T, std::logical_not< T > >( this->cpy( ) ) );
-		}
-
-
-		Term< T >
-		operator <( Term< T > const &p_term ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::less< T > >( this->cpy( ), p_term.cpy( ) ) );
-		}
-
-		Term< T >
-		operator <( T const &p_val ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::less< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
-		}
-
-		Term< T >
-		operator <=( Term< T > const &p_term ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::less_equal< T > >( this->cpy( ), p_term.cpy( ) ) );
-		}
-
-		Term< T >
-		operator <=( T const &p_val ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::less_equal< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
-		}
-
-		Term< T >
-		operator ==( Term< T > const &p_term ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::equal_to< T > >( this->cpy( ), p_term.cpy( ) ) );
-		}
-
-		Term< T >
-		operator ==( T const &p_val ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::equal_to< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
-		}
-
-		Term< T >
-		operator !=( Term< T > const &p_term ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::not_equal_to< T > >( this->cpy( ), p_term.cpy( ) ) );
-		}
-
-		Term< T >
-		operator !=( T const &p_val ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::not_equal_to< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
-		}
-
-		Term< T >
-		operator >=( Term< T > const &p_term ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::greater_equal< T > >( this->cpy( ), p_term.cpy( ) ) );
-		}
-
-		Term< T >
-		operator >=( T const &p_val ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::greater_equal< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
-		}
-
-		Term< T >
-		operator >( Term< T > const &p_term ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::greater< T > >( this->cpy( ), p_term.cpy( ) ) );
-		}
-
-		Term< T >
-		operator >( T const &p_val ) const {
-
-			return Term< T >( new TreeBinOP_DALARA< T, std::greater< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeUnOp_DASA< T, std::logical_not< T > >(this->cpy()));
 		}
 
 
 		Term< T >
-		operator &( Term< T > const &p_term ) const {
+		operator <(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::bit_and< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::less< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator &( T const &p_val ) const {
+		operator <(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::bit_and< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::less< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 		Term< T >
-		operator |( Term< T > const &p_term ) const {
+		operator <=(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::bit_or< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::less_equal< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator |( T const &p_val ) const {
+		operator <=(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::bit_or< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::less_equal< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 		Term< T >
-		operator ^( Term< T > const &p_term ) const {
+		operator ==(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::bit_xor< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::equal_to< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator ^( T const &p_val ) const {
+		operator ==(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::bit_xor< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::equal_to< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
+		Term< T >
+		operator !=(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::not_equal_to< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator !=(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::not_equal_to< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
+		Term< T >
+		operator >=(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::greater_equal< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator >=(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::greater_equal< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
+		Term< T >
+		operator >(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::greater< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator >(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::greater< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 
 		Term< T >
-		operator &&( Term< T > const &p_term ) const {
+		operator &(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::logical_and< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::bit_and< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator &&( T const &p_val ) const {
+		operator &(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::logical_and< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::bit_and< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 		Term< T >
-		operator ||( Term< T > const &p_term ) const {
+		operator |(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::logical_or< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::bit_or< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator ||( T const &p_val ) const {
+		operator |(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::logical_or< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::bit_or< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
+		Term< T >
+		operator ^(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::bit_xor< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator ^(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::bit_xor< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
+
+		Term< T >
+		operator &&(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::logical_and< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator &&(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::logical_and< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
+		Term< T >
+		operator ||(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::logical_or< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator ||(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::logical_or< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 
 
 
 		Term< T >
-		operator +( Term< T > const &p_term ) const {
+		operator +(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::plus< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::plus< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator +( T const &p_val ) const {
+		operator +(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::plus< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::plus< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 		Term< T >
-		operator -( Term< T > const &p_term ) const {
+		operator -(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::minus< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::minus< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator -( T const &p_val ) const {
+		operator -(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::minus< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::minus< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 		Term< T >
-		operator *( Term< T > const &p_term ) const {
+		operator *(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::multiplies< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::multiplies< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator *( T const &p_val ) const {
+		operator *(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::multiplies< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::multiplies< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 
 		Term< T >
-		operator /( Term< T > const &p_term ) const {
+		operator /(Term< T > const &p_term) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::divides< T > >( this->cpy( ), p_term.cpy( ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::divides< T > >(this->cpy(), p_term.cpy()));
 		}
 
 		Term< T >
-		operator /( T const &p_val ) const {
+		operator /(T const &p_val) const {
 
-			return Term< T >( new TreeBinOP_DALARA< T, std::divides< T > >( this->cpy( ), new TreeValue< T >( p_val ) ) );
+			return Term< T >(new TreeBinOP_DALARA< T, std::divides< T > >(this->cpy(), new TreeValue< T >(p_val)));
 		}
 };
 
 template< typename T >
 Term< T >
-operator <( T const &p_val, Term< T > const &p_term ) {
+operator <(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::less< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::less< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator <=( T const &p_val, Term< T > const &p_term ) {
+operator <=(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::less_equal< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::less_equal< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator ==( T const &p_val, Term< T > const &p_term ) {
+operator ==(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::equal_to< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::equal_to< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator !=( T const &p_val, Term< T > const &p_term ) {
+operator !=(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::not_equal_to< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::not_equal_to< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator >=( T const &p_val, Term< T > const &p_term ) {
+operator >=(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::greater_equal< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::greater_equal< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator >( T const &p_val, Term< T > const &p_term ) {
+operator >(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::greater< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::greater< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator &( T const &p_val, Term< T > const &p_term ) {
+operator &(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::bit_and< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::bit_and< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator |( T const &p_val, Term< T > const &p_term ) {
+operator |(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::bit_or< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::bit_or< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator ^( T const &p_val, Term< T > const &p_term ) {
+operator ^(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::bit_xor< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::bit_xor< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator &&( T const &p_val, Term< T > const &p_term ) {
+operator &&(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::logical_and< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::logical_and< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator ||( T const &p_val, Term< T > const &p_term ) {
+operator ||(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::logical_or< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::logical_or< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator +( T const &p_val, Term< T > const &p_term ) {
+operator +(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::plus< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::plus< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator -( T const &p_val, Term< T > const &p_term ) {
+operator -(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::minus< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::minus< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator *( T const &p_val, Term< T > const &p_term ) {
+operator *(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::multiplies< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::multiplies< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 template< typename T >
 Term< T >
-operator /( T const &p_val, Term< T > const &p_term ) {
+operator /(T const &p_val, Term< T > const &p_term) {
 
-	return Term< T >( new TreeBinOP_DALARA< T, std::divides< T > >( new TreeValue< T >( p_val ), p_term.cpy( ) ) );
+	return Term< T >(new TreeBinOP_DALARA< T, std::divides< T > >(new TreeValue< T >(p_val), p_term.cpy()));
 }
 
 #endif // TERM_HPP

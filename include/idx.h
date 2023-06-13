@@ -21,13 +21,13 @@ public TermI {
 
 	public:
 
-		EIdx( );
+		EIdx();
 
-		EIdx( int const &p_idx );
+		EIdx(int const &p_idx);
 
-		EIdx( EIdx const &p_idx );
+		EIdx(EIdx const &p_idx);
 
-		~EIdx( );
+		~EIdx();
 
 	private:
 
@@ -42,48 +42,48 @@ public TermI {
 	public:
 
 		TreeI
-		*cpy( ) const;
+		*cpy() const;
 
 		int
-		getCount( ) const {
+		getCount() const {
 
 			return __end - __begin;
 		}
 
 		EIdx
-		&inc( );
+		&inc();
 
 		bool
-		is( EIdx *p_idx ) const;
+		is(EIdx *p_idx) const;
 
 		bool
-		isConstant( ) const;
+		isConstant() const;
 
 		bool
-		isOK( ) const;
+		isOK() const;
 
 		bool
-		isReference( ) const;
+		isReference() const;
 
 		EIdx
-		&reset( );
+		&reset();
 
 		EIdx
-		&set( int const &p_value );
+		&set(int const &p_value);
 
 		EIdx
-		&setCount( int const &p_count );
+		&setCount(int const &p_count);
 
 		EIdx
-		&setFirst( int const &p_first );
+		&setFirst(int const &p_first);
 
 		int
-		val( ) const;
+		val() const;
 
 	public:
 
 		EIdx
-		&operator ++( );
+		&operator ++();
 };
 
 
@@ -95,7 +95,7 @@ public TreeI {
 
 	public:
 
-		TreeEinsteinIndex( EIdx const *p_eIdx );
+		TreeEinsteinIndex(EIdx const *p_eIdx);
 
 	private:
 
@@ -105,10 +105,10 @@ public TreeI {
 	public:
 
 		TreeI
-		*cpy( ) const;
+		*cpy() const;
 
 		int
-		val( ) const;
+		val() const;
 };
 
 
@@ -120,17 +120,17 @@ public std::vector< EIdx * > {
 
 	public:
 
-		Subscription( );
+		Subscription();
 
-		~Subscription( );
+		~Subscription();
 
 	public:
 
 		Subscription
-		&addEIdx( EIdx *p_idx );
+		&addEIdx(EIdx *p_idx);
 
 		bool
-		contains( EIdx * p_eidx ) const;
+		contains(EIdx * p_eidx) const;
 };
 
 class Counter :
@@ -138,9 +138,9 @@ public Subscription {
 
 	public:
 
-		Counter( );
+		Counter();
 
-		~Counter( );
+		~Counter();
 
 	private:
 
@@ -150,33 +150,33 @@ public Subscription {
 	public:
 
 		Counter
-		&operator ++( );
+		&operator ++();
 
 	public:
 
 		Counter
-		&addEIdx( EIdx *p_eidx );
+		&addEIdx(EIdx *p_eidx);
 
 		Counter
-		&buildForMultiplicationInnerLoop( Subscription const &p_lhs, Subscription const &p_rhs );
+		&buildForMultiplicationInnerLoop(Subscription const &p_lhs, Subscription const &p_rhs);
 
 		Counter
-		&buildForMultiplicationOuterLoop( Subscription const &p_lhs, Subscription const &p_rhs );
+		&buildForMultiplicationOuterLoop(Subscription const &p_lhs, Subscription const &p_rhs);
 
 		Counter
-		&buildFromSubscription( Subscription const &p_subscription );
+		&buildFromSubscription(Subscription const &p_subscription);
 
 		Counter
-		&inc( );
+		&inc();
 
 		bool
-		isOK( ) const;
+		isOK() const;
 
 		int
-		lcd( ) const;
+		lcd() const;
 
 		Counter
-		&reset( );
+		&reset();
 };
 
 #endif // IDX_H

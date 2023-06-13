@@ -11,47 +11,47 @@ class CodePrinter {
 
 	public:
 
-		CodePrinter( std::string const &p_filename, bool const & p_welcomeMessage = true ) {
+		CodePrinter(std::string const &p_filename, bool const & p_welcomeMessage = true) {
 
 			std::ifstream
-			fs( p_filename );
+			fs(p_filename);
 
-			if( fs.is_open( ) ) {
+			if(fs.is_open()) {
 
 				std::stringstream
 				ss;
 
-				ss << fs.rdbuf( );
+				ss << fs.rdbuf();
 
-				fs.close( );
+				fs.close();
 
 				std::string
-				s = ss.str( );
+				s = ss.str();
 
 				std::size_t
 				from = 0,
-				to = s.find( "//@", from );
+				to = s.find("//@", from);
 
-				while( to != std::string::npos ) {
+				while(to != std::string::npos) {
 
 					from = to + 3;
 
 					std::size_t
-					send = s.find( "\n", to );
+					send = s.find("\n", to);
 
 					std::string
-					name = std::string( s, from, send - from );
+					name = std::string(s, from, send - from);
 
-					to = s.find( "//@", send + 1 );
+					to = s.find("//@", send + 1);
 
-					if( 0 < name.length( ) ) {
+					if(0 < name.length()) {
 
-						text[ name ] = std::string( s, send + 1, to - send - 1 );
+						text[name] = std::string(s, send + 1, to - send - 1);
 					}
 				}
 			}
 
-			if( ! p_welcomeMessage ) {
+			if(! p_welcomeMessage) {
 
 				return;
 			}
@@ -65,33 +65,33 @@ class CodePrinter {
 		text;
 
 		void
-		print( std::string const & p_snippetname ) {
+		print(std::string const & p_snippetname) {
 
 			std::cout <<
 			"----------------------------------------------------------------------------------------------------------------" <<
 			"\n[" <<
 			p_snippetname <<
 			"]\nc++:\n" <<
-			text[ p_snippetname ] <<
+			text[p_snippetname] <<
 			"\nout:\n";
 		}
 
 		static bool
-		waitForENTER( ) {
+		waitForENTER() {
 
 			std::cout << "[ENTER] for next frame!\n";
 
 			int
-			c = std::cin.get( );
+			c = std::cin.get();
 
-			return ( c == 'x' ) || ( c == 'X' ) || ( c == 'q' ) || ( c == 'Q' );
+			return (c == 'x') || (c == 'X') || (c == 'q') || (c == 'Q');
 		}
 
 		static bool
-		WFE ( ) {
+		WFE () {
 
-			if( waitForENTER( ) )
-				exit( -1 );
+			if(waitForENTER())
+				exit(-1);
 
 			return true;
 		}

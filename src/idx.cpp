@@ -4,46 +4,46 @@
 //---------------------------------------------------------------------------
 
 
-EIdx::EIdx( ) :
-TermI( new TreeEinsteinIndex( this ) ),
-__isConstant( false ),
-__begin( 0 ),
-__current( 0 ),
-__end( 0 ) {
+EIdx::EIdx() :
+TermI(new TreeEinsteinIndex(this)),
+__isConstant(false),
+__begin(0),
+__current(0),
+__end(0) {
 
 }
 
-EIdx::EIdx( EIdx const &p_idx ) :
-TermI( new TreeEinsteinIndex( this ) ),
-__isConstant( p_idx.__isConstant ),
-__begin( p_idx.__begin ),
-__current( p_idx.__current ),
-__end( p_idx.__end ) {
+EIdx::EIdx(EIdx const &p_idx) :
+TermI(new TreeEinsteinIndex(this)),
+__isConstant(p_idx.__isConstant),
+__begin(p_idx.__begin),
+__current(p_idx.__current),
+__end(p_idx.__end) {
 
 }
 
-EIdx::EIdx( int const &p_idx ) :
-TermI( new TreeEinsteinIndex( this ) ),
-__isConstant( true ),
-__begin( p_idx ),
-__current( __begin ),
-__end( __begin + 1 ) {
+EIdx::EIdx(int const &p_idx) :
+TermI(new TreeEinsteinIndex(this)),
+__isConstant(true),
+__begin(p_idx),
+__current(__begin),
+__end(__begin + 1) {
 
 }
 
-EIdx::~EIdx( ) {
+EIdx::~EIdx() {
 
 }
 
 
 TreeI
-*EIdx::cpy( ) const {
+*EIdx::cpy() const {
 
-	return new TreeEinsteinIndex( this );
+	return new TreeEinsteinIndex(this);
 }
 
 EIdx
-&EIdx::inc( ) {
+&EIdx::inc() {
 
 	++__current;
 
@@ -51,9 +51,9 @@ EIdx
 }
 
 bool
-EIdx::is( EIdx *p_idx ) const {
+EIdx::is(EIdx *p_idx) const {
 
-	if( isConstant( ) || p_idx->isConstant( ) ) {
+	if(isConstant() || p_idx->isConstant()) {
 
 		return false;
 	}
@@ -62,19 +62,19 @@ EIdx::is( EIdx *p_idx ) const {
 }
 
 bool
-EIdx::isConstant( ) const {
+EIdx::isConstant() const {
 
 	return __isConstant;
 }
 
 bool
-EIdx::isOK( ) const {
+EIdx::isOK() const {
 
 	return __current < __end && __begin <= __current;
 }
 
 EIdx
-&EIdx::reset( ) {
+&EIdx::reset() {
 
 	__current = __begin;
 
@@ -82,7 +82,7 @@ EIdx
 }
 
 EIdx
-&EIdx::set( int const &p_value ) {
+&EIdx::set(int const &p_value) {
 
 	__current = p_value;
 
@@ -90,7 +90,7 @@ EIdx
 }
 
 EIdx
-&EIdx::setCount( int const &p_count ) {
+&EIdx::setCount(int const &p_count) {
 
 	__end = __begin + p_count;
 
@@ -98,7 +98,7 @@ EIdx
 }
 
 EIdx
-&EIdx::setFirst( int const &p_first ) {
+&EIdx::setFirst(int const &p_first) {
 
 	int
 	d_ = __end - __begin;
@@ -111,52 +111,52 @@ EIdx
 }
 
 int
-EIdx::val( ) const {
+EIdx::val() const {
 
 	return __current;
 }
 
 EIdx
-&EIdx::operator ++( ) {
+&EIdx::operator ++() {
 
-	return inc( );
+	return inc();
 }
 
 
 //---------------------------------------------------------------------------
 
 
-TreeEinsteinIndex::TreeEinsteinIndex( EIdx const *p_eIdx ) :
-TreeI( ),
-__einsteinIndex( p_eIdx ) {
+TreeEinsteinIndex::TreeEinsteinIndex(EIdx const *p_eIdx) :
+TreeI(),
+__einsteinIndex(p_eIdx) {
 
 }
 
 TreeI
-*TreeEinsteinIndex::cpy( ) const {
+*TreeEinsteinIndex::cpy() const {
 
-	return new TreeEinsteinIndex( __einsteinIndex );
+	return new TreeEinsteinIndex(__einsteinIndex);
 }
 
 int
-TreeEinsteinIndex::val( ) const {
+TreeEinsteinIndex::val() const {
 
-	return __einsteinIndex->val( );
+	return __einsteinIndex->val();
 }
 
 
 //---------------------------------------------------------------------------
 
 
-Subscription::Subscription( ) {
+Subscription::Subscription() {
 
 }
 
-Subscription::~Subscription( ) {
+Subscription::~Subscription() {
 
-	for( auto s : *this ) {
+	for(auto s : *this) {
 
-		if( s->isConstant( ) ) {
+		if(s->isConstant()) {
 
 			delete s;
 		}
@@ -164,19 +164,19 @@ Subscription::~Subscription( ) {
 }
 
 Subscription
-&Subscription::addEIdx( EIdx *p_idx ) {
+&Subscription::addEIdx(EIdx *p_idx) {
 
-	push_back( p_idx->isConstant( ) ? new EIdx( *p_idx ) : p_idx );
+	push_back(p_idx->isConstant() ? new EIdx(*p_idx) : p_idx);
 
 	return *this;
 }
 
 bool
-Subscription::contains( EIdx *p_eidx ) const {
+Subscription::contains(EIdx *p_eidx) const {
 
-	for( auto i : *this ) {
+	for(auto i : *this) {
 
-		if( i->is( p_eidx ) ) {
+		if(i->is(p_eidx)) {
 
 			return true;
 		}
@@ -188,131 +188,131 @@ Subscription::contains( EIdx *p_eidx ) const {
 //---------------------------------------------------------------------------
 
 
-Counter::Counter( ) :
-Subscription( ) {
+Counter::Counter() :
+Subscription() {
 
 }
 
-Counter::~Counter( ) {
+Counter::~Counter() {
 
-}
-
-Counter
-&Counter::operator ++( ) {
-
-	return inc( );
 }
 
 Counter
-&Counter::addEIdx( EIdx *p_eidx ) {
+&Counter::operator ++() {
 
-	Subscription::addEIdx( p_eidx );
+	return inc();
+}
+
+Counter
+&Counter::addEIdx(EIdx *p_eidx) {
+
+	Subscription::addEIdx(p_eidx);
 
 	return *this;
 }
 
 Counter
-&Counter::buildForMultiplicationInnerLoop( Subscription const &p_lhs, Subscription const &p_rhs ) {
+&Counter::buildForMultiplicationInnerLoop(Subscription const &p_lhs, Subscription const &p_rhs) {
 
-	resize( 0 );
+	resize(0);
 
-	for( auto i : p_lhs ) {
+	for(auto i : p_lhs) {
 
-		if( !i->isConstant( ) && !contains( i ) && p_rhs.contains( i ) ) {
+		if(!i->isConstant() && !contains(i) && p_rhs.contains(i)) {
 
-			addEIdx( i );
+			addEIdx(i);
 		}
 	}
 
-	reset( );
+	reset();
 
 	return *this;
 }
 
 Counter
-&Counter::buildForMultiplicationOuterLoop( Subscription const &p_lhs, Subscription const &p_rhs ) {
+&Counter::buildForMultiplicationOuterLoop(Subscription const &p_lhs, Subscription const &p_rhs) {
 
-	resize( 0 );
+	resize(0);
 
-	for( auto i : p_lhs ) {
+	for(auto i : p_lhs) {
 
-		if( !i->isConstant( ) && !contains( i ) && !p_rhs.contains( i ) ) {
+		if(!i->isConstant() && !contains(i) && !p_rhs.contains(i)) {
 
-			addEIdx( i );
+			addEIdx(i);
 		}
 	}
 
-	for( auto i : p_rhs ) {
+	for(auto i : p_rhs) {
 
-		if( !i->isConstant( ) && !contains( i ) && !p_lhs.contains( i ) ) {
+		if(!i->isConstant() && !contains(i) && !p_lhs.contains(i)) {
 
-			addEIdx( i );
+			addEIdx(i);
 		}
 	}
 
-	reset( );
+	reset();
 
 	return *this;
 }
 
 Counter
-&Counter::buildFromSubscription( Subscription const &p_subscription ) {
+&Counter::buildFromSubscription(Subscription const &p_subscription) {
 
-	resize( 0 );
+	resize(0);
 
-	for( auto i : p_subscription ) {
+	for(auto i : p_subscription) {
 
-		if( !i->isConstant( ) ) {
+		if(!i->isConstant()) {
 
-			if( !contains( i ) ) {
+			if(!contains(i)) {
 
-				push_back( i );
+				push_back(i);
 			}
 		}
 	}
 
-	return reset( );
+	return reset();
 }
 
 Counter
-&Counter::inc( ) {
+&Counter::inc() {
 
-	__lastChangedDigit = size( );
+	__lastChangedDigit = size();
 
-	while( 0 <= --__lastChangedDigit ) {
+	while(0 <= --__lastChangedDigit) {
 
-		if( ( ++*at( __lastChangedDigit ) ).isOK( ) ) {
+		if((++*at(__lastChangedDigit)).isOK()) {
 
 			return *this;
 		}
 
-		at( __lastChangedDigit )->reset( );
+		at(__lastChangedDigit)->reset();
 	}
 
 	return *this;
 }
 
 bool
-Counter::isOK( ) const {
+Counter::isOK() const {
 
 	return 0 <= __lastChangedDigit;
 }
 
 int
-Counter::lcd( ) const {
+Counter::lcd() const {
 
 	return __lastChangedDigit;
 }
 
 Counter
-&Counter::reset( ) {
+&Counter::reset() {
 
-	for( auto i : *this ) {
+	for(auto i : *this) {
 
-		i->reset( );
+		i->reset();
 	}
 
-	__lastChangedDigit = size( );
+	__lastChangedDigit = size();
 
 	return *this;
 }
