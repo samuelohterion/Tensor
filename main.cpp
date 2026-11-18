@@ -55,7 +55,7 @@ main() {
 	Tensor< double >
 	tDbl = {2};
 
-	// initit
+	// init it
 	tDbl[0] = 3.14;
 	tDbl[1] = 2.72;
 
@@ -174,7 +174,7 @@ main() {
 	TDbl
 	m = {3, 3};
 
-	m[i][j] = (1 + i + 3 * j) *(1 + i + 3 * j);
+	m[i][j] = (1 + i + 3 * j) * (1 + i + 3 * j);
 
 	print(m[i][j], "m[i][j]");
 //@
