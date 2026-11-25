@@ -2,7 +2,7 @@
 Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions.  
 For example a matrix product:
 - in the paper:  
-  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$  
+  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$    
   $$A_{j}^i = 3 i + 1 j - 3$$  
   $$B_{j}^i = - i - 3 j + 3$$  
   $$C_{j}^i = A_{k}^i B_{j}^k$$  
