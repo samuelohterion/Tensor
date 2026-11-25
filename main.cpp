@@ -368,21 +368,7 @@ main() {
 	print(small[i][j], "small[i][j]");
 //@
 
-	CodePrinter::WFE(); cp.print("hadamard product of two vectors");
-//@hadamard product of two vectors
-	Tensor< int >
-	t1 = {3, 2};
-
-    t1[i][j] = 3 * j + i + 1;
-
-	Tensor< int >
-	mul = {3, 3};
-
-	mul[i][j] = t1[i][0] * t1[j][1];
-
-    print(t1[i][j], "t1[i][j] = 3 * j + i + 1");
-    print(mul[i][j], "mul[i][j] = t1[i][0] * t1[j][1]");
-    print(mul[i][i], "mul[i][i]");
-//@
-    return 0;
+	std::cout << "Thanks for your attention";
+	
+	return 0;
 }

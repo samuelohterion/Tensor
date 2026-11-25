@@ -2,10 +2,10 @@
 Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions.  
 For example a matrix product:
 - in the paper:  
-  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$
-  $$A_{j}^i = 3 i + 1 j - 3$$
-  $$B_{j}^i = - i - 3 j + 3$$
-  $$C_{j}^i = A_{k}^i B_{j}^k$$
+  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$  
+  $$A_{j}^i = 3 i + 1 j - 3$$  
+  $$B_{j}^i = - i - 3 j + 3$$  
+  $$C_{j}^i = A_{k}^i B_{j}^k$$  
 - in your c++ code
   ```
   // 3 Tensors, Matrices 
@@ -62,10 +62,10 @@ For example a matrix product:
     -68  -167
   ```
 ---
-## Start the Example-Program either in 
-- Qt-Creator
- or in 
-- Console via CMake  
+## Start the Example-Program either by 
+```
+$ make run
+```
 
 
 You will see the following output.  
@@ -282,9 +282,9 @@ out:
 ### Scalar Product:  
 $$<x,x> = \sum^{i=n}_{i=1} x_i \cdot x^i = x_i x^i = = x_i x_i = = x^i x^i$$
 Examples:
-$$three\_ones\_i \; three\_ones_i$$
-$$three\_ones\_i \; one\_two\_three_i$$
-$$one\_two\_three_i \; three\_ones\_i$$
+$$three\_ones_i \; three\_ones_i$$
+$$three\_ones_i \; one\_two\_three_i$$
+$$one\_two\_three_i \; three\_ones_i$$
 $$one\_two\_three_i \; one\_two\_three_i$$
 ```
 [the scalar product]
