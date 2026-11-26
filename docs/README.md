@@ -188,9 +188,9 @@ out:
 [ENTER] for next frame!
 ```
 #### [now create some more vectors and print them]
-$$t\_5\_10=(5, 10)^T$$  
-$$t\_1\_1\_1=(1, 1, 1)^T$$
-$$t\_1\_2\_3=(1, 2, 3)^T$$
+$$\texttt{t\_5\_10}=(5, 10)^T$$  
+$$\texttt{t\_1\_1\_1}=(1, 1, 1)^T$$
+$$\texttt{t\_1\_2\_3}=(1, 2, 3)^T$$
 ```
 [now create some more vectors and print them]
 c++:
@@ -226,8 +226,8 @@ c++:
 // EINSTEIN INDICES start at 0
 
 t_5_10[i] = 5 * (i + 1); //  5  10
-t_1_1_1[i] = 1;         //  1  1  1
-t_1_2_3[i] = i + 1;  //  1  2  3
+t_1_1_1[i] = 1;          //  1  1  1
+t_1_2_3[i] = i + 1;      //  1  2  3
 print(t_5_10[i], "t_5_10");
 print(t_1_1_1[i], "t_1_1_1");
 print(t_1_2_3[i], "t_1_2_3");
@@ -314,10 +314,10 @@ out:
 [ENTER] for next frame!
 ```
 #### [the scalar product]
-$$t\_1\_1\_1_i t\_1\_1\_1_i$$  
-$$t\_1\_1\_1_i t\_1\_3\_3_i$$  
-$$t\_1\_2\_3_i t\_1\_1\_1_i$$  
-$$t\_1\_2\_3_i t\_1\_2\_3_i$$  
+$$\texttt{t\_1\_1\_1}_i\;\texttt{t\_1\_1\_1}_i$$  
+$$\texttt{t\_1\_1\_1}_i\;t\_1\_3\_3_i$$  
+$$\texttt{t\_1\_2\_3}_i\;\texttt{t\_1\_1\_1}_i$$  
+$$\texttt{t\_1\_2\_3}_i\;\texttt{t\_1\_2\_3}_i$$  
 ```
 [the scalar product]
 c++:
@@ -589,6 +589,8 @@ eps
 [ENTER] for next frame!
 ```
 #### [cross product of t_1_1_1 and t_1_2_3]
+$$\vec{w} = \vec{u} \times \vec{v}$$  
+$$w_i = \epsilon_{i,j,k}\;u_j\;v_k$$ 
 ```
 [cross product of t_1_1_1 and t_1_2_3]
 c++:
@@ -649,6 +651,8 @@ mA
 [ENTER] for next frame!
 ```
 #### [calculate the determinant of m]
+$$det(m) = \epsilon_{i,j,k}\;m_0^i\;m_1^j\;m_2^k$$  
+$$det(m) = \epsilon^{i,j,k}\;m_i^0\;m_j^1\;m_k^2$$  
 ```
 [calculate the determinant of m]
 c++:
