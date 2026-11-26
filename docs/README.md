@@ -315,10 +315,10 @@ out:
 [ENTER] for next frame!
 ```
 #### [the scalar product]
-$$tˍ1ˍ1ˍ1_i\;tˍ1ˍ1ˍ1_i$$  
-$$tˍ1ˍ1ˍ1_i\;t\_1\_3\_3_i$$  
-$$tˍ1ˍ2ˍ3_i\;tˍ1ˍ1ˍ1_i$$  
-$$tˍ1ˍ2ˍ3_i\;tˍ1ˍ2ˍ3_i$$  
+$$tˍ1ˍ1ˍ1_i tˍ1ˍ1ˍ1_i$$  
+$$tˍ1ˍ1ˍ1_i t\_1\_3\_3_i$$  
+$$tˍ1ˍ2ˍ3_i tˍ1ˍ1ˍ1_i$$  
+$$tˍ1ˍ2ˍ3_i tˍ1ˍ2ˍ3_i$$  
 ```
 [the scalar product]
 c++:
@@ -591,7 +591,7 @@ eps
 ```
 #### [cross product of t_1_1_1 and t_1_2_3]
 $$\vec{w} = \vec{u} \times \vec{v}$$  
-$$w_i = \epsilon_{i,j,k}\;u_j\;v_k$$ 
+$$w_i = \epsilon_{i,j,k} u_j v_k$$ 
 ```
 [cross product of t_1_1_1 and t_1_2_3]
 c++:
@@ -652,8 +652,8 @@ mA
 [ENTER] for next frame!
 ```
 #### [calculate the determinant of m]
-$$det(m) = \epsilon_{i,j,k}\;m_0^i\;m_1^j\;m_2^k$$  
-$$det(m) = \epsilon_{i,j,k}\;m_i^0\;m_j^1\;m_k^2$$  
+$$det(m) = \epsilon_{i,j,k} m_0^i m_1^j m_2^k$$  
+$$det(m) = \epsilon_{i,j,k} m_i^0 m_j^1 m_k^2$$  
 ```
 [calculate the determinant of m]
 c++:
