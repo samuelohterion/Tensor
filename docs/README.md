@@ -1,11 +1,30 @@
 # Tensor
 Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions. The indices start at 0, bu mathematical at 1. So, please note the index shift in the initialization of the tensors! 
 For example a matrix product:
+Task is to multiply a 2x3 matrix by a 3x4 matrix.  
+First both matrices have to be initialized.
+This is done in Tensor style via so called Einstein-Indices.
+There they start at 1, in our c++-world the start at 0.
 - in the paper:  
   $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$  
+  $$A=\begin{pmatrix}
+      1 & 2 & 3 \\
+      4 & 5 & 6
+  \end{pmatrix}
+  $$  
+  $$B=\begin{pmatrix}
+      -1 & -4 & -7 & -10 \\
+      -2 & -5 & -8 & -11 \\
+      -3 & -6 & -9 & -12
+  \end{pmatrix}
+  $$  
   $$A_{j}^i = 3 i + 1 j - 3$$  
   $$B_{j}^i = - i - 3 j + 3$$  
+  $$C = A \cdot B$$  
   $$C_{j}^i = A_{k}^i B_{j}^k$$  
+  $$D=\left(A \cdot B\right)^T$$ 
+  $$D=B^T \cdot A^T$$  
+  $$D_{j}^i = B_{i}^k A_{k}^j$$  
   $$D_{i}^j = A_{k}^i B_{j}^k$$  
 - in your c++ code
   ```
@@ -21,6 +40,7 @@ For example a matrix product:
 
   // these Einstein Indices start az zero
   // so one has to convert them from the paper to code algebra
+  // simply by adding 1 to each Einstein-Index
   
   // A[i][j] =   3 * (i + 1) + (j + 1) - 3 =
   A[i][j] =   1 + 3 * i + j;
@@ -168,6 +188,9 @@ out:
 [ENTER] for next frame!
 ```
 #### [now create some more vectors and print them]
+$$t\_5\_10=(5, 10)^T$$  
+$$t\_1\_1\_1=(1, 1, 1)^T$$
+$$t\_1\_2\_3=(1, 2, 3)^T$$
 ```
 [now create some more vectors and print them]
 c++:
@@ -290,6 +313,11 @@ c++:
 out:
 [ENTER] for next frame!
 ```
+#### [the scalar product]
+$$t\_1\_1\_1_i t\_1\_1\_1_i$$  
+$$t\_1\_1\_1_i t\_1\_3\_3_i$$  
+$$t\_1\_2\_3_i t\_1\_1\_1_i$$  
+$$t\_1\_2\_3_i t\_1\_2\_3_i$$  
 ```
 [the scalar product]
 c++:
@@ -324,6 +352,7 @@ t_1_2_3[i] * t_1_2_3[i]
 [ENTER] for next frame!
 ```
 #### [create a 2x2 matrix via outer product of two vectors]
+$$\vec{u}\cdot \vec{v}^T = v_i u_j$$  
 ```
 [create a 2x2 matrix via outer product of two vectors]
 c++:
@@ -345,6 +374,8 @@ t_1_2_3[i] * t_5_10[j]
 [ENTER] for next frame!
 ```
 #### [matrices times vectors]
+$$\vec{v} = M\cdot \vec{v}$$  
+$$v_i = M_i^j u_j$$  
 ```
 [matrices times vectors]
 c++:
@@ -373,6 +404,9 @@ t_1_2_3[i] * m32[i][j]
 [ENTER] for next frame!
 ```
 #### [matrices times matrices]
+$$C = A\cdot B$$  
+$$C_i^j = A_i^k B_k^j$$  
+
 ```
 [matrices times matrices]
 c++:
