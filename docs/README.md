@@ -7,19 +7,6 @@ This is done in Tensor style via so called Einstein-Indices.
 There they start at 1, in our c++-world the start at 0.
 - in the paper:  
   $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$  
-  $$
-  A=\begin{pmatrix}
-      1 & 2 & 3 \\\
-      4 & 5 & 6
-  \end{pmatrix}
-  $$  
-  $$
-  B=\begin{pmatrix}
-      -1 & -4 & -7 & -10 \\\
-      -2 & -5 & -8 & -11 \\\
-      -3 & -6 & -9 & -12
-  \end{pmatrix}
-  $$  
   $$A_{j}^i = 3 i + 1 j - 3$$  
   $$B_{j}^i = - i - 3 j + 3$$  
   $$C = A \cdot B$$  
