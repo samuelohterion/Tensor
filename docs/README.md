@@ -639,8 +639,8 @@ mA
 [ENTER] for next frame!
 ```
 #### [calculate the determinant of m]
-$$det(m) = \epsilon_{i,j,k} m_0^i m_1^j m_2^k$$  
-$$det(m) = \epsilon_{i,j,k} m_i^0 m_j^1 m_k^2$$  
+$$det(m) = \epsilon_{i,j,k} m_1^i m_2^j m_3^k$$  
+$$det(m) = \epsilon_{i,j,k} m_i^1 m_j^2 m_k^3$$  
 ```
 [calculate the determinant of m]
 c++:
