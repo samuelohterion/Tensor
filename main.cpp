@@ -30,7 +30,7 @@ main() {
 //@Main
 	// to use code printer create an instance with the name of the cpp file as argument
 	CodePrinter
-	cp("../main.cpp");
+	cp("main.cpp");
 
 	// then use @ instead of AT to frame all snippets by:
 	//ATsome unique snippet identifying text'
@@ -55,7 +55,7 @@ main() {
 	Tensor< double >
 	tDbl = {2};
 
-	// initit
+	// init it
 	tDbl[0] = 3.14;
 	tDbl[1] = 2.72;
 
@@ -78,12 +78,12 @@ main() {
 	CodePrinter::WFE(); cp.print("now create some more vectors and print them");
 //@now create some more vectors and print them
 	TDbl
-	five_ten = {2},
-	three_ones = {3},
-	one_two_three = {3};
-	print(five_ten[i]);
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
+	t_5_10 = {2},
+	t_1_1_1 = {3},
+	t_1_2_3 = {3};
+	print(t_5_10[i], "t_5_10");
+	print(t_1_1_1[i], "t_1_1_1");
+	print(t_1_2_3[i], "t_1_2_3");
 //@
 
 	CodePrinter::WFE(); cp.print("init them");
@@ -92,12 +92,12 @@ main() {
 	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
 	// EINSTEIN INDICES start at 0
 
-	five_ten[i] = 5 * (i + 1); //  5  10
-	three_ones[i] = 1;         //  1  1  1
-	one_two_three[i] = i + 1;  //  1  2  3
-	print(five_ten[i], "five_ten");
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
+	t_5_10[i] = 5 * (i + 1); //  5  10
+	t_1_1_1[i] = 1;         //  1  1  1
+	t_1_2_3[i] = i + 1;  //  1  2  3
+	print(t_5_10[i], "t_5_10");
+	print(t_1_1_1[i], "t_1_1_1");
+	print(t_1_2_3[i], "t_1_2_3");
 //@
 
 	CodePrinter::WFE(); cp.print("now create some matrices");
@@ -138,26 +138,26 @@ main() {
 
 	CodePrinter::WFE(); cp.print("the scalar product");
 //@the scalar product
-	print(three_ones[i], "three_ones[i]");
-	print(one_two_three[i], "one_two_three[i]");
-	print(three_ones[i] * three_ones[i], "three_ones[i] * three_ones[i]");
-	print(three_ones[i] * one_two_three[i], "three_ones[i] * one_two_three[i]");
-	print(one_two_three[i] * three_ones[i], "one_two_three[i] * three_ones[i]");
-	print(one_two_three[i] * one_two_three[i], "one_two_three[i] * one_two_three[i]");
+	print(t_1_1_1[i], "t_1_1_1[i]");
+	print(t_1_2_3[i], "t_1_2_3[i]");
+	print(t_1_1_1[i] * t_1_1_1[i], "t_1_1_1[i] * t_1_1_1[i]");
+	print(t_1_1_1[i] * t_1_2_3[i], "t_1_1_1[i] * t_1_2_3[i]");
+	print(t_1_2_3[i] * t_1_1_1[i], "t_1_2_3[i] * t_1_1_1[i]");
+	print(t_1_2_3[i] * t_1_2_3[i], "t_1_2_3[i] * t_1_2_3[i]");
 //@
 
 	CodePrinter::WFE(); cp.print("create a 2x2 matrix via outer product of two vectors");
 //@create a 2x2 matrix via outer product of two vectors
-	print(five_ten[i] * one_two_three[j], "five_ten[i] * one_two_three[j]");
-	print(one_two_three[i] * five_ten[j], "one_two_three[i] * five_ten[j]");
+	print(t_5_10[i] * t_1_2_3[j], "t_5_10[i] * t_1_2_3[j]");
+	print(t_1_2_3[i] * t_5_10[j], "t_1_2_3[i] * t_5_10[j]");
 //@
 
 	CodePrinter::WFE(); cp.print("matrices times vectors");
 //@matrices times vectors
-	print(m22[i][j] * five_ten[j], "m22[i][j] * five_ten[j]");
-	print(five_ten[i] * m22[i][j], "five_ten[i] * m22[i][j]");
-	print(m32[i][j] * five_ten[j], "m32[i][j] * five_ten[j]");
-	print(one_two_three[i] * m32[i][j], "one_two_three[i] * m32[i][j]");
+	print(m22[i][j] * t_5_10[j], "m22[i][j] * t_5_10[j]");
+	print(t_5_10[i] * m22[i][j], "t_5_10[i] * m22[i][j]");
+	print(m32[i][j] * t_5_10[j], "m32[i][j] * t_5_10[j]");
+	print(t_1_2_3[i] * m32[i][j], "t_1_2_3[i] * m32[i][j]");
 //@
 	CodePrinter::WFE(); cp.print("matrices times matrices");
 //@matrices times matrices
@@ -174,7 +174,7 @@ main() {
 	TDbl
 	m = {3, 3};
 
-	m[i][j] = (1 + i + 3 * j) *(1 + i + 3 * j);
+	m[i][j] = (1 + i + 3 * j) * (1 + i + 3 * j);
 
 	print(m[i][j], "m[i][j]");
 //@
@@ -199,25 +199,25 @@ main() {
 		"mUnit3x3[i][j] * m[i][j]"
 	);	
 
-	// or we can simply use our vector three_ones: (1,1,1)	
+	// or we can simply use our vector t_1_1_1: (1,1,1)	
 	print(
-		m[i][i] * three_ones[i],
-		"m[i][i] * three_ones[i]"
+		m[i][i] * t_1_1_1[i],
+		"m[i][i] * t_1_1_1[i]"
 	);	
 //@
 
 	CodePrinter::WFE(); cp.print("sum of vector elements");
 //@sum of vector elements
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
-	print(three_ones[i] * one_two_three[i], "three_ones[i] * one_two_three[i]");
-	print(one_two_three[i] * three_ones[i], "one_two_three[i] * three_ones[i]");
+	print(t_1_1_1[i], "t_1_1_1");
+	print(t_1_2_3[i], "t_1_2_3");
+	print(t_1_1_1[i] * t_1_2_3[i], "t_1_1_1[i] * t_1_2_3[i]");
+	print(t_1_2_3[i] * t_1_1_1[i], "t_1_2_3[i] * t_1_1_1[i]");
 //@
 
 	CodePrinter::WFE(); cp.print("sum of matrix row or column elements");
 //@sum of matrix row or column elements
-	print(three_ones[i] * m[i][j], "three_ones[i] * m[i][j]");
-	print(m[i][j] * three_ones[j], "m[i][j] * three_ones[j]");
+	print(t_1_1_1[i] * m[i][j], "t_1_1_1[i] * m[i][j]");
+	print(m[i][j] * t_1_1_1[j], "m[i][j] * t_1_1_1[j]");
 //@
 
 	CodePrinter::WFE(); cp.print("sum of all matrix elements");
@@ -240,14 +240,14 @@ main() {
 	print(eps[i][j][k], "eps");
 //@
 
-	CodePrinter::WFE(); cp.print("cross product of three_ones and one_two_three");
-//@cross product of three_ones and one_two_three
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
+	CodePrinter::WFE(); cp.print("cross product of t_1_1_1 and t_1_2_3");
+//@cross product of t_1_1_1 and t_1_2_3
+	print(t_1_1_1[i], "t_1_1_1");
+	print(t_1_2_3[i], "t_1_2_3");
 
 	// cross product
-	print(eps[i][j][k] * three_ones[j] * one_two_three[k], "eps[i][j][k] * three_ones[j] * one_two_three[k]");
-	print(eps[i][j][k] * one_two_three[j] * three_ones[k], "eps[i][j][k] * one_two_three[j] * three_ones[k]");
+	print(eps[i][j][k] * t_1_1_1[j] * t_1_2_3[k], "eps[i][j][k] * t_1_1_1[j] * t_1_2_3[k]");
+	print(eps[i][j][k] * t_1_2_3[j] * t_1_1_1[k], "eps[i][j][k] * t_1_2_3[j] * t_1_1_1[k]");
 //@
 
 	CodePrinter::WFE(); cp.print("create the adjugate matrix of m");
@@ -368,21 +368,7 @@ main() {
 	print(small[i][j], "small[i][j]");
 //@
 
-	CodePrinter::WFE(); cp.print("hadamard product of two vectors");
-//@hadamard product of two vectors
-	Tensor< int >
-	t1 = {3, 2};
-
-    t1[i][j] = 3 * j + i + 1;
-
-	Tensor< int >
-	mul = {3, 3};
-
-	mul[i][j] = t1[i][0] * t1[j][1];
-
-    print(t1[i][j], "t1[i][j] = 3 * j + i + 1");
-    print(mul[i][j], "mul[i][j] = t1[i][0] * t1[j][1]");
-    print(mul[i][i], "mul[i][i]");
-//@
-    return 0;
+	std::cout << "Thanks for your attention";
+	
+	return 0;
 }

@@ -1,11 +1,12 @@
 # Tensor
-Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions.  
+Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions. The indices start at 0, bu mathematical at 1. So, please note the index shift in the initialization of the tensors! 
 For example a matrix product:
 - in the paper:  
-  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$
-  $$A_{j}^i = 3 i + 1 j - 3$$
-  $$B_{j}^i = - i - 3 j + 3$$
-  $$C_{j}^i = A_{k}^i B_{j}^k$$
+  $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$  
+  $$A_{j}^i = 3 i + 1 j - 3$$  
+  $$B_{j}^i = - i - 3 j + 3$$  
+  $$C_{j}^i = A_{k}^i B_{j}^k$$  
+  $$D_{i}^j = A_{k}^i B_{j}^k$$  
 - in your c++ code
   ```
   // 3 Tensors, Matrices 
@@ -62,15 +63,15 @@ For example a matrix product:
     -68  -167
   ```
 ---
-## Start the Example-Program either in 
-- Qt-Creator
- or in 
-- Console via CMake  
-
+## Start the Example-Program by 
+```
+$ make run
+```
 
 You will see the following output.  
-
+### ./main
 ```
+./main
 
   - next frame by pressing ENTER or RETURN
   - to finish the show press one of these keys
@@ -81,28 +82,32 @@ Tensor
 ------
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [Main]
+```
 [Main]
 c++:
-	// to use code printer create an instance with the name of the cpp file as argument
-	CodePrinter
-	cp("../main.cpp");
+// to use code printer create an instance with the name of the cpp file as argument
+CodePrinter
+cp("main.cpp");
 
-	// then use @ instead of AT to frame all snippets by:
-	//ATsome unique snippet identifying text'
-	// c++
-	// snippet
-	//AT
+// then use @ instead of AT to frame all snippets by:
+//ATsome unique snippet identifying text'
+// c++
+// snippet
+//AT
 
-	// wait for a key:
-	// CodePrinter::WFE();
+// wait for a key:
+// CodePrinter::WFE();
 
-	// and print snippet by:
-	// cp.print("some unique snippet identifying text");
+// and print snippet by:
+// cp.print("some unique snippet identifying text");
 
 out:
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [just some code for convenience]
+```
 [just some code for convenience]
 c++:
 typedef Term< double >    Dbl;
@@ -112,128 +117,139 @@ template< typename T >
 void
 print(SubTensor< T > const & p_tensor, std::string const & p_text = "") {
 
-	std::cout << p_text << (p_text.length() ? "\n" : "") << p_tensor.str() << std::endl << std::endl;
+std::cout << p_text << (p_text.length() ? "\n" : "") << p_tensor.str() << std::endl << std::endl;
 }
 
 template< typename T >
 void
 print(std::string const & p_text, Term< T > const & p_term) {
 
-	std::cout << p_text << std::endl << p_term.str() << std::endl << std::endl;
+std::cout << p_text << std::endl << p_term.str() << std::endl << std::endl;
 }
 
 out:
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [create some double vector]
+```
 [create some double vector]
 c++:
 
-	// create a vector (tensor of degree 1 and 2 dimensions)
-	Tensor< double >
-	tDbl = {2};
+// create a vector (tensor of degree 1 and 2 dimensions)
+Tensor< double >
+tDbl = {2};
 
-	// initit
-	tDbl[0] = 3.14;
-	tDbl[1] = 2.72;
+// init it
+tDbl[0] = 3.14;
+tDbl[1] = 2.72;
 
-	// but how to print?
-	// this is not possible
-	// std::cout << tDbl << std::endl;
+// but how to print?
+// this is not possible
+// std::cout << tDbl << std::endl;
 
 out:
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [Einstein Indices]
+```
 [Einstein Indices]
 c++:
-	// to do this we need an
-	// EINSTEIN INDEX i
-	EIdx
-	i;
+// to do this we need an
+// EINSTEIN INDEX i
+EIdx
+i;
 
-	// to print a tensor of deg 1 we need 1 Einstein Index
-	std::cout << tDbl[i] << std::endl;
+// to print a tensor of deg 1 we need 1 Einstein Index
+std::cout << tDbl[i] << std::endl;
 
 out:
 [0..1]
   3.14  2.72
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [now create some more vectors and print them]
+```
 [now create some more vectors and print them]
 c++:
-	TDbl
-	five_ten = {2},
-	three_ones = {3},
-	one_two_three = {3};
-	print(five_ten[i]);
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
+TDbl
+t_5_10 = {2},
+t_1_1_1 = {3},
+t_1_2_3 = {3};
+print(t_5_10[i], "t_5_10");
+print(t_1_1_1[i], "t_1_1_1");
+print(t_1_2_3[i], "t_1_2_3");
 
 out:
+t_5_10
 [0..1]
   0  0
 
-three_ones
+t_1_1_1
 [0..2]
   0  0  0
 
-one_two_three
+t_1_2_3
 [0..2]
   0  0  0
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [init them]
+```
 [init them]
 c++:
-	// EINSTEIN INDICES can be used to initialize a tensor with values
-	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
-	// EINSTEIN INDICES start at 0
+// EINSTEIN INDICES can be used to initialize a tensor with values
+// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
+// EINSTEIN INDICES start at 0
 
-	five_ten[i] = 5 * (i + 1); //  5  10
-	three_ones[i] = 1;         //  1  1  1
-	one_two_three[i] = i + 1;  //  1  2  3
-	print(five_ten[i], "five_ten");
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
+t_5_10[i] = 5 * (i + 1); //  5  10
+t_1_1_1[i] = 1;         //  1  1  1
+t_1_2_3[i] = i + 1;  //  1  2  3
+print(t_5_10[i], "t_5_10");
+print(t_1_1_1[i], "t_1_1_1");
+print(t_1_2_3[i], "t_1_2_3");
 
 out:
-five_ten
+t_5_10
 [0..1]
    5  10
 
-three_ones
+t_1_1_1
 [0..2]
   1  1  1
 
-one_two_three
+t_1_2_3
 [0..2]
   1  2  3
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [now create some matrices]
+```
 [now create some matrices]
 c++:
-	// we need an another EINSTEIN INDEX j
-	EIdx
-	j;
+// we need an another EINSTEIN INDEX j
+EIdx
+j;
 
-	// create some double matrices (tensors of deg 2)
-	TDbl
-	m22 = {2, 2}, // 2 x 2
-	m23 = {2, 3}, // 2 x 3
-	m32 = {3, 2}, // 3 x 2
-	m33 = {3, 3}; // 3 x 3
+// create some double matrices (tensors of deg 2)
+TDbl
+m22 = {2, 2}, // 2 x 2
+m23 = {2, 3}, // 2 x 3
+m32 = {3, 2}, // 3 x 2
+m33 = {3, 3}; // 3 x 3
 
-	// initialize them again with i and j
-	m22[i][j] = i * 2 + j;
-	m23[i][j] = i * 3 + j;
-	m32[i][j] = m23[j][i];
-	m33[i][j] = i * 3 + j;
+// initialize them again with i and j
+m22[i][j] = i * 2 + j;
+m23[i][j] = i * 3 + j;
+m32[i][j] = m23[j][i];
+m33[i][j] = i * 3 + j;
 
-	// show the results now using the two indices i and j
-	print(m22[i][j], "m22");
-	print(m23[i][j], "m23");
-	print(m32[j][i], "m32");
-	print(m33[i][j], "m33");
+// show the results now using the two indices i and j
+print(m22[i][j], "m22");
+print(m23[i][j], "m23");
+print(m32[j][i], "m32");
+print(m33[i][j], "m33");
 
 out:
 m22
@@ -259,104 +275,113 @@ m33
   6  7  8
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [and now some more magic]
+```
 [and now some more magic]
 c++:
-	// Einstein Summation works like this
-	// if one has the same index in a product of two tensors
-	// then all elements are multiplied pairwise and summed up afterwards
-	// thats the classical scalar product
-	// v = (1, 2, 3), u = (-1, 0, +1) u[i]*v[i] = 1 * (-1) + 2 * 0 + 3 * 1 = 2
-	// so let's see whtat's possible here!
+// Einstein Summation works like this
+// if one has the same index in a product of two tensors
+// then all elements are multiplied pairwise and summed up afterwards
+// thats the classical scalar product
+// v = (1, 2, 3), u = (-1, 0, +1) u[i]*v[i] = 1 * (-1) + 2 * 0 + 3 * 1 = 2
+// so let's see whtat's possible here!
 
 out:
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+```
 [the scalar product]
 c++:
-	print(three_ones[i], "three_ones[i]");
-	print(one_two_three[i], "one_two_three[i]");
-	print(three_ones[i] * three_ones[i], "three_ones[i] * three_ones[i]");
-	print(three_ones[i] * one_two_three[i], "three_ones[i] * one_two_three[i]");
-	print(one_two_three[i] * three_ones[i], "one_two_three[i] * three_ones[i]");
-	print(one_two_three[i] * one_two_three[i], "one_two_three[i] * one_two_three[i]");
+print(t_1_1_1[i], "t_1_1_1[i]");
+print(t_1_2_3[i], "t_1_2_3[i]");
+print(t_1_1_1[i] * t_1_1_1[i], "t_1_1_1[i] * t_1_1_1[i]");
+print(t_1_1_1[i] * t_1_2_3[i], "t_1_1_1[i] * t_1_2_3[i]");
+print(t_1_2_3[i] * t_1_1_1[i], "t_1_2_3[i] * t_1_1_1[i]");
+print(t_1_2_3[i] * t_1_2_3[i], "t_1_2_3[i] * t_1_2_3[i]");
 
 out:
-three_ones[i]
+t_1_1_1[i]
 [0..2]
   1  1  1
 
-one_two_three[i]
+t_1_2_3[i]
 [0..2]
   1  2  3
 
-three_ones[i] * three_ones[i]
+t_1_1_1[i] * t_1_1_1[i]
   3
 
-three_ones[i] * one_two_three[i]
+t_1_1_1[i] * t_1_2_3[i]
   6
 
-one_two_three[i] * three_ones[i]
+t_1_2_3[i] * t_1_1_1[i]
   6
 
-one_two_three[i] * one_two_three[i]
+t_1_2_3[i] * t_1_2_3[i]
   14
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [create a 2x2 matrix via outer product of two vectors]
+```
 [create a 2x2 matrix via outer product of two vectors]
 c++:
-	print(five_ten[i] * one_two_three[j], "five_ten[i] * one_two_three[j]");
-	print(one_two_three[i] * five_ten[j], "one_two_three[i] * five_ten[j]");
+  print(t_5_10[i] * t_1_2_3[j], "t_5_10[i] * t_1_2_3[j]");
+print(t_1_2_3[i] * t_5_10[j], "t_1_2_3[i] * t_5_10[j]");
 
 out:
-five_ten[i] * one_two_three[j]
+t_5_10[i] * t_1_2_3[j]
 [0..1][0..2]
    5  10  15
   10  20  30
 
-one_two_three[i] * five_ten[j]
+t_1_2_3[i] * t_5_10[j]
 [0..2][0..1]
    5  10
   10  20
   15  30
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [matrices times vectors]
+```
 [matrices times vectors]
 c++:
-	print(m22[i][j] * five_ten[j], "m22[i][j] * five_ten[j]");
-	print(five_ten[i] * m22[i][j], "five_ten[i] * m22[i][j]");
-	print(m32[i][j] * five_ten[j], "m32[i][j] * five_ten[j]");
-	print(one_two_three[i] * m32[i][j], "one_two_three[i] * m32[i][j]");
+print(m22[i][j] * t_5_10[j], "m22[i][j] * t_5_10[j]");
+print(t_5_10[i] * m22[i][j], "t_5_10[i] * m22[i][j]");
+print(m32[i][j] * t_5_10[j], "m32[i][j] * t_5_10[j]");
+print(t_1_2_3[i] * m32[i][j], "t_1_2_3[i] * m32[i][j]");
 
 out:
-m22[i][j] * five_ten[j]
+m22[i][j] * t_5_10[j]
 [0..1]
   10  40
 
-five_ten[i] * m22[i][j]
+t_5_10[i] * m22[i][j]
 [0..1]
   20  35
 
-m32[i][j] * five_ten[j]
+m32[i][j] * t_5_10[j]
 [0..2]
   30  45  60
 
-one_two_three[i] * m32[i][j]
+t_1_2_3[i] * m32[i][j]
 [0..1]
    8  26
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [matrices times matrices]
+```
 [matrices times matrices]
 c++:
-	// for this we need a third EINSTEIN INDEX k
-	EIdx
-	k;
+// for this we need a third EINSTEIN INDEX k
+EIdx
+k;
 
-	print(m32[i][k] * m23[k][j], "m32 x m23 < == > m32[i][k] * m23[k][j]");
-	print(m23[i][k] * m32[k][j], "m23 x m32 < == > m23[i][k] * m32[k][j]");
+print(m32[i][k] * m23[k][j], "m32 x m23 < == > m32[i][k] * m23[k][j]");
+print(m23[i][k] * m32[k][j], "m23 x m32 < == > m23[i][k] * m32[k][j]");
 
 out:
 m32 x m23 < == > m32[i][k] * m23[k][j]
@@ -371,15 +396,17 @@ m23 x m32 < == > m23[i][k] * m32[k][j]
   14  50
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [now create a new double 3x3 matrix]
+```
 [now create a new double 3x3 matrix]
 c++:
-	TDbl
-	m = {3, 3};
+TDbl
+m = {3, 3};
 
-	m[i][j] = (1 + i + 3 * j) *(1 + i + 3 * j);
+m[i][j] = (1 + i + 3 * j) * (1 + i + 3 * j);
 
-	print(m[i][j], "m[i][j]");
+print(m[i][j], "m[i][j]");
 
 out:
 m[i][j]
@@ -389,32 +416,34 @@ m[i][j]
    9  36  81
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [trace of a matrix]
+```
 [trace of a matrix]
 c++:
-	// we can use a unit matrix
-	TDbl
-	mUnit3x3 = {3, 3};
+// we can use a unit matrix
+TDbl
+mUnit3x3 = {3, 3};
 
-	// mUnit3x3[i][j] = i == j;
-	// or simply
-	mUnit3x3[i][i] = 1;
-	
-	print(
-		mUnit3x3[i][j],
-		"mUnit3x3[i][j]"
-	);
-	
-	print(
-		mUnit3x3[i][j] * m[i][j],
-		"mUnit3x3[i][j] * m[i][j]"
-	);	
+// mUnit3x3[i][j] = i == j;
+// or simply
+mUnit3x3[i][i] = 1;
 
-	// or we can simply use our vector three_ones: (1,1,1)	
-	print(
-		m[i][i] * three_ones[i],
-		"m[i][i] * three_ones[i]"
-	);	
+print(
+mUnit3x3[i][j],
+"mUnit3x3[i][j]"
+);
+
+print(
+mUnit3x3[i][j] * m[i][j],
+"mUnit3x3[i][j] * m[i][j]"
+);
+
+// or we can simply use our vector t_1_1_1: (1,1,1)
+print(
+m[i][i] * t_1_1_1[i],
+"m[i][i] * t_1_1_1[i]"
+);
 
 out:
 mUnit3x3[i][j]
@@ -426,57 +455,63 @@ mUnit3x3[i][j]
 mUnit3x3[i][j] * m[i][j]
   107
 
-m[i][i] * three_ones[i]
+m[i][i] * t_1_1_1[i]
   107
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [sum of vector elements]
+```
 [sum of vector elements]
 c++:
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
-	print(three_ones[i] * one_two_three[i], "three_ones[i] * one_two_three[i]");
-	print(one_two_three[i] * three_ones[i], "one_two_three[i] * three_ones[i]");
+print(t_1_1_1[i], "t_1_1_1");
+print(t_1_2_3[i], "t_1_2_3");
+print(t_1_1_1[i] * t_1_2_3[i], "t_1_1_1[i] * t_1_2_3[i]");
+print(t_1_2_3[i] * t_1_1_1[i], "t_1_2_3[i] * t_1_1_1[i]");
 
 out:
-three_ones
+t_1_1_1
 [0..2]
   1  1  1
 
-one_two_three
+t_1_2_3
 [0..2]
   1  2  3
 
-three_ones[i] * one_two_three[i]
+t_1_1_1[i] * t_1_2_3[i]
   6
 
-one_two_three[i] * three_ones[i]
+t_1_2_3[i] * t_1_1_1[i]
   6
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [sum of matrix row or column elements]
+```
 [sum of matrix row or column elements]
 c++:
-	print(three_ones[i] * m[i][j], "three_ones[i] * m[i][j]");
-	print(m[i][j] * three_ones[j], "m[i][j] * three_ones[j]");
+print(t_1_1_1[i] * m[i][j], "t_1_1_1[i] * m[i][j]");
+print(m[i][j] * t_1_1_1[j], "m[i][j] * t_1_1_1[j]");
 
 out:
-three_ones[i] * m[i][j]
+t_1_1_1[i] * m[i][j]
 [0..2]
    14   77  194
 
-m[i][j] * three_ones[j]
+m[i][j] * t_1_1_1[j]
 [0..2]
    66   93  126
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [sum of all matrix elements]
+```
 [sum of all matrix elements]
 c++:
-	// need a matrix containing ones only
-	m33[i][j] = 1;
-	print(m33[i][j] * m[i][j], "m33[i][j] * m[i][j]");
-	print(m[i][j] * m33[i][j], "m[i][j] * m33[i][j]");
+// need a matrix containing ones only
+m33[i][j] = 1;
+print(m33[i][j] * m[i][j], "m33[i][j] * m[i][j]");
+print(m[i][j] * m33[i][j], "m[i][j] * m33[i][j]");
 
 out:
 m33[i][j] * m[i][j]
@@ -486,17 +521,19 @@ m[i][j] * m33[i][j]
   285
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [the levi cevita tensor]
+```
 [the levi cevita tensor]
 c++:
-	TDbl
-	eps = {3, 3, 3};
+TDbl
+eps = {3, 3, 3};
 
-	eps[i][j][k] =
-		(((i < j) & (j < k)) | ((k < i) & (i < j)) | ((j < k) & (k < i))) -
-		(((i > j) & (j > k)) | ((k > i) & (i > j)) | ((j > k) & (k > i)));
+eps[i][j][k] =
+(((i < j) & (j < k)) | ((k < i) & (i < j)) | ((j < k) & (k < i))) -
+(((i > j) & (j > k)) | ((k > i) & (i > j)) | ((j > k) & (k > i)));
 
-	print(eps[i][j][k], "eps");
+print(eps[i][j][k], "eps");
 
 out:
 eps
@@ -516,47 +553,51 @@ eps
    0   0   0
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
-[cross product of three_ones and one_two_three]
+```
+#### [cross product of t_1_1_1 and t_1_2_3]
+```
+[cross product of t_1_1_1 and t_1_2_3]
 c++:
-	print(three_ones[i], "three_ones");
-	print(one_two_three[i], "one_two_three");
+print(t_1_1_1[i], "t_1_1_1");
+print(t_1_2_3[i], "t_1_2_3");
 
-	// cross product
-	print(eps[i][j][k] * three_ones[j] * one_two_three[k], "eps[i][j][k] * three_ones[j] * one_two_three[k]");
-	print(eps[i][j][k] * one_two_three[j] * three_ones[k], "eps[i][j][k] * one_two_three[j] * three_ones[k]");
+// cross product
+print(eps[i][j][k] * t_1_1_1[j] * t_1_2_3[k], "eps[i][j][k] * t_1_1_1[j] * t_1_2_3[k]");
+print(eps[i][j][k] * t_1_2_3[j] * t_1_1_1[k], "eps[i][j][k] * t_1_2_3[j] * t_1_1_1[k]");
 
 out:
-three_ones
+t_1_1_1
 [0..2]
   1  1  1
 
-one_two_three
+t_1_2_3
 [0..2]
   1  2  3
 
-eps[i][j][k] * three_ones[j] * one_two_three[k]
+eps[i][j][k] * t_1_1_1[j] * t_1_2_3[k]
 [0..2]
    1  -2   1
 
-eps[i][j][k] * one_two_three[j] * three_ones[k]
+eps[i][j][k] * t_1_2_3[j] * t_1_1_1[k]
 [0..2]
   -1   2  -1
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [create the adjugate matrix of m]
+```
 [create the adjugate matrix of m]
 c++:
-	// adjugate matrix
-	TDbl
-	mA = {3, 3};
+// adjugate matrix
+TDbl
+mA = {3, 3};
 
-	mA[i][0] = eps[i][j][k] * m[1][j] * m[2][k];
-	mA[i][1] = eps[i][j][k] * m[2][j] * m[0][k];
-	mA[i][2] = eps[i][j][k] * m[0][j] * m[1][k];
+mA[i][0] = eps[i][j][k] * m[1][j] * m[2][k];
+mA[i][1] = eps[i][j][k] * m[2][j] * m[0][k];
+mA[i][2] = eps[i][j][k] * m[0][j] * m[1][k];
 
-	print(m[i][j], "m");
-	print(mA[i][j], "mA");
+print(m[i][j], "m");
+print(mA[i][j], "mA");
 
 out:
 m
@@ -572,19 +613,21 @@ mA
    -81   108   -39
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [calculate the determinant of m]
+```
 [calculate the determinant of m]
 c++:
 
-	// determinant of m by rows
-	print(
-		 eps[i][j][k] * m[0][i] * m[1][j] * m[2][k],
-		"eps[i][j][k] * m[0][i] * m[1][j] * m[2][k]");
+// determinant of m by rows
+print(
+ eps[i][j][k] * m[0][i] * m[1][j] * m[2][k],
+"eps[i][j][k] * m[0][i] * m[1][j] * m[2][k]");
 
-	// determinant of m by columns
-	print(
-		 eps[i][j][k] * m[i][0] * m[j][1] * m[k][2],
-		"eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]");
+// determinant of m by columns
+print(
+ eps[i][j][k] * m[i][0] * m[j][1] * m[k][2],
+"eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]");
 
 out:
 eps[i][j][k] * m[0][i] * m[1][j] * m[2][k]
@@ -594,16 +637,18 @@ eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]
   -216
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [use adjugate of m and determinant of m to create the inverse of m]
+```
 [use adjugate of m and determinant of m to create the inverse of m]
 c++:
-	TDbl
-	mInv = {3, 3};
+TDbl
+mInv = {3, 3};
 
-	mInv[i][j] = mA[i][j] / (eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]);
+mInv[i][j] = mA[i][j] / (eps[i][j][k] * m[i][0] * m[j][1] * m[k][2]);
 
-	// invers of m
-	print(mInv[i][j], "mInv");
+// invers of m
+print(mInv[i][j], "mInv");
 
 out:
 mInv
@@ -613,10 +658,12 @@ mInv
       0.375       -0.5   0.180556
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [check result, calculate inverse of m times m]
+```
 [check result, calculate inverse of m times m]
 c++:
-	print(mInv[i][j] * m[j][k], "mInv[i][j] * m[j][k]");
+print(mInv[i][j] * m[j][k], "mInv[i][j] * m[j][k]");
 
 out:
 mInv[i][j] * m[j][k]
@@ -626,53 +673,55 @@ mInv[i][j] * m[j][k]
              0             0             1
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [moment of inertia]
+```
 [moment of inertia]
 c++:
-	TDbl
-	axis   = {3},
-	xyz    = {3, 3},
-	lambda = {3, 3};
+TDbl
+axis   = {3},
+xyz    = {3, 3},
+lambda = {3, 3};
 
-	axis[i] = 1 + 2 * i;
-	axis[i] = axis[i] / sqrt(axis[j] * axis[j]);
-	lambda[i][j] = Dbl(i == j) * (axis[i] * axis[i]) - axis[i] * axis[j];
+axis[i] = 1 + 2 * i;
+axis[i] = axis[i] / sqrt(axis[j] * axis[j]);
+lambda[i][j] = Dbl(i == j) * (axis[i] * axis[i]) - axis[i] * axis[j];
 
-	xyz[0][i] = (i == 0) * 1 + (i == 1) * 0 + (i == 2) * 0;
-//	xyz[0][i] = eps[i][j][k] * axis[j] * xyz[0][k];
-	xyz[0][i] = xyz[0][i] / sqrt(xyz[0][i] * xyz[0][i]);
+xyz[0][i] = (i == 0) * 1 + (i == 1) * 0 + (i == 2) * 0;
+//xyz[0][i] = eps[i][j][k] * axis[j] * xyz[0][k];
+xyz[0][i] = xyz[0][i] / sqrt(xyz[0][i] * xyz[0][i]);
 
-	xyz[1][i] = eps[i][j][k] * axis[j] * xyz[0][k];
-	xyz[1][i] = xyz[1][i] / sqrt(xyz[1][i] * xyz[1][i]);
-	xyz[2][i] = eps[i][j][k] * axis[j] * xyz[1][k];
-	xyz[2][i] = xyz[2][i] / sqrt(xyz[2][i] * xyz[2][i]);
+xyz[1][i] = eps[i][j][k] * axis[j] * xyz[0][k];
+xyz[1][i] = xyz[1][i] / sqrt(xyz[1][i] * xyz[1][i]);
+xyz[2][i] = eps[i][j][k] * axis[j] * xyz[1][k];
+xyz[2][i] = xyz[2][i] / sqrt(xyz[2][i] * xyz[2][i]);
 
-	print(axis[i], "axis");
-	print(xyz[0][i], "xyz[0][i]");
-	print(xyz[1][i], "xyz[1][i]");
-	print(xyz[2][i], "xyz[2][i]");
-	print(lambda[i][j], "lambda");
+print(axis[i], "axis");
+print(xyz[0][i], "xyz[0][i]");
+print(xyz[1][i], "xyz[1][i]");
+print(xyz[2][i], "xyz[2][i]");
+print(lambda[i][j], "lambda");
 
-	print(lambda[i][j] * axis[j], "lambda[i][j] * axis[j]");
-	print(lambda[i][j] * xyz[0][j], "lambda[i][j] * xyz[0][j]");
-	print(lambda[i][j] * xyz[1][j], "lambda[i][j] * xyz[1][j]");
-	print(lambda[i][j] * xyz[2][j], "lambda[i][j] * xyz[2][j]");
+print(lambda[i][j] * axis[j], "lambda[i][j] * axis[j]");
+print(lambda[i][j] * xyz[0][j], "lambda[i][j] * xyz[0][j]");
+print(lambda[i][j] * xyz[1][j], "lambda[i][j] * xyz[1][j]");
+print(lambda[i][j] * xyz[2][j], "lambda[i][j] * xyz[2][j]");
 
-	print(axis[i] * lambda[i][j], "axis[i] * lambda[i][j]");
-	print(axis[i] * axis[i], "axis[i] * axis[i]");
-	print(axis[i] * lambda[i][j] * axis[j], "axis[i] * lambda[i][j] * axis[j]");
+print(axis[i] * lambda[i][j], "axis[i] * lambda[i][j]");
+print(axis[i] * axis[i], "axis[i] * axis[i]");
+print(axis[i] * lambda[i][j] * axis[j], "axis[i] * lambda[i][j] * axis[j]");
 
-	print(xyz[0][i] * lambda[i][j], "xyz[0][i] * lambda[i][j]");
-	print(xyz[0][i] * xyz[0][i], "xyz[0][i] * xyz[0][i]");
-	print(xyz[0][i] * lambda[i][j] * xyz[0][j], "xyz[0][i] * lambda[i][j] * xyz[0][j]");
+print(xyz[0][i] * lambda[i][j], "xyz[0][i] * lambda[i][j]");
+print(xyz[0][i] * xyz[0][i], "xyz[0][i] * xyz[0][i]");
+print(xyz[0][i] * lambda[i][j] * xyz[0][j], "xyz[0][i] * lambda[i][j] * xyz[0][j]");
 
-	print(xyz[1][i] * lambda[i][j], "xyz[1][i] * lambda[i][j]");
-	print(xyz[1][i] * xyz[1][i], "xyz[1][i] * xyz[1][i]");
-	print(xyz[1][i] * lambda[i][j] * xyz[1][j], "xyz[1][i] * lambda[i][j] * xyz[1][j]");
+print(xyz[1][i] * lambda[i][j], "xyz[1][i] * lambda[i][j]");
+print(xyz[1][i] * xyz[1][i], "xyz[1][i] * xyz[1][i]");
+print(xyz[1][i] * lambda[i][j] * xyz[1][j], "xyz[1][i] * lambda[i][j] * xyz[1][j]");
 
-	print(xyz[2][i] * lambda[i][j], "xyz[2][i] * lambda[i][j]");
-	print(xyz[2][i] * xyz[2][i], "xyz[2][i] * xyz[2][i]");
-	print(xyz[2][i] * lambda[i][j] * xyz[2][j], "xyz[2][i] * lambda[i][j] * xyz[2][j]");
+print(xyz[2][i] * lambda[i][j], "xyz[2][i] * lambda[i][j]");
+print(xyz[2][i] * xyz[2][i], "xyz[2][i] * xyz[2][i]");
+print(xyz[2][i] * lambda[i][j] * xyz[2][j], "xyz[2][i] * lambda[i][j] * xyz[2][j]");
 
 out:
 axis
@@ -754,18 +803,20 @@ xyz[2][i] * lambda[i][j] * xyz[2][j]
   1
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [big one]
+```
 [big one]
 c++:
-	Tensor< int >
-	big = {2, 3, 4, 5, 6, 7};
+Tensor< int >
+big = {2, 3, 4, 5, 6, 7};
 
-	EIdx
-	a, b, c, d, e, f;
+EIdx
+a, b, c, d, e, f;
 
-	big[a][b][c][d][e][f] = 0 + f + 7 * (e + 6 * (d + 5 * (c + 4 * (b + 3 * a))));
+big[a][b][c][d][e][f] = 0 + f + 7 * (e + 6 * (d + 5 * (c + 4 * (b + 3 * a))));
 
-	print(big[a][b][c][d][e][f], "big");
+print(big[a][b][c][d][e][f], "big");
 
 out:
 big
@@ -1759,18 +1810,20 @@ big
   5033  5034  5035  5036  5037  5038  5039
 
 [ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
+```
+#### [cut out some sub tensors]
+```
 [cut out some sub tensors]
 c++:
-	print(big[i][0][j][1][k][2], "big[i][0][j][1][k][2]");
-	print(big[0][0][0][0][i][j], "big[0][0][0][0][i][j]");
-	print(big[i][0][0][0][0][j], "big[i][0][0][0][0][j]");
+print(big[i][0][j][1][k][2], "big[i][0][j][1][k][2]");
+print(big[0][0][0][0][i][j], "big[0][0][0][0][i][j]");
+print(big[i][0][0][0][0][j], "big[i][0][0][0][0][j]");
 
-	Tensor< int >
-	small = {7, 2};
-	small[i][j] = big[j][0][0][0][0][i];
+Tensor< int >
+small = {7, 2};
+small[i][j] = big[j][0][0][0][0][i];
 
-	print(small[i][j], "small[i][j]");
+print(small[i][j], "small[i][j]");
 
 out:
 big[i][0][j][1][k][2]
@@ -1810,38 +1863,5 @@ small[i][j]
      5  2525
      6  2526
 
-[ENTER] for next frame!
-----------------------------------------------------------------------------------------------------------------
-[hadamard product of two vectors]
-c++:
-	Tensor< int >
-	t1 = {3, 2};
-
-    t1[i][j] = 3 * j + i + 1;
-
-	Tensor< int >
-	mul = {3, 3};
-
-	mul[i][j] = t1[i][0] * t1[j][1];
-
-    print(t1[i][j], "t1[i][j] = 3 * j + i + 1");
-    print(mul[i][j], "mul[i][j] = t1[i][0] * t1[j][1]");
-    print(mul[i][i], "mul[i][i]");
-
-out:
-t1[i][j] = 3 * j + i + 1
-[0..2][0..1]
-  1  4
-  2  5
-  3  6
-
-mul[i][j] = t1[i][0] * t1[j][1]
-[0..2][0..2]
-   4   5   6
-   8  10  12
-  12  15  18
-
-mul[i][i]
-[0..2]
-   4  10  18
+Thanks for your attention
 ```
