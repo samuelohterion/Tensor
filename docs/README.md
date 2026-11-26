@@ -304,10 +304,8 @@ out:
 [ENTER] for next frame!
 ```
 #### [the scalar product]
-$$tˍ1ˍ1ˍ1_i tˍ1ˍ1ˍ1_i$$  
-$$tˍ1ˍ1ˍ1_i tˍ1ˍ2ˍ3_i$$  
-$$tˍ1ˍ2ˍ3_i tˍ1ˍ1ˍ1_i$$  
-$$tˍ1ˍ2ˍ3_i tˍ1ˍ2ˍ3_i$$  
+$$s = \vec{u}^T\cdot \vec{v}$$
+$$s = u^i v_i = u_i v^i = u^i v^i = u_i v_i$$
 ```
 [the scalar product]
 c++:
@@ -342,7 +340,7 @@ t_1_2_3[i] * t_1_2_3[i]
 [ENTER] for next frame!
 ```
 #### [create a 2x2 matrix via outer product of two vectors]
-$$\vec{u}\cdot \vec{v}^T = v_i u_j$$  
+$$m_{2x2}=\vec{u}\cdot \vec{v}^T = v_i u_j = v_i u^j = v^i u_j = v^i u^j$$  
 ```
 [create a 2x2 matrix via outer product of two vectors]
 c++:
