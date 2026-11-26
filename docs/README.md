@@ -188,9 +188,10 @@ out:
 [ENTER] for next frame!
 ```
 #### [now create some more vectors and print them]
-$$\texttt{t\_5\_10}=(5, 10)^T$$  
-$$\texttt{t\_1\_1\_1}=(1, 1, 1)^T$$
-$$\texttt{t\_1\_2\_3}=(1, 2, 3)^T$$
+$$\texttt{tˍ5ˍ{10}}=(5, 10)^T$$
+$$\texttt{tˍ1ˍ1}=(1, 1, 1)^T$$
+$$\texttt{tˍ1ˍ2ˍ3}=(1, 2, 3)^T$$
+
 ```
 [now create some more vectors and print them]
 c++:
@@ -314,10 +315,10 @@ out:
 [ENTER] for next frame!
 ```
 #### [the scalar product]
-$$\texttt{t\_1\_1\_1}_i\;\texttt{t\_1\_1\_1}_i$$  
-$$\texttt{t\_1\_1\_1}_i\;t\_1\_3\_3_i$$  
-$$\texttt{t\_1\_2\_3}_i\;\texttt{t\_1\_1\_1}_i$$  
-$$\texttt{t\_1\_2\_3}_i\;\texttt{t\_1\_2\_3}_i$$  
+$$tˍ1ˍ1ˍ1_i\;tˍ1ˍ1ˍ1_i$$  
+$$tˍ1ˍ1ˍ1_i\;t\_1\_3\_3_i$$  
+$$tˍ1ˍ2ˍ3_i\;tˍ1ˍ1ˍ1_i$$  
+$$tˍ1ˍ2ˍ3_i\;tˍ1ˍ2ˍ3_i$$  
 ```
 [the scalar product]
 c++:
@@ -652,7 +653,7 @@ mA
 ```
 #### [calculate the determinant of m]
 $$det(m) = \epsilon_{i,j,k}\;m_0^i\;m_1^j\;m_2^k$$  
-$$det(m) = \epsilon^{i,j,k}\;m_i^0\;m_j^1\;m_k^2$$  
+$$det(m) = \epsilon_{i,j,k}\;m_i^0\;m_j^1\;m_k^2$$  
 ```
 [calculate the determinant of m]
 c++:
