@@ -8,13 +8,13 @@ There they start at 1, in our c++-world the start at 0.
 - in the paper:  
   $$C_{2\times{4}} = A_{2\times{3}} \cdot B_{3\times{4}}$$  
   $$A=\begin{pmatrix}
-      1 & 2 & 3 \\
+      1 & 2 & 3 \\\\
       4 & 5 & 6
   \end{pmatrix}
   $$  
   $$B=\begin{pmatrix}
-      -1 & -4 & -7 & -10 \\
-      -2 & -5 & -8 & -11 \\
+      -1 & -4 & -7 & -10 \\\\
+      -2 & -5 & -8 & -11 \\\\
       -3 & -6 & -9 & -12
   \end{pmatrix}
   $$  
@@ -188,9 +188,9 @@ out:
 [ENTER] for next frame!
 ```
 #### [now create some more vectors and print them]
-$$\texttt{tˍ5ˍ{10}}=(5, 10)^T$$
-$$\texttt{tˍ1ˍ1}=(1, 1, 1)^T$$
-$$\texttt{tˍ1ˍ2ˍ3}=(1, 2, 3)^T$$
+$$tˍ5ˍ10=(5, 10)^T$$
+$$tˍ1ˍ1=(1, 1, 1)^T$$
+$$tˍ1ˍ2ˍ3=(1, 2, 3)^T$$
 
 ```
 [now create some more vectors and print them]
