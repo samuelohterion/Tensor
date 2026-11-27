@@ -1,5 +1,5 @@
 # Tensor
-Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions. The indices start at 0, bu mathematical at 1. So, please note the index shift in the initialization of the tensors! 
+Tensor is a **c++ class** that can be used to formulate ***tensor expressions*** with ***Einstein Indices*** in c++ programs as mathematical expressions. The indices start at 0, but mathematically at 1. So, please note the index shift in the initialization of the tensors! 
 For example a matrix product:
 Task is to multiply a 2x3 matrix by a 3x4 matrix.  
 First both matrices have to be initialized.
