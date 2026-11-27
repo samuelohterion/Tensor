@@ -368,7 +368,7 @@ main() {
 	print(small[i][j], "small[i][j]");
 //@
 
-	std::cout << "Thanks for your attention";
+	std::cout << "Thanks for your attention" << std::endl;
 	
 	return 0;
 }
