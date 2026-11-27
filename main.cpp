@@ -47,7 +47,6 @@ main() {
 	std::cout << "Tensor\n------\n\n";
 	CodePrinter::WFE(); cp.print("Main");
 	CodePrinter::WFE(); cp.print("just some code for convenience");
-
 	CodePrinter::WFE(); cp.print("create some double vector");
 //@create some double vector
 
@@ -89,12 +88,12 @@ main() {
 	CodePrinter::WFE(); cp.print("init them");
 //@init them
 	// EINSTEIN INDICES can be used to initialize a tensor with values
-	// EINSTEIN INDICES can be combined by operations +,-,*,/ with another EI or integer values
+	// EINSTEIN INDICES can be combined by operations +,-,*,/,% with another EI or integer values
 	// EINSTEIN INDICES start at 0
 
-	t_5_10[i] = 5 * (i + 1); //  5  10
-	t_1_1_1[i] = 1;         //  1  1  1
-	t_1_2_3[i] = i + 1;  //  1  2  3
+	t_5_10[i] = (100 + 5 * (i + 1)) % 10; //  5  10
+	t_1_1_1[i] = 1;                       //  1  1  1
+	t_1_2_3[i] = i + 1;                   //  1  2  3
 	print(t_5_10[i], "t_5_10");
 	print(t_1_1_1[i], "t_1_1_1");
 	print(t_1_2_3[i], "t_1_2_3");

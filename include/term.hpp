@@ -490,6 +490,18 @@ class Term {
 		}
 
 
+		Term< T >
+		operator %(Term< T > const &p_term) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::modulus< T > >(this->cpy(), p_term.cpy()));
+		}
+
+		Term< T >
+		operator %(T const &p_val) const {
+
+			return Term< T >(new TreeBinOP_DALARA< T, std::modulus< T > >(this->cpy(), new TreeValue< T >(p_val)));
+		}
+
 
 
 		Term< T >
