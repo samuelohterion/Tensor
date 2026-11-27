@@ -37,3 +37,7 @@ build
 .idea
 
 *.xml
+
+main
+main.o
+output.txt
