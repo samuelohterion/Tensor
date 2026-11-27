@@ -125,6 +125,18 @@ main() {
 	print(m33[i][j], "m33");
 //@
 
+	CodePrinter::WFE(); cp.print("modulus");
+//@modulus
+	TDbl
+	tModulus = {15, 15};
+
+	tModulus[i][j] = j % (i + 1) + 1;
+
+	print(tModulus[i][j], "tModulus[i][j]");
+//@
+
+
+
 	CodePrinter::WFE(); cp.print("and now some more magic");
 //@and now some more magic
 	// Einstein Summation works like this
